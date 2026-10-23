@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pianificazione Cantiere — Gantt Fasi di Lavorazione</title>
+<title>Ge.Ka. — Gestionale Cantiere</title>
 <style>/* Notion fonts loaded inline */</style>
 <style>
   :root {
@@ -11,8 +11,9 @@
     --surface: #f7f7f5;
     --surface2: #efefed;
     --border: #e3e2df;
-    --gold: #37352f;
-    --gold-light: #1a1a1a;
+    --border-btn: #000000;
+    --gold: #000000;
+    --gold-light: #000000;
     --gold-dim: #9b9a97;
     --green: #0f7b6c;
     --green-dim: #d3f8e9;
@@ -23,15 +24,42 @@
     --orange: #cb6b2e;
     --orange-dim: #fdecd8;
     --purple: #7c4ec4;
-    --text: #37352f;
-    --text-dim: #787774;
-    --text-dimmer: #9b9a97;
-    --accent: #37352f;
+    --text: #000000;
+    --text-dim: #000000;
+    --text-dimmer: #000000;
+    --accent: #000000;
   }
 
   :root {
     --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   }
+
+  /* ===================== DARK MODE ===================== */
+  body.dark-mode {
+    --bg: #1e1f1c;
+    --surface: #26271f;
+    --surface2: #2f3027;
+    --border: #3a3b31;
+    --border-btn: #ece9e2;
+    --gold: #ece9e2;
+    --gold-light: #f4f2ec;
+    --gold-dim: #a6a496;
+    --green: #4fcfa8;
+    --green-dim: #16352c;
+    --red: #e88b85;
+    --red-dim: #3a2323;
+    --blue: #6cbdf0;
+    --blue-dim: #1c3548;
+    --orange: #e3a267;
+    --orange-dim: #3a2c1a;
+    --purple: #b399e6;
+    --text: #ece9e2;
+    --text-dim: #ece9e2;
+    --text-dimmer: #ece9e2;
+    --accent: #ece9e2;
+  }
+  body.dark-mode [style*="background:#1a1a1a"],
+  body.dark-mode [style*="background:#37352f"] { background: #4a4a42 !important; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
 
@@ -65,18 +93,22 @@
     width: 56px;
   }
   #sidebar.collapsed .sidebar-logo-text,
+  #sidebar.collapsed .sidebar-logo,
   #sidebar.collapsed .nav-label,
-  #sidebar.collapsed .sidebar-section-label,
-  #sidebar.collapsed .sidebar-actions { display: none; }
+  #sidebar.collapsed .sidebar-section-label { display: none; }
   #sidebar.collapsed .sidebar-nav-item { justify-content: center; padding: 10px 0; }
+  #sidebar.collapsed .sidebar-header { justify-content: center; padding: 0; }
   #sidebar.collapsed .sidebar-bottom { padding: 12px 0; align-items: center; }
-  #sidebar.collapsed .sidebar-bottom .btn-header { justify-content: center; padding: 8px 0; width: 40px; }
+  #sidebar.collapsed .sidebar-actions { align-items: center; }
+  #sidebar.collapsed .sidebar-bottom .btn-header { justify-content: center !important; padding: 0 !important; width: 36px !important; height: 36px; border-radius: 8px; border-color: transparent; flex-shrink: 0; }
+  #sidebar.collapsed .sidebar-bottom .btn-header:hover { border-color: transparent; }
 
   .sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 16px 14px;
+    height: 48px;
+    padding: 0 16px;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     gap: 10px;
@@ -88,25 +120,18 @@
     overflow: hidden;
     white-space: nowrap;
   }
-  .sidebar-logo-icon {
-    width: 28px; height: 28px; flex-shrink: 0;
-    background: var(--gold-light);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .sidebar-logo-icon svg { color: #fff; }
   .sidebar-logo-text {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--gold-light);
-    letter-spacing: -0.2px;
-    line-height: 1.3;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
   }
-  .sidebar-logo-text small { display: block; font-size: 10px; font-weight: 400; color: var(--text-dimmer); letter-spacing: 0; margin-top: 1px; }
+  .sidebar-logo-text small { display: block; font-size: 10px; font-weight: 400; color: var(--text-dimmer); letter-spacing: 0.3px; margin-top: 2px; text-transform: uppercase; }
 
   #sidebar-toggle {
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-btn);
     color: var(--text-dimmer);
     width: 26px; height: 26px;
     border-radius: 6px;
@@ -116,7 +141,7 @@
     transition: all 0.2s;
     padding: 0;
   }
-  #sidebar-toggle:hover { color: var(--text); border-color: var(--text-dimmer); }
+  #sidebar-toggle:hover { color: var(--text); border-color: var(--border-btn); }
 
   .sidebar-section-label {
     font-size: 9px;
@@ -182,7 +207,7 @@
     left: 240px;
     right: 0;
     height: 48px;
-    background: rgba(255,255,255,0.97);
+    background: var(--bg);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -190,7 +215,7 @@
     justify-content: space-between;
     padding: 0 32px;
     z-index: 100;
-    transition: left 0.28s cubic-bezier(.4,0,.2,1);
+    transition: left 0.28s cubic-bezier(.4,0,.2,1), background 0.2s;
   }
   #topbar.sidebar-collapsed { left: 56px; }
 
@@ -207,11 +232,15 @@
   }
 
   .save-indicator { font-family:var(--font); font-size: 11px; color: #57ab5a; opacity: 0; transition: opacity 0.3s; }
-  .btn-header { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 5px 11px; border-radius: 6px; cursor: pointer; font-family:var(--font); font-size: 11px; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
-  .btn-header:hover { color: var(--text); border-color: #666; }
-  .btn-header.primary { background: #e8e8e8; color: #222222; border-color: #e8e8e8; font-weight: 600; }
-  .btn-header.primary:hover { background: #fff; }
-  .btn-header.icon-only { padding: 5px 7px; }
+  .btn-header { background: transparent; border: 1px solid var(--border-btn); color: var(--text-dim); padding: 6px 13px; border-radius: 7px; cursor: pointer; font-family:var(--font); font-size: 11.5px; font-weight: 500; transition: all 0.18s cubic-bezier(.4,0,.2,1); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .btn-header:hover { color: var(--text); border-color: var(--border-btn); background: var(--surface2); transform: translateY(-1px); }
+  .btn-header:active { transform: scale(0.96); }
+  .btn-header.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+  .btn-header.primary:hover { filter: brightness(1.15); background: var(--accent); border-color: var(--accent); color: var(--bg); transform: translateY(-1px); }
+  .btn-header.icon-only { padding: 6px 8px; }
+  .btn-header:focus-visible, .btn:focus-visible, .btn-outline:focus-visible, .btn-sm:focus-visible {
+    outline: none; box-shadow: 0 0 0 3px rgba(120,120,120,0.35);
+  }
 
   /* Main layout */
   #app-content {
@@ -250,9 +279,10 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 28px;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .card:hover { border-color: var(--text-dimmer); }
+  .card:hover { border-color: var(--text-dimmer); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+  body.dark-mode .card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.35); }
   .card.full-width { grid-column: 1 / -1; }
 
   .card-label {
@@ -305,7 +335,10 @@
     border-radius: 12px;
     padding: 24px;
     text-align: center;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
+  .kpi-card:hover { border-color: var(--text-dimmer); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+  body.dark-mode .kpi-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.35); }
   .kpi-label { font-size: 11px; color: var(--text-dimmer); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
   .kpi-value { font-size: 28px; font-weight: 600; color: var(--text); }
   .kpi-value.green, .kpi-value.red, .kpi-value.blue, .kpi-value.orange { color: var(--text); }
@@ -329,46 +362,56 @@
   .result-row .value.blue { color: var(--blue); }
 
   /* Buttons */
-  .btn {
-    background: #e8e8e8;
-    color: #222222;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
+  .btn, .btn-outline, .btn-sm {
+    font-family: var(--font);
     cursor: pointer;
-    font-family:var(--font);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    transition: all 0.18s cubic-bezier(.4,0,.2,1);
+  }
+  .btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: 1px solid var(--accent);
+    padding: 11px 26px;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 14px;
-    transition: all 0.2s;
-    letter-spacing: 0.1px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
   }
-  .btn:hover { background: #ffffff; transform: translateY(-1px); }
+  .btn:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 5px 14px rgba(0,0,0,0.18); }
+  .btn:active { transform: translateY(0) scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; filter: none; }
   .btn-outline {
     background: transparent;
     color: var(--text-dim);
-    border: 1px solid var(--border);
-    padding: 10px 22px;
+    border: 1px solid var(--border-btn);
+    padding: 10px 20px;
     border-radius: 8px;
-    cursor: pointer;
-    font-family:var(--font);
     font-weight: 500;
     font-size: 13px;
-    transition: all 0.2s;
   }
-  .btn-outline:hover { background: rgba(255,255,255,0.06); border-color: #555; color: var(--text); }
+  .btn-outline:hover { background: var(--surface2); border-color: var(--border-btn); color: var(--text); transform: translateY(-1px); }
+  .btn-outline:active { transform: translateY(0) scale(0.97); }
   .btn-sm {
     background: transparent;
     color: var(--text-dim);
-    border: 1px solid var(--border);
-    padding: 5px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family:var(--font);
-    font-size: 11px;
-    transition: all 0.2s;
+    border: 1px solid var(--border-btn);
+    padding: 6px 13px;
+    border-radius: 7px;
+    font-weight: 500;
+    font-size: 11.5px;
   }
-  .btn-sm:hover { color: var(--text); border-color: var(--text-dimmer); }
-  .btn-sm.danger:hover { color: var(--red); border-color: var(--red); }
+  .btn-sm:hover { color: var(--text); border-color: var(--border-btn); background: var(--surface2); transform: translateY(-1px); }
+  .btn-sm:active { transform: scale(0.96); }
+  .btn-sm.danger:hover { color: var(--red); border-color: var(--red); background: var(--red-dim); }
+  .btn-sm:disabled, .btn-sm[disabled] { opacity: 0.45; cursor: not-allowed; }
+  .btn-sm:disabled:hover, .btn-sm[disabled]:hover { color: var(--text-dim); border-color: var(--border-btn); background: transparent; }
+  .btn-x { width: 28px; height: 28px; padding: 0 !important; flex-shrink: 0; }
 
   /* Tags */
   .tag {
@@ -716,9 +759,117 @@
     main { padding: 24px 20px 60px; }
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   }
+
+  /* ===================== GUIDA / HELP ===================== */
+  .help-steps { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
+  .help-step {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .help-step:last-child { border-bottom: none; }
+  .help-step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    font-family: var(--font);
+  }
+  .help-step-body { flex: 1; min-width: 0; }
+  .help-step-title { font-size: 14px; font-weight: 600; color: var(--gold-light); margin-bottom: 4px; font-family: var(--font); }
+  .help-step-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; font-family: var(--font); }
+  .help-step-text code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--gold-light);
+  }
+  .help-step-text a { color: var(--blue); text-decoration: none; }
+  .help-step-text a:hover { text-decoration: underline; }
+
+  .help-callout {
+    display: flex;
+    gap: 12px;
+    background: var(--blue-dim);
+    border: 1px solid rgba(10,133,209,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .help-callout.warn { background: var(--orange-dim); border-color: rgba(203,107,46,0.3); }
+  .help-callout b { font-weight: 700; }
+
+  .help-menu-list { display: flex; flex-direction: column; gap: 14px; }
+  .help-menu-item { display: flex; gap: 12px; align-items: flex-start; }
+  .help-menu-icon {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim);
+  }
+  .help-menu-text b { display: block; font-size: 13px; color: var(--gold-light); margin-bottom: 2px; font-family: var(--font); }
+  .help-menu-text span { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; font-family: var(--font); }
+
+  .help-faq details {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  .help-faq details:last-child { border-bottom: none; }
+  .help-faq summary {
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--gold-light);
+    font-family: var(--font);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .help-faq summary::-webkit-details-marker { display: none; }
+  .help-faq summary::after {
+    content: '+';
+    flex-shrink: 0;
+    color: var(--text-dimmer);
+    font-size: 16px;
+    font-weight: 400;
+    transition: transform 0.2s;
+  }
+  .help-faq details[open] summary::after { content: '−'; }
+  .help-faq .help-faq-answer {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.65;
+    margin-top: 10px;
+    padding-right: 20px;
+  }
+  .help-faq .help-faq-answer code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--gold-light);
+  }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 
@@ -726,12 +877,9 @@
 <aside id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </div>
       <div class="sidebar-logo-text">
-        Gestionale Cantiere
-        <small>rev. 2026</small>
+        Ge.Ka.
+        <small>Gestionale Cantiere</small>
       </div>
     </div>
     <button id="sidebar-toggle" title="Comprimi/espandi menu" onclick="toggleSidebar()">
@@ -757,19 +905,19 @@
       <span class="nav-label">Fasi & Attività</span>
     </button>
 
+    <button class="sidebar-nav-item" id="nav-gantt" onclick="showTab('gantt')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="4" rx="1"/><rect x="8" y="10" width="10" height="4" rx="1"/><rect x="5" y="16" width="7" height="4" rx="1"/></svg>
+      <span class="nav-label">Gantt</span>
+    </button>
+
     <button class="sidebar-nav-item" id="nav-preventivi" onclick="showTab('preventivi')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>
+      <span style="width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;line-height:1;flex-shrink:0;">&euro;</span>
       <span class="nav-label">Preventivi</span>
     </button>
 
     <button class="sidebar-nav-item" id="nav-risorse" onclick="showTab('risorse')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span class="nav-label">Risorse</span>
-    </button>
-
-    <button class="sidebar-nav-item" id="nav-gantt" onclick="showTab('gantt')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="4" rx="1"/><rect x="8" y="10" width="10" height="4" rx="1"/><rect x="5" y="16" width="7" height="4" rx="1"/></svg>
-      <span class="nav-label">Gantt</span>
     </button>
 
     <button class="sidebar-nav-item" id="nav-avanzamento" onclick="showTab('avanzamento')">
@@ -800,10 +948,24 @@
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span class="nav-label">Checklist</span>
     </button>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section-label">Supporto</div>
+
+    <button class="sidebar-nav-item" id="nav-help" onclick="showTab('help')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span class="nav-label">Guida</span>
+    </button>
   </nav>
 
   <div class="sidebar-bottom">
     <div class="sidebar-actions">
+      <button class="btn-header" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Tema chiaro/scuro" style="width:100%;justify-content:flex-start;">
+        <svg id="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span class="nav-label" id="dark-mode-label">Tema scuro</span>
+      </button>
       <button class="btn-header" onclick="showGistConfig()" title="Configura GitHub Gist" style="width:100%;justify-content:flex-start;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
         <span class="nav-label">GitHub Gist</span>
@@ -832,11 +994,30 @@
   <div class="topbar-right">
     <div id="header-status-badge" style="display:none;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.3px;border:1px solid transparent;"></div>
     <span class="save-indicator" id="save-indicator">✓ salvato</span>
-    <button class="btn-header" onclick="esportaPDF()" style="border-color:#cb6841;color:#cb6841;">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-      Esporta PDF
+    <button class="btn-header" onclick="importaJSON()" title="Importa progetto da file JSON">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Importa
     </button>
-    <button class="btn-header primary" onclick="saveToStorage()">
+    <input type="file" id="import-file-input" accept="application/json" style="display:none;" onchange="handleImportFile(this)">
+    <div style="position:relative;" id="export-menu-wrap">
+      <button class="btn-header" onclick="toggleExportMenu(event)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Esporta
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px;"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div id="export-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.15);min-width:170px;overflow:hidden;z-index:300;">
+        <button onclick="closeExportMenu();esportaPDF()" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:transparent;border:none;cursor:pointer;font-family:var(--font);font-size:12.5px;color:var(--text);text-align:left;transition:background 0.15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='transparent'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          Esporta PDF
+        </button>
+        <div style="height:1px;background:var(--border);"></div>
+        <button onclick="closeExportMenu();esportaJSON()" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:transparent;border:none;cursor:pointer;font-family:var(--font);font-size:12.5px;color:var(--text);text-align:left;transition:background 0.15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='transparent'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Esporta JSON
+        </button>
+      </div>
+    </div>
+    <button class="btn-header" onclick="saveToStorage()">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       Salva
     </button>
@@ -941,18 +1122,8 @@
   <div class="flex-between">
     <div style="display:flex;gap:10px">
       <button class="btn" onclick="aggiungiTask()">+ Aggiungi Attività</button>
-      <button class="btn-outline" onclick="aggiungiCategoria()">+ Categoria</button>
-      <button class="btn-outline" onclick="aggiungiMilestone()" style="display:inline-flex;align-items:center;gap:6px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 22,12 12,22 2,12"/></svg>
-        + Milestone
-      </button>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center">
-      <span style="font-size:12px;color:var(--text-dimmer);font-family:var(--font);">Scala:</span>
-      <select id="scala_gantt" onchange="renderGantt()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:12px;outline:none;">
-        <option value="week" selected>Settimane + Giorni</option>
-        <option value="month">Mesi</option>
-      </select>
+      <button class="btn-outline" onclick="aggiungiCategoria()">+ Aggiungi Categoria</button>
+      <button class="btn-outline" onclick="aggiungiMilestone()">+ Aggiungi Milestone</button>
     </div>
   </div>
 
@@ -970,7 +1141,7 @@
           <th style="width:90px;">Responsabile</th>
           <th style="width:80px;">Costo (€)</th>
           <th style="width:70px;">Critico</th>
-          <th style="width:50px;">Azioni</th>
+          <th style="width:50px;text-align:right;">Azioni</th>
         </tr>
       </thead>
       <tbody id="tasks-body"></tbody>
@@ -985,21 +1156,19 @@
 
   <div class="card full-width" style="padding:16px 0 0;margin-bottom:20px;">
     <div style="padding:0 20px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dimmer);">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-          Trascina la barra per spostare
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dimmer);">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          Bordi sx/dx per ridimensionare
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dimmer);">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="4" rx="1"/></svg>
-          Bordo inferiore barra per avanzamento %
-        </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <button class="btn-header icon-only" onclick="mostraAiutoGantt()" title="Come funziona il Gantt" style="width:20px;height:20px;padding:0;border-radius:50%;justify-content:center;font-weight:700;font-size:10px;">?</button>
       </div>
-      <button class="btn-outline" onclick="showTab('fasi')" style="display:inline-flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Modifica Attività</button>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:10px;align-items:center">
+          <span style="font-size:12px;color:var(--text-dimmer);font-family:var(--font);">Scala:</span>
+          <select id="scala_gantt" onchange="renderGantt()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:12px;outline:none;">
+            <option value="week" selected>Settimane + Giorni</option>
+            <option value="month">Mesi</option>
+          </select>
+        </div>
+        <button class="btn-outline" onclick="showTab('fasi')" style="display:inline-flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Modifica Attività</button>
+      </div>
     </div>
     <div class="gantt-wrap">
       <div class="gantt-inner" id="gantt-container"></div>
@@ -1027,7 +1196,7 @@
     <div class="card-label">Subappaltatori & Fornitori</div>
     <div class="flex-between" style="margin-bottom:16px">
       <div></div>
-      <button class="btn" onclick="aggiungiFornitore()">+ Aggiungi</button>
+      <button class="btn" onclick="aggiungiFornitore()">+ Aggiungi Fornitore</button>
     </div>
     <table class="tasks-table" id="fornitori-table">
       <thead>
@@ -1093,7 +1262,7 @@
     <div class="card-label">Registro SAL (Stati Avanzamento Lavori)</div>
     <div class="flex-between" style="margin-bottom:16px">
       <div></div>
-      <button class="btn" onclick="aggiungiSAL()">+ Registra SAL</button>
+      <button class="btn" onclick="aggiungiSAL()">+ Aggiungi SAL</button>
     </div>
     <table class="tasks-table">
       <thead>
@@ -1128,7 +1297,7 @@
         <option value="Collaudo parziale">Collaudo parziale</option>
       </select>
     </div>
-    <button class="btn" onclick="apriModaleVerbale()">+ Nuovo Verbale</button>
+    <button class="btn" onclick="apriModaleVerbale()">+ Aggiungi Verbale</button>
   </div>
 
   <div class="grid-3" style="margin-top:20px;">
@@ -1189,7 +1358,7 @@
         <option value="Bassa">Bassa</option>
       </select>
     </div>
-    <button class="btn" onclick="apriModaleProblema()">+ Segnala Problematica</button>
+    <button class="btn" onclick="apriModaleProblema()">+ Aggiungi Problematica</button>
   </div>
 
   <div class="grid-4" style="margin-top:20px;">
@@ -1286,7 +1455,7 @@
 
   <div class="flex-between" style="margin-bottom:20px;">
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-      <button class="btn" onclick="nuovaGaraPreventivi()">+ Nuova Gara</button>
+      <button class="btn" onclick="nuovaGaraPreventivi()">+ Aggiungi Gara</button>
       <select id="prev-filter-stato" onchange="renderPreventivi()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:12px;outline:none;">
         <option value="">Tutte le gare</option>
         <option value="Aperta">Aperte</option>
@@ -1317,11 +1486,11 @@
   <div id="prev-gare-list"></div>
 
   <!-- ── SEZIONE COMPARATIVO COMBINAZIONI ── -->
-  <div style="margin-top:40px;" id="comp-section">
+  <div class="card" style="margin-top:40px;" id="comp-section">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
       <div style="font-size:16px;font-weight:600;color:var(--gold-light);letter-spacing:-0.2px;">Comparativo combinazioni</div>
       <div style="flex:1;height:1px;background:var(--border);"></div>
-      <button class="btn-sm" onclick="compAggiungiCombo()" style="font-size:12px;padding:7px 16px;">+ Nuova combinazione</button>
+      <button class="btn-sm" onclick="compAggiungiCombo()" style="font-size:12px;padding:7px 16px;">+ Aggiungi Combinazione</button>
     </div>
     <div style="font-size:12px;color:var(--text-dimmer);margin-bottom:20px;">
       Ogni <strong>combinazione</strong> è un set di offerte (una per gara) che potresti aggiudicare insieme.
@@ -1329,9 +1498,9 @@
     </div>
     <!-- Zona costruzione combo -->
     <div id="comp-builder"></div>
-    <!-- Tabella riepilogativa -->
-    <div id="comp-summary" style="margin-top:24px;"></div>
   </div>
+  <!-- Tabella riepilogativa (card separata, non annidata) -->
+  <div id="comp-summary" style="margin-top:20px;"></div>
 </div>
 
 <!-- TAB CHECKLIST -->
@@ -1379,13 +1548,164 @@
     </div>
     <div style="display:flex;gap:10px;">
       <button class="btn-outline" onclick="mostraTemplateDefault()">Template default</button>
-      <button class="btn-outline" onclick="aggiungiListaChecklist()">+ Nuova Lista</button>
+      <button class="btn-outline" onclick="aggiungiListaChecklist()">+ Aggiungi Lista</button>
       <button class="btn" onclick="aggiungiVoceChecklist()">+ Aggiungi Voce</button>
 
     </div>
   </div>
 
   <div id="checklist-container"></div>
+</div>
+
+<!-- TAB HELP: GUIDA -->
+<div class="tab-panel" id="tab-help">
+  <div class="section-title">Guida all'uso</div>
+  <div class="section-subtitle">COME FUNZIONA IL GESTIONALE E COME COLLEGARLO A GITHUB</div>
+
+  <div class="card full-width" style="margin-bottom:20px;">
+    <div class="card-label">Panoramica</div>
+    <div class="card-title" style="margin-bottom:12px;">Cos'è e come funziona</div>
+    <div class="help-step-text" style="font-size:13.5px;">
+      Questo gestionale, <b>Ge.Ka.</b>, è un'unica pagina web (un file <code>.html</code>) che gira interamente nel tuo browser: non serve installare nulla e non c'è un server. Tutti i dati del progetto (fasi, preventivi, risorse, verbali, checklist, ecc.) vengono salvati automaticamente nella memoria locale del browser (<code>localStorage</code>) quando premi <b>Salva</b> in alto a destra.
+    </div>
+    <div class="help-callout">
+      <span>💡</span>
+      <div>
+        <b>Un file, un browser.</b> Se apri il file su un altro computer, o cancelli i dati del browser, i progetti salvati "solo in locale" non sono più visibili. Per portarti i progetti dietro tra più dispositivi (PC ufficio, PC cantiere, tablet...) usa la sincronizzazione con <b>GitHub Gist</b>, spiegata più sotto.
+      </div>
+    </div>
+  </div>
+
+  <div class="card full-width" style="margin-bottom:20px;">
+    <div class="card-label">Sezioni del programma</div>
+    <div class="card-title" style="margin-bottom:16px;">Cosa trovi in ogni voce di menu</div>
+    <div class="help-menu-list">
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+        <div class="help-menu-text"><b>Progetto</b><span>Anagrafica del cantiere: nome, codice, committente, data inizio e durata prevista in settimane. È il punto di partenza da compilare per ogni nuovo progetto.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg></div>
+        <div class="help-menu-text"><b>Fasi & Attività</b><span>Elenco delle fasi di lavorazione (scavi, fondazioni, strutture, ecc.) con date di inizio/fine e stato di avanzamento. Da qui nasce il diagramma di Gantt.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/></svg></div>
+        <div class="help-menu-text"><b>Preventivi</b><span>Voci di costo previste ed effettive, per tenere sotto controllo il budget del cantiere rispetto al preventivato.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="help-menu-text"><b>Risorse</b><span>Squadre, mezzi e fornitori impiegati nel cantiere, con relativa disponibilità nel tempo.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="4" rx="1"/><rect x="8" y="10" width="10" height="4" rx="1"/><rect x="5" y="16" width="7" height="4" rx="1"/></svg></div>
+        <div class="help-menu-text"><b>Gantt</b><span>Vista grafica del cronoprogramma, generata automaticamente dalle fasi inserite.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="help-menu-text"><b>Avanzamento</b><span>Confronto tra avanzamento previsto ed effettivo, per capire a colpo d'occhio se il cantiere è in linea con i tempi.</span></div>
+      </div>
+      <div class="help-menu-item">
+        <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="help-menu-text"><b>Verbali · Problematiche · Documenti · Checklist</b><span>Sezioni documentali: verbali di riunione, non conformità/problemi aperti, documenti/allegati e liste di controllo (es. sicurezza, collaudi).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card full-width" style="margin-bottom:20px;">
+    <div class="card-label">Sincronizzazione multi-dispositivo</div>
+    <div class="card-title" style="margin-bottom:4px;">Come collegare il programma a GitHub</div>
+    <div class="help-step-text" style="margin-bottom:4px;">
+      La sincronizzazione con <b>GitHub Gist</b> permette di salvare i tuoi progetti su un file privato del tuo account GitHub, così puoi aprirli da qualsiasi computer o dispositivo semplicemente usando lo stesso "token" di accesso — senza bisogno di email, chiavette USB o cloud a pagamento.
+    </div>
+
+    <div class="help-steps">
+      <div class="help-step">
+        <div class="help-step-num">1</div>
+        <div class="help-step-body">
+          <div class="help-step-title">Crea un account GitHub (se non l'hai già)</div>
+          <div class="help-step-text">Vai su <a href="https://github.com/join" target="_blank">github.com/join</a> e registrati gratuitamente. Se hai già un account GitHub, salta questo passaggio.</div>
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">2</div>
+        <div class="help-step-body">
+          <div class="help-step-title">Genera un Personal Access Token con permesso "gist"</div>
+          <div class="help-step-text">
+            Nel programma clicca su <b>GitHub Gist</b> in fondo al menu laterale (oppure vai su <a href="https://github.com/settings/tokens/new?scopes=gist&description=GestionaleCantiere" target="_blank">github.com/settings/tokens/new</a>). Assicurati che sia selezionato <b>solo</b> lo scope <code>gist</code> (non serve nient'altro). Dai una scadenza a piacere (es. "No expiration" o "90 giorni") e clicca <b>Generate token</b> in fondo alla pagina.
+          </div>
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">3</div>
+        <div class="help-step-body">
+          <div class="help-step-title">Copia il token e incollalo nel programma</div>
+          <div class="help-step-text">
+            GitHub mostra il token <b>una sola volta</b> (una stringa che inizia con <code>ghp_</code>): copialo subito. Torna nel gestionale, apri <b>GitHub Gist</b> nel menu laterale, incolla il token nel campo dedicato e clicca <b>Salva</b>.
+          </div>
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">4</div>
+        <div class="help-step-body">
+          <div class="help-step-title">Il programma crea automaticamente un Gist privato</div>
+          <div class="help-step-text">
+            Da questo momento, ogni volta che premi <b>Salva</b>, il progetto viene scritto sia in locale nel browser sia in un Gist privato collegato al tuo account (visibile solo a te, mai pubblico). Non devi fare nient'altro: la sincronizzazione è automatica.
+          </div>
+        </div>
+      </div>
+      <div class="help-step">
+        <div class="help-step-num">5</div>
+        <div class="help-step-body">
+          <div class="help-step-title">Apri lo stesso progetto da un altro dispositivo</div>
+          <div class="help-step-text">
+            Apri il file HTML del gestionale sull'altro computer/tablet, vai su <b>GitHub Gist</b> nel menu, incolla <b>lo stesso token</b> creato al passo 2 e salva. Poi usa <b>Apri progetto</b> nel menu laterale: vedrai l'elenco dei progetti salvati sul Gist e potrai caricare quello che ti serve.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-callout warn">
+      <span>🔒</span>
+      <div>
+        <b>Sicurezza del token.</b> Il token viene salvato solo nella memoria locale del browser che stai usando (mai inviato altrove se non a GitHub stesso) e funziona come una password: chi lo possiede può leggere/scrivere i tuoi Gist. Non condividerlo e, se pensi sia stato esposto, revocalo da <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> e generane uno nuovo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card full-width">
+    <div class="card-label">Domande frequenti</div>
+    <div class="card-title" style="margin-bottom:6px;">FAQ</div>
+    <div class="help-faq">
+      <details>
+        <summary>Devo per forza usare GitHub?</summary>
+        <div class="help-faq-answer">No. Senza token configurato il programma funziona comunque e salva tutto in locale nel browser con <b>Salva</b>. GitHub Gist serve solo se vuoi accedere agli stessi progetti da più dispositivi o vuoi un backup fuori dal browser.</div>
+      </details>
+      <details>
+        <summary>Cos'è esattamente un "Gist"?</summary>
+        <div class="help-faq-answer">Un Gist è un piccolo file di testo ospitato gratuitamente sui server di GitHub, collegato al tuo account. Il programma lo usa come un "contenitore" dove salva i dati dei tuoi progetti in formato testuale. Può essere pubblico o privato: il gestionale crea sempre un Gist <b>privato</b>, visibile solo a chi accede con il tuo token.</div>
+      </details>
+      <details>
+        <summary>Posso usare lo stesso token su più computer contemporaneamente?</summary>
+        <div class="help-faq-answer">Sì. Il token identifica il tuo account GitHub, non un singolo dispositivo. Configuralo su ogni computer/tablet da cui vuoi lavorare: tutti punteranno allo stesso Gist e vedranno gli stessi progetti salvati.</div>
+      </details>
+      <details>
+        <summary>Cosa succede se due persone modificano lo stesso progetto insieme?</summary>
+        <div class="help-faq-answer">L'ultimo salvataggio sovrascrive il precedente sul Gist: non c'è un merge automatico delle modifiche. Se lavorate in più persone sullo stesso progetto, meglio coordinarsi ed evitare di salvare nello stesso momento.</div>
+      </details>
+      <details>
+        <summary>Il mio token non funziona più / ho un errore di autenticazione</summary>
+        <div class="help-faq-answer">Il token potrebbe essere scaduto o essere stato revocato. Genera un nuovo token da <code>github.com/settings/tokens</code> con scope <code>gist</code> e reinseriscilo nel programma tramite <b>GitHub Gist</b> nel menu laterale.</div>
+      </details>
+      <details>
+        <summary>Come faccio un backup dei dati?</summary>
+        <div class="help-faq-answer">Se hai configurato GitHub Gist, il tuo Gist privato è già un backup accessibile da <code>github.com</code> con il tuo account. Puoi inoltre usare <b>Esporta PDF</b> in alto per salvare un'istantanea stampabile del progetto in qualsiasi momento.</div>
+      </details>
+      <details>
+        <summary>I miei dati vengono inviati a server diversi da GitHub?</summary>
+        <div class="help-faq-answer">No. Il programma comunica solo con le API ufficiali di GitHub (<code>api.github.com</code>) per leggere/scrivere il Gist. Non ci sono altri server o servizi terzi coinvolti nel salvataggio dei dati.</div>
+      </details>
+    </div>
+  </div>
 </div>
 
 <!-- Tooltip -->
@@ -1398,7 +1718,7 @@
 // ========================
 // DATI INIZIALI
 // ========================
-const COLORS = ['#c9a84c','#4caf82','#5ca8e0','#e08c5c','#a05ce0','#e05c5c','#4cafe0','#e0c94c'];
+const COLORS = ['#ef4444','#f97316','#eab308','#84cc16','#22c55e','#14b8a6','#3b82f6','#6366f1','#a855f7','#ec4899'];
 const COLOR_NAMES = ['gold','green','blue','orange','purple','red','cyan','yellow'];
 
 const tasks = [];
@@ -1506,6 +1826,7 @@ function showTab(id) {
   if (id === 'documenti') renderDocumenti();
   if (id === 'preventivi') renderPreventivi();
   if (id === 'checklist') renderChecklist();
+  if (id === 'help') { /* pagina statica, nessun render dinamico necessario */ }
 }
 
 // ========================
@@ -1555,7 +1876,7 @@ function updateStatusBadge() {
   } else if (scostamento >= -5) {
     badge.style.background = 'rgba(10,133,209,0.12)';
     badge.style.borderColor = 'rgba(10,133,209,0.35)';
-    badge.style.color = '#0a85d1';
+    badge.style.color = 'var(--blue)';
     badge.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> In linea`;
   } else {
     badge.style.background = 'rgba(212,76,71,0.12)';
@@ -1641,7 +1962,7 @@ function renderTasks() {
       tr.className = 'cat-row';
       tr.draggable = true;
       tr.dataset.idx = i;
-      tr.innerHTML = `<td colspan="11" style="padding:8px 16px;">
+      tr.innerHTML = `<td colspan="11" style="padding:8px 14px;">
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <span class="drag-handle" style="cursor:grab;color:var(--text-dimmer);font-size:14px;user-select:none;" title="Trascina per riordinare">⠿</span>
             <input type="text" value="${t.nome}" onchange="_rinominaFase(${i},this.value);renderGantt();"
@@ -1649,7 +1970,7 @@ function renderTasks() {
               onfocus="this.style.background='var(--bg)';this.style.borderColor='var(--border)'"
               onblur="this.style.background='transparent';this.style.borderColor='transparent'">
             <div class="color-pick" style="margin-left:4px;">${colorSwatches}</div>
-            <button class="btn-sm" style="margin-left:auto;" onclick="rimuoviTask(${i})">✕</button>
+            <button class="btn-sm btn-x" style="margin-left:auto;" onclick="rimuoviTask(${i})">✕</button>
           </div>
         </td>`;
       setupRowDrag(tr);
@@ -1692,11 +2013,11 @@ function renderTasks() {
         <td><input type="text" value="${t.resp||''}" onchange="tasks[${i}].resp=this.value;"></td>
         <td style="text-align:center;color:var(--text-dimmer);font-size:11px;">—</td>
         <td>
-          <label style="cursor:pointer;font-size:12px;color:var(--text-dim);">
-            <input type="checkbox" ${t.critico?'checked':''} onchange="tasks[${i}].critico=this.checked;renderGantt();" style="width:auto;margin-right:4px;">critico
+          <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim);">
+            <input type="checkbox" ${t.critico?'checked':''} onchange="tasks[${i}].critico=this.checked;renderGantt();" style="width:auto;margin:0;">critico
           </label>
         </td>
-        <td><button class="btn-sm danger" onclick="rimuoviTask(${i})">✕</button></td>`;
+        <td style="text-align:right;"><button class="btn-sm danger btn-x" onclick="rimuoviTask(${i})">✕</button></td>`;
       setupRowDrag(tr);
       tbody.appendChild(tr);
       return;
@@ -1724,30 +2045,27 @@ function renderTasks() {
         </div>
       </td>
       <td>
-        <div style="display:flex;flex-direction:column;gap:3px;">
-          <select onchange="tasks[${i}].impresa=this.value;renderRisorse();" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:6px;font-family:var(--font);font-size:11px;outline:none;max-width:128px;">
-            <option value="">— nessuna —</option>
-            ${(() => {
-              const agg = _getAggiudicataPerLavorazione(t.nome);
-              let opts = '';
-              if (agg) opts += `<option value="${agg.ditta}"${t.impresa===agg.ditta?' selected':''}>${agg.ditta} ★</option>`;
-              getFornitoriNomi().filter(n => !agg || n !== agg.ditta).forEach(n => {
-                opts += `<option value="${n}"${t.impresa===n?' selected':''}>${n}</option>`;
-              });
-              return opts;
-            })()}
-          </select>
-          ${(() => { const agg = _getAggiudicataPerLavorazione(t.nome); return agg ? `<span style="font-size:10px;color:var(--green);display:flex;align-items:center;gap:3px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>da gara</span>` : ''; })()}
-        </div>
+        <select onchange="tasks[${i}].impresa=this.value;renderRisorse();" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:5px 6px;border-radius:6px;font-family:var(--font);font-size:11px;outline:none;width:100%;max-width:128px;">
+          <option value="">— nessuna —</option>
+          ${(() => {
+            const agg = _getAggiudicataPerLavorazione(t.nome);
+            let opts = '';
+            if (agg) opts += `<option value="${agg.ditta}"${t.impresa===agg.ditta?' selected':''}>${agg.ditta}</option>`;
+            getFornitoriNomi().filter(n => !agg || n !== agg.ditta).forEach(n => {
+              opts += `<option value="${n}"${t.impresa===n?' selected':''}>${n}</option>`;
+            });
+            return opts;
+          })()}
+        </select>
       </td>
       <td><input type="text" value="${t.resp||''}" onchange="tasks[${i}].resp=this.value;"></td>
       <td><input type="text" data-currency="true" value="${formatThousands(t.costo||0)}" oninput="formatCurrencyInput(this)" onchange="tasks[${i}].costo=parseCurrency(this.value);renderRisorse();" style="width:80px;"></td>
       <td>
-        <label style="cursor:pointer;font-size:12px;color:var(--text-dim);">
-          <input type="checkbox" ${t.critico?'checked':''} onchange="tasks[${i}].critico=this.checked;renderGantt();" style="width:auto;margin-right:4px;">critico
+        <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-dim);">
+          <input type="checkbox" ${t.critico?'checked':''} onchange="tasks[${i}].critico=this.checked;renderGantt();" style="width:auto;margin:0;">critico
         </label>
       </td>
-      <td><button class="btn-sm danger" onclick="rimuoviTask(${i})">✕</button></td>`;
+      <td style="text-align:right;"><button class="btn-sm danger btn-x" onclick="rimuoviTask(${i})">✕</button></td>`;
     setupRowDrag(tr);
     tbody.appendChild(tr);
   });
@@ -1844,6 +2162,32 @@ function initOggiLabel() {
   const gg = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()];
   const mesi = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
   el.textContent = `${gg} ${d.getDate()} ${mesi[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function mostraAiutoGantt() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const righe = [
+    { icon: '<polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/>', testo: 'Trascina la barra per spostare l\'attività nel tempo.' },
+    { icon: '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>', testo: 'Trascina i bordi sinistro/destro della barra per ridimensionare la durata.' },
+    { icon: '<rect x="3" y="10" width="18" height="4" rx="1"/>', testo: 'Trascina il bordo inferiore della barra per impostare l\'avanzamento %.' },
+  ];
+  overlay.innerHTML = `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);font-family:var(--font);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+        <div style="font-size:15px;font-weight:600;color:var(--text);">Come funziona il Gantt</div>
+        <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-dimmer);line-height:1;">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        ${righe.map(r => `
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;color:var(--text-dimmer);">${r.icon}</svg>
+            <div style="font-size:13px;color:var(--text-dim);line-height:1.5;">${r.testo}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 }
 
 function renderGantt() {
@@ -2327,7 +2671,7 @@ function renderRisorse() {
   tasks.filter(t => !t.cat && t.costo > 0).forEach(t => {
     const catTask = tasks.slice(0, tasks.indexOf(t)).reverse().find(x => x.cat);
     const k = catTask ? catTask.nome.replace(/FASE [A-Z] — /,'') : 'Altro';
-    const colore = catTask ? catTask.colore : '#9b9a97';
+    const colore = catTask ? catTask.colore : 'var(--text-dimmer)';
     if (!catMap[k]) catMap[k] = { costo: 0, colore };
     catMap[k].costo += t.costo;
   });
@@ -2390,7 +2734,7 @@ function renderRisorse() {
         const daGara = agg && agg.ditta === f.nome;
         return daGara
           ? `<button class="btn-sm" disabled title="Impresa aggiudicata da gara — elimina l'offerta aggiudicata in Preventivi per rimuoverla" style="opacity:0.4;cursor:not-allowed;border-color:var(--border);color:var(--text-dimmer);padding:5px 10px;" onclick="event.preventDefault();"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>`
-          : `<button class="btn-sm danger" onclick="fornitori.splice(${i},1);renderRisorse();renderTasks();">✕</button>`;
+          : `<button class="btn-sm danger btn-x" onclick="fornitori.splice(${i},1);renderRisorse();renderTasks();">✕</button>`;
       })()}</td>
     </tr>`;
   }).join('');
@@ -2513,7 +2857,7 @@ function renderAvanzamento() {
         ${SAL_STATI.map(s2=>`<option${s2===s.stato?' selected':''}>${s2}</option>`).join('')}
       </select>
     </td>
-    <td><button class="btn-sm danger" onclick="sals.splice(${i},1);sals.forEach((x,j)=>x.n=j+1);renderAvanzamento();" title="Elimina SAL">✕</button></td>
+    <td><button class="btn-sm danger btn-x" onclick="sals.splice(${i},1);sals.forEach((x,j)=>x.n=j+1);renderAvanzamento();" title="Elimina SAL">✕</button></td>
   </tr>`;
   }).join('');
 
@@ -2666,6 +3010,22 @@ function aggiungiSAL() {
 // IMPORTA / ESPORTA JSON
 // ========================
 
+function toggleExportMenu(ev) {
+  ev.stopPropagation();
+  const menu = document.getElementById('export-menu');
+  if (!menu) return;
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+}
+function closeExportMenu() {
+  const menu = document.getElementById('export-menu');
+  if (menu) menu.style.display = 'none';
+}
+document.addEventListener('click', (ev) => {
+  const wrap = document.getElementById('export-menu-wrap');
+  if (wrap && !wrap.contains(ev.target)) closeExportMenu();
+});
+
 function esportaJSON() {
   // Raccoglie tutti i campi del progetto corrente (stessa struttura di saveToStorage)
   const data = {
@@ -2691,8 +3051,14 @@ function esportaJSON() {
     tasks:           tasks,
     fornitori:       fornitori,
     sals:            sals,
+    verbali:         verbali,
+    problematiche:   problematiche,
+    documenti:       documenti,
+    garePreventivi:  garePreventivi,
+    checklist:       checklist,
+    combos:          combos,
     exportedAt:      new Date().toISOString(),
-    _version:        1
+    _version:        2
   };
 
   const codice = data.codice_progetto || 'progetto';
@@ -2750,32 +3116,33 @@ function handleImportFile(input) {
     const nTask  = (data.tasks  || []).filter(t => !t.cat).length;
     const nSal   = (data.sals   || []).length;
     const nForn  = (data.fornitori || []).length;
+    const nGare  = (data.garePreventivi || []).length;
+    const nCombo = (data.combos || []).length;
 
     const dialog = document.createElement('div');
-    dialog.style.cssText = 'background:#fff;border:1px solid #e3e2df;border-radius:12px;padding:32px;min-width:420px;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);';
+    dialog.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:32px;min-width:420px;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);';
     dialog.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a85d1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="5" x2="12" y2="17"/></svg>
-        <div style="font-size:16px;font-weight:600;color:#1a1a1a;">Importa Progetto</div>
+        <div style="font-size:16px;font-weight:600;color:var(--gold-light);">Importa Progetto</div>
       </div>
-      <div style="font-size:13px;color:#787774;margin-bottom:20px;">Riepilogo del file selezionato:</div>
+      <div style="font-size:13px;color:var(--text-dim);margin-bottom:20px;">Riepilogo del file selezionato:</div>
       <div style="background:#f7f7f5;border:1px solid #e3e2df;border-radius:8px;padding:16px;margin-bottom:20px;">
-        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:#787774;">Codice</span><span style="font-weight:600;color:#0a85d1;">${codice}</span></div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:#787774;">Cantiere</span><span style="font-weight:500;color:#1a1a1a;">${nome}</span></div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:#787774;">Committente</span><span style="color:#37352f;">${comm}</span></div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:#787774;">Attività</span><span style="color:#37352f;">${nTask}</span></div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:#787774;">SAL</span><span style="color:#37352f;">${nSal}</span></div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:#787774;">Esportato il</span><span style="color:#37352f;">${exp}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">Codice</span><span style="font-weight:600;color:var(--blue);">${codice}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">Cantiere</span><span style="font-weight:500;color:var(--gold-light);">${nome}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">Committente</span><span style="color:var(--text);">${comm}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">Attività</span><span style="color:var(--text);">${nTask}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">SAL</span><span style="color:var(--text);">${nSal}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e3e2df;font-size:13px;"><span style="color:var(--text-dim);">Gare / Combinazioni</span><span style="color:var(--text);">${nGare} / ${nCombo}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--text-dim);">Esportato il</span><span style="color:var(--text);">${exp}</span></div>
       </div>
       <div style="background:#fde8e8;border:1px solid #f5c6c6;border-radius:6px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#d44c47;display:flex;align-items:flex-start;gap:7px;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         I dati del progetto corrente verranno sostituiti. Salva prima se vuoi conservarli.
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end;">
-        <button onclick="document.getElementById('import-confirm-overlay').remove()"
-          style="background:transparent;border:1px solid #e3e2df;color:#787774;border-radius:8px;padding:10px 20px;cursor:pointer;font-family:var(--font);font-size:13px;">Annulla</button>
-        <button onclick="confermaImporta(${JSON.stringify(JSON.stringify(data)).replace(/</g,'&lt;')})"
-          style="background:#0a85d1;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;">Importa</button>
+        <button class="btn-outline" onclick="document.getElementById('import-confirm-overlay').remove()">Annulla</button>
+        <button class="btn" onclick="confermaImporta(${JSON.stringify(JSON.stringify(data)).replace(/</g,'&lt;')})">Importa</button>
       </div>
     `;
     // Salva i dati nel overlay per recuperarli al click
@@ -2836,11 +3203,19 @@ function eseguiImporta(data) {
   if (data.verbali)   { verbali.length = 0;   data.verbali.forEach(v => verbali.push(v)); }
   if (data.problematiche) { problematiche.length = 0; data.problematiche.forEach(p => problematiche.push(p)); }
   if (data.documenti) { documenti.length = 0; data.documenti.forEach(d => documenti.push(d)); }
+  if (data.garePreventivi) { garePreventivi.length = 0; data.garePreventivi.forEach(g => garePreventivi.push(g)); }
+  if (data.checklist) { checklist.length = 0; data.checklist.forEach(c => checklist.push(c)); }
+  if (data.combos) { combos.length = 0; data.combos.forEach(c => combos.push(c)); }
 
   // Ricalcola e aggiorna tutto
   calcolaSALLiquidati();
+  try { sincronizzaDaGare(); } catch(e) {}
   aggiorna();
   renderTasks();
+  try { renderHome(); } catch(e) {}
+  try { renderPreventivi(); } catch(e) {}
+  try { renderComparativoBuilder(); renderComparativoSummary(); } catch(e) {}
+  try { renderVerbali(); renderProblematiche(); renderDocumenti(); renderChecklist(); } catch(e) {}
   saveToStorage();
 
   // Feedback
@@ -2877,37 +3252,35 @@ function showGistConfig() {
   overlay.id = 'gist-config-overlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
   overlay.innerHTML = `
-    <div style="background:#fff;border:1px solid #e3e2df;border-radius:16px;padding:32px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.2);font-family:var(--font);">
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.2);font-family:var(--font);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <div style="font-size:16px;font-weight:600;color:#1a1a1a;">Configurazione GitHub Gist</div>
-        <button onclick="document.getElementById('gist-config-overlay').remove()" style="background:none;border:none;cursor:pointer;font-size:20px;color:#9b9a97;line-height:1;">✕</button>
+        <div style="font-size:16px;font-weight:600;color:var(--gold-light);">Configurazione GitHub Gist</div>
+        <button onclick="document.getElementById('gist-config-overlay').remove()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-dimmer);line-height:1;">✕</button>
       </div>
-      <div style="font-size:12px;color:#787774;margin-bottom:24px;line-height:1.5;">
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:24px;line-height:1.5;">
         I progetti vengono salvati in un Gist privato sul tuo account GitHub,<br>accessibile da qualsiasi dispositivo con lo stesso token.
       </div>
 
       <div style="margin-bottom:16px;">
-        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#787774;margin-bottom:6px;">Personal Access Token (scope: <code>gist</code>)</label>
+        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:6px;">Personal Access Token (scope: <code>gist</code>)</label>
         <input id="cfg-token" type="password" value="${token}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-          style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;outline:none;color:#1a1a1a;"
+          style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:13px;outline:none;color:var(--gold-light);"
           onfocus="this.style.borderColor='#666'" onblur="this.style.borderColor='#e3e2df'">
-        <div style="font-size:11px;color:#9b9a97;margin-top:5px;">
-          Genera su <a href="https://github.com/settings/tokens/new?scopes=gist&description=GestionaleCantiere" target="_blank" style="color:#0a85d1;">github.com/settings/tokens</a> → seleziona solo <strong>gist</strong>
+        <div style="font-size:11px;color:var(--text-dimmer);margin-top:5px;">
+          Genera su <a href="https://github.com/settings/tokens/new?scopes=gist&description=GestionaleCantiere" target="_blank" style="color:var(--blue);">github.com/settings/tokens</a> → seleziona solo <strong>gist</strong>
         </div>
       </div>
 
       <div style="margin-bottom:24px;">
-        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#787774;margin-bottom:6px;">Gist ID (opzionale — lascia vuoto per crearne uno nuovo)</label>
+        <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:6px;">Gist ID (opzionale — lascia vuoto per crearne uno nuovo)</label>
         <input id="cfg-gist-id" type="text" value="${gistId}" placeholder="lascia vuoto → verrà creato automaticamente"
-          style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;outline:none;color:#1a1a1a;"
+          style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;outline:none;color:var(--gold-light);"
           onfocus="this.style.borderColor='#666'" onblur="this.style.borderColor='#e3e2df'">
       </div>
 
       <div style="display:flex;gap:10px;justify-content:flex-end;">
-        <button onclick="document.getElementById('gist-config-overlay').remove()"
-          style="background:transparent;border:1px solid #e3e2df;color:#787774;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;">Annulla</button>
-        <button onclick="saveGistConfig()"
-          style="background:#37352f;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-size:13px;font-weight:600;">Salva configurazione</button>
+        <button class="btn-outline" onclick="document.getElementById('gist-config-overlay').remove()">Annulla</button>
+        <button class="btn" onclick="saveGistConfig()">Salva configurazione</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -2926,7 +3299,7 @@ function saveGistConfig() {
 }
 
 // Crea un nuovo Gist privato (chiamato solo la prima volta)
-const GIST_DESCRIPTION = 'Gestionale Cantiere — Progetti';
+const GIST_DESCRIPTION = 'Ge.Ka. — Gestionale Cantiere — Progetti';
 
 // Cerca tra i Gist esistenti quello con la descrizione giusta,
 // oppure ne crea uno nuovo solo se non esiste ancora.
@@ -3121,13 +3494,13 @@ async function showProjectPicker() {
   overlay.id = 'project-picker-overlay';
   overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;`;
   const dialog = document.createElement('div');
-  dialog.style.cssText = `background:#fff;border:1px solid #e3e2df;border-radius:12px;padding:28px;min-width:480px;max-width:600px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);`;
+  dialog.style.cssText = `background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:28px;min-width:480px;max-width:600px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);`;
   dialog.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="font-size:16px;font-weight:600;color:#1a1a1a;">Progetti salvati su GitHub Gist</div>
-      <button onclick="document.getElementById('project-picker-overlay').remove()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#9b9a97;">✕</button>
+      <div style="font-size:16px;font-weight:600;color:var(--gold-light);">Progetti salvati su GitHub Gist</div>
+      <button onclick="document.getElementById('project-picker-overlay').remove()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-dimmer);">✕</button>
     </div>
-    <div id="picker-loading" style="text-align:center;padding:32px 0;color:#9b9a97;font-size:13px;">
+    <div id="picker-loading" style="text-align:center;padding:32px 0;color:var(--text-dimmer);font-size:13px;">
       <div style="margin-bottom:8px;">⏳ Caricamento da GitHub...</div>
     </div>
     <div id="picker-content" style="display:none;">
@@ -3139,8 +3512,8 @@ async function showProjectPicker() {
       <div id="picker-list" style="max-height:320px;overflow-y:auto;"></div>
     </div>
     <div style="margin-top:16px;padding-top:16px;border-top:1px solid #e3e2df;display:flex;justify-content:space-between;align-items:center;">
-      <button onclick="showGistConfig()" style="background:none;border:none;color:#9b9a97;font-size:11px;cursor:pointer;padding:0;font-family:var(--font);">⚙ Configura token GitHub</button>
-      <span style="font-size:11px;color:#9b9a97;">Gist ID: <code style="font-size:10px;">${getGistId() || '—'}</code></span>
+      <button onclick="showGistConfig()" style="background:none;border:none;color:var(--text-dimmer);font-size:11px;cursor:pointer;padding:0;font-family:var(--font);">⚙ Configura token GitHub</button>
+      <span style="font-size:11px;color:var(--text-dimmer);">Gist ID: <code style="font-size:10px;">${getGistId() || '—'}</code></span>
     </div>`;
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
@@ -3151,7 +3524,7 @@ async function showProjectPicker() {
   document.getElementById('picker-content').style.display = 'block';
 
   if (projects.length === 0) {
-    document.getElementById('picker-list').innerHTML = `<div style="text-align:center;padding:24px;color:#9b9a97;font-size:13px;">Nessun progetto trovato nel Gist.</div>`;
+    document.getElementById('picker-list').innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-dimmer);font-size:13px;">Nessun progetto trovato nel Gist.</div>`;
   } else {
     document.getElementById('picker-list').innerHTML = projects.map(p => {
       const d = p.savedAt ? new Date(p.savedAt).toLocaleDateString('it-IT', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
@@ -3161,15 +3534,12 @@ async function showProjectPicker() {
         onmouseout="this.style.background='';this.style.borderColor='transparent'"
         onclick="openProject('${p.key}')">
         <div style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:12px;font-weight:600;color:#0a85d1;min-width:50px;">${p.codice}</span>
-          <span style="font-size:13px;color:#37352f;">${p.nome}</span>
+          <span style="font-size:12px;font-weight:600;color:var(--blue);min-width:50px;">${p.codice}</span>
+          <span style="font-size:13px;color:var(--text);">${p.nome}</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:11px;color:#9b9a97;">${d}</span>
-          <button onclick="event.stopPropagation();deleteProject('${p.key}','${p.nome}')" 
-            style="background:none;border:1px solid #e3e2df;color:#9b9a97;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px;transition:all 0.15s;"
-            onmouseover="this.style.color='#d44c47';this.style.borderColor='#d44c47'" 
-            onmouseout="this.style.color='#9b9a97';this.style.borderColor='#e3e2df'">Elimina</button>
+          <span style="font-size:11px;color:var(--text-dimmer);">${d}</span>
+          <button class="btn-sm danger" onclick="event.stopPropagation();deleteProject('${p.key}','${p.nome}')" style="padding:2px 8px;font-size:11px;">Elimina</button>
         </div>
       </div>`;
     }).join('');
@@ -3189,7 +3559,7 @@ async function openProject(key) {
   document.getElementById('project-picker-overlay')?.remove();
   showSaveIndicator('⏳ caricamento...', false);
   const el = document.getElementById('save-indicator');
-  if (el) { el.style.color = '#0a85d1'; el.style.opacity = '1'; }
+  if (el) { el.style.color = 'var(--blue)'; el.style.opacity = '1'; }
   const savedAt = await loadFromStorage(key);
   calcolaSALLiquidati();
   aggiorna();
@@ -3214,7 +3584,7 @@ async function deleteProject(key, nome) {
     });
     document.querySelector(`[data-key="${key}"]`)?.remove();
     if (document.querySelectorAll('.picker-row').length === 0) {
-      document.getElementById('picker-list').innerHTML = `<div style="text-align:center;padding:24px;color:#9b9a97;font-size:13px;">Nessun progetto trovato nel Gist.</div>`;
+      document.getElementById('picker-list').innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-dimmer);font-size:13px;">Nessun progetto trovato nel Gist.</div>`;
     }
   } catch(e) {
     alert('Errore durante l\'eliminazione.');
@@ -3228,21 +3598,19 @@ function newProject() {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;';
 
   const dialog = document.createElement('div');
-  dialog.style.cssText = 'background:#fff;border:1px solid #e3e2df;border-radius:12px;padding:32px;min-width:380px;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);';
+  dialog.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:32px;min-width:380px;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,0.15);font-family:var(--font);';
   dialog.innerHTML = `
-    <div style="font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:8px;">Nuovo Progetto</div>
-    <div style="font-size:13px;color:#787774;margin-bottom:24px;">Inserisci il codice univoco del progetto.<br>Non sarà modificabile in seguito.</div>
-    <label style="display:block;font-size:12px;color:#787774;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">Codice Progetto</label>
+    <div style="font-size:16px;font-weight:600;color:var(--gold-light);margin-bottom:8px;">Nuovo Progetto</div>
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:24px;">Inserisci il codice univoco del progetto.<br>Non sarà modificabile in seguito.</div>
+    <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">Codice Progetto</label>
     <input id="new-project-code" type="text" placeholder="es. A01, B12, C03..." autocomplete="off"
-      style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:12px 14px;font-family:var(--font);font-size:16px;font-weight:600;letter-spacing:0.05em;outline:none;color:#1a1a1a;margin-bottom:20px;"
+      style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:12px 14px;font-family:var(--font);font-size:16px;font-weight:600;letter-spacing:0.05em;outline:none;color:var(--gold-light);margin-bottom:20px;"
       onfocus="this.style.borderColor='#666'"
       onblur="this.style.borderColor='#e3e2df'"
       onkeydown="if(event.key==='Enter') confirmNewProject()">
     <div style="display:flex;gap:10px;justify-content:flex-end;">
-      <button onclick="document.getElementById('new-project-overlay').remove()"
-        style="background:transparent;border:1px solid #e3e2df;color:#787774;border-radius:8px;padding:10px 20px;cursor:pointer;font-family:var(--font);font-size:13px;">Annulla</button>
-      <button onclick="confirmNewProject()"
-        style="background:#37352f;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;">Crea Progetto</button>
+      <button class="btn-outline" onclick="document.getElementById('new-project-overlay').remove()">Annulla</button>
+      <button class="btn" onclick="confirmNewProject()">Crea Progetto</button>
     </div>
   `;
 
@@ -3400,9 +3768,9 @@ async function esportaPDF() {
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;display:flex;align-items:center;justify-content:center;';
   overlay.innerHTML = `
-    <div style="background:#fff;border:1px solid #e3e2df;border-radius:16px;padding:36px 52px;text-align:center;font-family:ui-sans-serif,-apple-system,sans-serif;min-width:300px;">
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:36px 52px;text-align:center;font-family:ui-sans-serif,-apple-system,sans-serif;min-width:300px;">
       <div style="width:44px;height:44px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:#f5f5f3;border-radius:10px;color:#555;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-      <div style="color:#1a1a1a;font-size:15px;font-weight:600;margin-bottom:6px;">Generazione PDF in corso...</div>
+      <div style="color:var(--gold-light);font-size:15px;font-weight:600;margin-bottom:6px;">Generazione PDF in corso...</div>
       <div id="pdf-step" style="color:#888;font-size:12px;min-height:16px;">Preparazione</div>
       <div style="margin-top:18px;width:100%;height:4px;background:#e8e8e6;border-radius:2px;overflow:hidden;">
         <div id="pdf-bar" style="height:100%;width:0%;background:#333;border-radius:2px;transition:width 0.25s;"></div>
@@ -3464,7 +3832,7 @@ async function esportaPDF() {
     pdf.setDrawColor(220, 220, 220); pdf.setLineWidth(0.2);
     pdf.line(M, PH - FOOTER_H, PW - M, PH - FOOTER_H);
     pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6); pdf.setTextColor(170, 170, 170);
-    pdf.text('Gestionale Cantiere — rev. 2026', M, fy);
+    pdf.text('Ge.Ka. — Gestionale Cantiere — rev. 2026', M, fy);
     pdf.text(codice + ' · ' + nomeCantiere, PW - M, fy, { align: 'right' });
   }
 
@@ -3522,6 +3890,22 @@ async function esportaPDF() {
   showTab('avanzamento'); renderAvanzamento(); await new Promise(r => setTimeout(r, 250));
   showTab('fasi'); renderTasks(); await new Promise(r => setTimeout(r, 150));
   showTab('preventivi'); renderPreventivi(); await new Promise(r => setTimeout(r, 150));
+
+  // Prepara la mappa del cantiere (Home) per poterla catturare nel report
+  setStep('Caricamento mappa cantiere...', 7);
+  showTab('home'); await new Promise(r => setTimeout(r, 150));
+  let mapCaptureData = null;
+  try {
+    if (typeof aggiornaMappaHome === 'function') await aggiornaMappaHome();
+    await new Promise(r => setTimeout(r, 900)); // attesa caricamento tile mappa
+    const mapEl = document.getElementById('home-map');
+    if (mapEl && mapEl.querySelector('.leaflet-container')) {
+      mapCaptureData = await capture(mapEl, { scale: 2, bg: '#f0f0ee' });
+    }
+  } catch (err) {
+    mapCaptureData = null; // se la mappa non è disponibile (offline, CORS, indirizzo mancante) si salta la sezione
+  }
+
   showTab('progetto'); await new Promise(r => setTimeout(r, 100));
 
   // ════════════════════════════════
@@ -3575,6 +3959,20 @@ async function esportaPDF() {
     pdf.text(k.v, kx+4, y+14);
   });
   y += 22;
+
+  // Mappa posizione cantiere
+  if (mapCaptureData) {
+    y = secTitle('Posizione cantiere', y);
+    const mapMaxH = 45;
+    const mapH = addImg(mapCaptureData, M, y, CW_P, mapMaxH);
+    pdf.setDrawColor(220,220,220); pdf.setLineWidth(0.2);
+    pdf.rect(M, y, CW_P, mapH);
+    if (indirizzo) {
+      pdf.setFont('helvetica','normal'); pdf.setFontSize(6); pdf.setTextColor(140,140,140);
+      pdf.text(indirizzo, M, y + mapH + 3.5);
+    }
+    y += mapH + 7;
+  }
 
   // 3 schede info
   const col3W = (CW_P - 4) / 3;
@@ -4273,7 +4671,7 @@ function renderVerbali() {
       <td>
         <div style="display:flex;gap:6px;">
           <button class="btn-sm" onclick="apriDettaglioVerbale(${idx})">Apri</button>
-          <button class="btn-sm danger" onclick="rimuoviVerbale(${idx})">✕</button>
+          <button class="btn-sm danger btn-x" onclick="rimuoviVerbale(${idx})">✕</button>
         </div>
       </td>`;
     tbody.appendChild(tr);
@@ -4330,7 +4728,7 @@ function apriModaleVerbale(v, idx) {
     </div>
     <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
       <button class="btn-outline" onclick="this.closest('[style*=fixed]').remove()">Annulla</button>
-      <button class="btn" onclick="salvaVerbale(${isEdit?idx:'null'}, this)">Salva Verbale</button>
+      <button class="btn" onclick="salvaVerbale(${isEdit?idx:'null'}, this)">Salva</button>
     </div>`;
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
@@ -4416,7 +4814,7 @@ function renderProblematiche() {
       <td>
         <div style="display:flex;gap:6px;">
           <button class="btn-sm" onclick="apriModaleProblema(${idx})">Edit</button>
-          <button class="btn-sm danger" onclick="rimuoviProblema(${idx})">✕</button>
+          <button class="btn-sm danger btn-x" onclick="rimuoviProblema(${idx})">✕</button>
         </div>
       </td>`;
     tbody.appendChild(tr);
@@ -4567,7 +4965,7 @@ function renderDocumenti() {
       ${d.pdfData ? `<a href="${d.pdfData}" download="${d.pdfName||'documento.pdf'}" style="font-size:12px;color:var(--text-dim);text-decoration:none;display:flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;width:fit-content;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#888';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> ${d.pdfName||'documento.pdf'}</a>` : ''}
       <div style="display:flex;gap:8px;margin-top:4px;">
         <button class="btn-sm" onclick="apriModaleDocumento(${idx})" style="flex:1;">Modifica</button>
-        <button class="btn-sm danger" onclick="rimuoviDocumento(${idx})">✕</button>
+        <button class="btn-sm danger btn-x" onclick="rimuoviDocumento(${idx})">✕</button>
       </div>`;
     grid.appendChild(card);
   });
@@ -4754,9 +5152,9 @@ function renderHome() {
   const SEZIONI = [
     { id:'progetto', label:'Dati Progetto', desc:'Anagrafica, importi e parametri contrattuali' },
     { id:'fasi', label:'Fasi & Attività', desc:'Definizione lavorazioni e tempistiche' },
+    { id:'gantt', label:'Gantt', desc:'Visualizzazione timeline del cantiere' },
     { id:'preventivi', label:'Preventivi', desc:'Confronto offerte e aggiudicazione gare' },
     { id:'risorse', label:'Risorse', desc:'Subappaltatori, fornitori e costi' },
-    { id:'gantt', label:'Gantt', desc:'Visualizzazione timeline del cantiere' },
     { id:'avanzamento', label:'Avanzamento', desc:'SAL, monitoraggio e analisi critica' },
     { id:'verbali', label:'Verbali', desc:'Riunioni, sopralluoghi e verbali SAL' },
     { id:'problematiche', label:'Problematiche', desc:'Non conformità, riserve e segnalazioni' },
@@ -4779,9 +5177,18 @@ function renderHome() {
         <div style="font-size:14px;color:var(--text-dim);display:flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${indirizzo}</div>
       </div>
 
+      <!-- Mappa posizione cantiere -->
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:28px;">
+        <div style="padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dimmer);">Posizione cantiere</div>
+          ${indirizzo !== '—' ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(indirizzo)}" target="_blank" rel="noopener" style="font-size:11px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;white-space:nowrap;">Apri in Google Maps <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : ''}
+        </div>
+        <div id="home-map" style="height:260px;width:100%;background:var(--surface2);position:relative;z-index:0;isolation:isolate;"></div>
+      </div>
+
       <!-- Scheda dati principali -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px;">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+        <div class="card" style="padding:20px;">
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dimmer);margin-bottom:14px;">Parti coinvolte</div>
           <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
             <div><span style="color:var(--text-dimmer);display:block;font-size:11px;">Committente</span><span style="font-weight:500;color:var(--text);">${committente}</span></div>
@@ -4789,7 +5196,7 @@ function renderHome() {
             <div><span style="color:var(--text-dimmer);display:block;font-size:11px;">Direttore Lavori</span><span style="font-weight:500;color:var(--text);">${dl}</span></div>
           </div>
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+        <div class="card" style="padding:20px;">
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dimmer);margin-bottom:14px;">Tempi</div>
           <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
             <div><span style="color:var(--text-dimmer);display:block;font-size:11px;">Inizio lavori</span><span style="font-weight:500;color:var(--text);">${fmtD(di)}</span></div>
@@ -4797,7 +5204,7 @@ function renderHome() {
             <div><span style="color:var(--text-dimmer);display:block;font-size:11px;">Durata · Giorni eff.</span><span style="font-weight:500;color:var(--text);">${dur} sett. · ${ggLav} gg</span></div>
           </div>
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+        <div class="card" style="padding:20px;">
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dimmer);margin-bottom:14px;">Importi</div>
           <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
             <div><span style="color:var(--text-dimmer);display:block;font-size:11px;">Importo totale</span><span style="font-weight:500;color:var(--text);">${fmt(importo)}</span></div>
@@ -4807,7 +5214,7 @@ function renderHome() {
       </div>
 
       <!-- Barra avanzamento -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:28px;">
+      <div class="card" style="padding:20px 24px;margin-bottom:28px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
           <div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -4841,7 +5248,7 @@ function renderHome() {
             else if (ckTot > 0) badge = `<div style="font-size:10px;color:var(--green);margin-top:6px;font-weight:500;">Completata</div>`;
           }
           return `
-          <div onclick="showTab('${s.id}')" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#888';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
+          <div class="card" onclick="showTab('${s.id}')" style="padding:18px 16px;cursor:pointer;">
             <div style="width:34px;height:34px;background:var(--surface2);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--text-dim);">${SVG[s.id]}</div>
             <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;">${s.label}</div>
             <div style="font-size:10px;color:var(--text-dimmer);line-height:1.4;">${s.desc}</div>
@@ -4851,6 +5258,65 @@ function renderHome() {
       </div>
     </div>
   `;
+
+  setTimeout(aggiornaMappaHome, 30);
+}
+
+// ========================
+// MAPPA POSIZIONE CANTIERE (Home)
+// ========================
+let _homeMapCoords = null;      // { lat, lon, label } dell'ultima geolocalizzazione riuscita
+let _homeMapAddrCached = null;  // indirizzo a cui corrispondono le coordinate sopra
+
+function _renderLeafletMap(lat, lon, label, indirizzoVal) {
+  const mapEl = document.getElementById('home-map');
+  if (!mapEl || typeof L === 'undefined') return;
+  mapEl.innerHTML = '';
+  const map = L.map(mapEl, { scrollWheelZoom: false }).setView([lat, lon], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+  L.marker([lat, lon]).addTo(map).bindPopup(label || indirizzoVal).openPopup();
+  setTimeout(() => map.invalidateSize(), 80);
+}
+
+async function aggiornaMappaHome() {
+  const indirizzoVal = (document.getElementById('indirizzo')?.value || '').trim();
+  const mapEl = document.getElementById('home-map');
+  if (!mapEl) return;
+
+  if (!indirizzoVal) {
+    mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-dimmer);text-align:center;padding:20px;">Inserisci un indirizzo nella scheda <b>Dati Progetto</b> per vedere qui la mappa.</div>';
+    return;
+  }
+
+  // Se l'indirizzo non è cambiato rispetto all'ultima ricerca riuscita, riusa le coordinate
+  // in cache senza richiamare di nuovo il servizio di geolocalizzazione
+  if (indirizzoVal === _homeMapAddrCached && _homeMapCoords) {
+    _renderLeafletMap(_homeMapCoords.lat, _homeMapCoords.lon, _homeMapCoords.label, indirizzoVal);
+    return;
+  }
+
+  mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-dimmer);">Ricerca posizione in corso...</div>';
+
+  try {
+    const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(indirizzoVal)}`);
+    const results = await resp.json();
+    if (!mapEl.isConnected) return; // l'utente ha già cambiato tab
+    if (!results || !results.length) {
+      mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-dimmer);text-align:center;padding:20px;">Indirizzo non trovato. Prova a renderlo più preciso (via, numero civico, città).</div>';
+      return;
+    }
+    const { lat, lon, display_name } = results[0];
+    const latN = parseFloat(lat), lonN = parseFloat(lon);
+    _homeMapCoords = { lat: latN, lon: lonN, label: display_name };
+    _homeMapAddrCached = indirizzoVal;
+    _renderLeafletMap(latN, lonN, display_name, indirizzoVal);
+  } catch (err) {
+    if (!mapEl.isConnected) return;
+    mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--red);text-align:center;padding:20px;">Impossibile contattare il servizio mappe. Verifica la connessione internet.</div>';
+  }
 }
 
 // ========================
@@ -4889,7 +5355,7 @@ function renderPreventivi() {
   const container = document.getElementById('prev-gare-list');
   if (!gare.length) {
     container.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-dimmer);font-size:13px;">
-      Nessuna gara. Clicca <strong>+ Nuova Gara</strong> per iniziare.
+      Nessuna gara. Clicca <strong>+ Aggiungi Gara</strong> per iniziare.
     </div>`;
     return;
   }
@@ -4923,6 +5389,7 @@ function renderPreventivi() {
             </div>
             <div style="text-align:right;flex-shrink:0;">
               <div style="font-size:18px;font-weight:700;color:${isAgg ? 'var(--green)' : 'var(--text)'};">${fmt(o.importo)}</div>
+              ${o.imponibile != null ? `<div style="font-size:10px;color:var(--text-dimmer);">Imp. ${fmt(o.imponibile)} + IVA ${o.ivaPerc||0}%</div>` : ''}
               <div style="font-size:10px;color:var(--text-dimmer);">${o.tempiGg ? o.tempiGg+'gg · ' : ''}${o.garanziaMesi ? o.garanziaMesi+'mesi gar.' : ''}</div>
             </div>
           </div>
@@ -4940,7 +5407,7 @@ function renderPreventivi() {
           <div style="display:flex;gap:6px;justify-content:flex-end;">
             ${g.stato !== 'Aggiudicata' ? `<button class="btn-sm" onclick="aggiudicaOfferta(${realIdx},${realOI})">✓ Aggiudica</button>` : ''}
             <button class="btn-sm" onclick="editOfferta(${realIdx},${realOI})">✎ Modifica</button>
-            <button class="btn-sm danger" onclick="rimuoviOfferta(${realIdx},${realOI})">✕</button>
+            <button class="btn-sm danger btn-x" onclick="rimuoviOfferta(${realIdx},${realOI})">✕</button>
           </div>
         </div>`;
     }).join('');
@@ -4965,7 +5432,7 @@ function renderPreventivi() {
               ${risparmio !== null ? `<div style="font-size:11px;color:var(--green);">Risparmio: ${fmt(risparmio)}</div>` : ''}
             </div>` : ''}
             <button class="btn-sm" onclick="editGara(${realIdx})">✎ Modifica</button>
-            <button class="btn-sm danger" onclick="rimuoviGara(${realIdx})">✕</button>
+            <button class="btn-sm danger btn-x" onclick="rimuoviGara(${realIdx})">✕</button>
           </div>
         </div>
         <!-- Offerte -->
@@ -5130,7 +5597,11 @@ function aggiungiOfferta(gi) {
       <div class="input-group"><label>TELEFONO</label><input type="text" id="mp-tel" placeholder=""></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-      <div class="input-group"><label>IMPORTO (€)</label><input type="text" data-currency="true" id="mp-imp" placeholder="0" oninput="formatCurrencyInput(this)"></div>
+      <div class="input-group"><label>IMPONIBILE (€)</label><input type="text" data-currency="true" id="mp-imponibile" placeholder="0" oninput="formatCurrencyInput(this);_aggiornaTotalePreventivo()"></div>
+      <div class="input-group"><label>IVA (%)</label><input type="number" id="mp-iva" placeholder="22" value="22" step="0.01" oninput="_aggiornaTotalePreventivo()"></div>
+      <div class="input-group"><label>TOTALE (IVA incl.)</label><input type="text" id="mp-tot-display" readonly style="background:var(--surface);cursor:default;font-weight:600;" value="€ 0"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="input-group"><label>TEMPI (giorni)</label><input type="number" id="mp-tempi" placeholder=""></div>
       <div class="input-group"><label>GARANZIA (mesi)</label><input type="number" id="mp-gar" placeholder=""></div>
     </div>
@@ -5153,11 +5624,14 @@ function aggiungiOfferta(gi) {
   `, () => {
     const ditta = document.getElementById('mp-ditta').value.trim();
     if (!ditta) { alert('Inserisci il nome della ditta'); return false; }
+    const imponibile = parseCurrency(document.getElementById('mp-imponibile').value);
+    const ivaPerc = parseFloat(document.getElementById('mp-iva').value) || 0;
+    const importo = imponibile + (imponibile * ivaPerc / 100);
     garePreventivi[gi].offerte.push({
       id: Date.now(),
       ditta, contatto: document.getElementById('mp-contatto').value,
       telefono: document.getElementById('mp-tel').value,
-      importo: parseCurrency(document.getElementById('mp-imp').value),
+      imponibile, ivaPerc, importo,
       tempiGg: parseInt(document.getElementById('mp-tempi').value)||0,
       garanziaMesi: parseInt(document.getElementById('mp-gar').value)||0,
       valutazione: parseInt(document.getElementById('mp-val').value)||3,
@@ -5169,7 +5643,19 @@ function aggiungiOfferta(gi) {
     _pendingOffertaPdfData = null;
     _pendingOffertaPdfName = null;
     return true;
-  }, () => setPrevStelle(3));
+  }, () => { setPrevStelle(3); _aggiornaTotalePreventivo(); });
+}
+
+// Calcola in tempo reale il Totale (IVA inclusa) nel modale Imponibile/IVA delle offerte preventivi
+function _aggiornaTotalePreventivo() {
+  const impEl = document.getElementById('mp-imponibile');
+  const ivaEl = document.getElementById('mp-iva');
+  const totEl = document.getElementById('mp-tot-display');
+  if (!impEl || !ivaEl || !totEl) return;
+  const imponibile = parseCurrency(impEl.value);
+  const ivaPerc = parseFloat(ivaEl.value) || 0;
+  const totale = imponibile + (imponibile * ivaPerc / 100);
+  totEl.value = fmt(totale);
 }
 
 function editOfferta(gi, oi) {
@@ -5184,7 +5670,11 @@ function editOfferta(gi, oi) {
       <div class="input-group"><label>TELEFONO</label><input type="text" id="mp-tel" value="${o.telefono||''}"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-      <div class="input-group"><label>IMPORTO (€)</label><input type="text" data-currency="true" id="mp-imp" value="${formatThousands(o.importo)}" oninput="formatCurrencyInput(this)"></div>
+      <div class="input-group"><label>IMPONIBILE (€)</label><input type="text" data-currency="true" id="mp-imponibile" value="${formatThousands(o.imponibile != null ? o.imponibile : (o.importo / (1 + ((o.ivaPerc != null ? o.ivaPerc : 22) / 100))))}" oninput="formatCurrencyInput(this);_aggiornaTotalePreventivo()"></div>
+      <div class="input-group"><label>IVA (%)</label><input type="number" id="mp-iva" value="${o.ivaPerc != null ? o.ivaPerc : 22}" step="0.01" oninput="_aggiornaTotalePreventivo()"></div>
+      <div class="input-group"><label>TOTALE (IVA incl.)</label><input type="text" id="mp-tot-display" readonly style="background:var(--surface);cursor:default;font-weight:600;" value="${fmt(o.importo)}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="input-group"><label>TEMPI (giorni)</label><input type="number" id="mp-tempi" value="${o.tempiGg||''}"></div>
       <div class="input-group"><label>GARANZIA (mesi)</label><input type="number" id="mp-gar" value="${o.garanziaMesi||''}"></div>
     </div>
@@ -5208,7 +5698,9 @@ function editOfferta(gi, oi) {
     o.ditta = document.getElementById('mp-ditta').value;
     o.contatto = document.getElementById('mp-contatto').value;
     o.telefono = document.getElementById('mp-tel').value;
-    o.importo = parseCurrency(document.getElementById('mp-imp').value);
+    o.imponibile = parseCurrency(document.getElementById('mp-imponibile').value);
+    o.ivaPerc = parseFloat(document.getElementById('mp-iva').value) || 0;
+    o.importo = o.imponibile + (o.imponibile * o.ivaPerc / 100);
     o.tempiGg = parseInt(document.getElementById('mp-tempi').value)||0;
     o.garanziaMesi = parseInt(document.getElementById('mp-gar').value)||0;
     o.valutazione = parseInt(document.getElementById('mp-val').value)||3;
@@ -5220,7 +5712,7 @@ function editOfferta(gi, oi) {
     _pendingOffertaPdfData = null;
     _pendingOffertaPdfName = null;
     return true;
-  }, () => setPrevStelle(o.valutazione || 3));
+  }, () => { setPrevStelle(o.valutazione || 3); _aggiornaTotalePreventivo(); });
 }
 
 function setPrevStelle(n) {
@@ -5255,6 +5747,7 @@ function _getAggiudicataPerLavorazione(nomeLavorazione) {
 
 // Restituisce { ditta, importo } dell'offerta aggiudicata per una data fase/categoria, o null
 function _getAggiudicataPerCategoria(nomeCategoria) {
+  if (!nomeCategoria) return null;
   for (const g of garePreventivi) {
     if (g.categoria === nomeCategoria) {
       const agg = g.offerte.find(o => o.aggiudicata);
@@ -5299,30 +5792,28 @@ function sincronizzaDaGare() {
     }
   });
 
-  // 2. Aggiorna fornitori: per ogni fornitore legato a una fase aggiudicata,
-  //    aggiorna nome e importo. Se la ditta aggiudicata non esiste ancora, la aggiunge.
-  const fasiAggiudicate = {};
+  // 2. Aggiorna fornitori: per ogni offerta aggiudicata (con o senza categoria/fase
+  //    assegnata), aggiorna nome e importo. Se la ditta aggiudicata non esiste
+  //    ancora tra i fornitori, la aggiunge automaticamente.
+  const aggiudicazioni = [];
   garePreventivi.forEach(g => {
     const agg = g.offerte.find(o => o.aggiudicata);
-    if (agg && g.categoria) fasiAggiudicate[g.categoria] = { ditta: agg.ditta, importo: agg.importo };
+    if (agg) aggiudicazioni.push({ cat: g.categoria || '', ditta: agg.ditta, importo: agg.importo, lavorazione: g.lavorazione });
   });
 
-  Object.entries(fasiAggiudicate).forEach(([fase, { ditta, importo }]) => {
-    // Cerca fornitore già associato a questa fase
-    let forn = fornitori.find(f => f.cat === fase);
+  aggiudicazioni.forEach(({ cat, ditta, importo }) => {
+    // Cerca un fornitore già esistente con lo STESSO NOME (e stessa categoria, se la gara ne ha una).
+    // Non si cerca più per sola categoria: questo evitava che un'impresa aggiudicata
+    // sovrascrivesse i dati di un'altra impresa già presente su quella stessa categoria/fase.
+    let forn = fornitori.find(f => f.nome === ditta && (!cat || f.cat === cat));
     if (forn) {
-      forn.nome    = ditta;
+      // Stessa impresa, stessa gara: aggiorna solo l'importo aggiornato dell'aggiudicazione
       forn.importo = importo;
+      if (cat) forn.cat = cat;
     } else {
-      // Cerca fornitore con stesso nome
-      forn = fornitori.find(f => f.nome === ditta);
-      if (forn) {
-        forn.cat     = fase;
-        forn.importo = importo;
-      } else {
-        // Aggiunge nuovo fornitore
-        fornitori.push({ nome: ditta, cat: fase, importo, stato: 'Non iniziato', contatto: '' });
-      }
+      // Impresa aggiudicataria non ancora presente tra le Risorse: viene sempre AGGIUNTA,
+      // senza mai sovrascrivere un'impresa diversa già presente
+      fornitori.push({ nome: ditta, cat, importo, stato: 'Non iniziato', contatto: '' });
     }
   });
 }
@@ -5404,18 +5895,16 @@ window.onload = async () => {
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
       overlay.innerHTML = `
-        <div style="background:#fff;border:1px solid #e3e2df;border-radius:16px;padding:32px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);font-family:var(--font);text-align:center;">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);font-family:var(--font);text-align:center;">
           <div style="font-size:32px;margin-bottom:16px;">&#x1F517;</div>
-          <div style="font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:8px;">Configura GitHub Gist</div>
-          <div style="font-size:13px;color:#787774;margin-bottom:24px;line-height:1.6;">
+          <div style="font-size:16px;font-weight:600;color:var(--gold-light);margin-bottom:8px;">Configura GitHub Gist</div>
+          <div style="font-size:13px;color:var(--text-dim);margin-bottom:24px;line-height:1.6;">
             I progetti vengono salvati su <strong>GitHub Gist</strong> in modo da essere accessibili da qualsiasi dispositivo.<br><br>
             Serve un <strong>Personal Access Token</strong> GitHub con scope <code>gist</code>.
           </div>
           <div style="display:flex;gap:10px;justify-content:center;">
-            <button onclick="this.closest('div[style*=fixed]').remove()"
-              style="background:transparent;border:1px solid #e3e2df;color:#787774;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;">Configura dopo</button>
-            <button onclick="this.closest('div[style*=fixed]').remove();showGistConfig()"
-              style="background:#37352f;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-size:13px;font-weight:600;">Configura ora &#x2192;</button>
+            <button class="btn-outline" onclick="this.closest('div[style*=fixed]').remove()">Configura dopo</button>
+            <button class="btn" onclick="this.closest('div[style*=fixed]').remove();showGistConfig()">Configura ora &#x2192;</button>
           </div>
         </div>`;
       document.body.appendChild(overlay);
@@ -5525,8 +6014,8 @@ function renderChecklist() {
           </div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-sm" onclick="aggiungiVoceALista(${realIdx})">+ Voce</button>
-          <button class="btn-sm danger" onclick="rimuoviLista(${realIdx})">✕</button>
+          <button class="btn-sm" onclick="aggiungiVoceALista(${realIdx})">+ Aggiungi Voce</button>
+          <button class="btn-sm danger btn-x" onclick="rimuoviLista(${realIdx})">✕</button>
         </div>
       </div>
       <div style="padding:0 24px 12px;">
@@ -5574,7 +6063,7 @@ function renderChecklist() {
                     style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:6px;font-family:var(--font);font-size:12px;outline:none;">
                 </td>
                 <td style="padding:8px;text-align:center;vertical-align:top;">
-                  <button class="btn-sm danger" onclick="rimuoviVoce(${realIdx},${realVi})" title="Rimuovi voce" style="padding:4px 8px;">✕</button>
+                  <button class="btn-sm danger btn-x" onclick="rimuoviVoce(${realIdx},${realVi})" title="Rimuovi voce">✕</button>
                 </td>
               </tr>`;
             }).join('')}
@@ -5867,13 +6356,12 @@ async function mostraTemplateDefault() {
 
   // Header
   const header = document.createElement('div');
-  header.style.cssText = 'padding:24px 28px 16px;border-bottom:1px solid var(--border);flex-shrink:0;';
+  header.style.cssText = 'padding:24px 28px 16px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;';
   const hasGist = !!token;
   header.innerHTML = `
-    <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;">Template Checklist Globale</div>
-    <div style="font-size:12px;color:var(--text-dimmer);">
-      Modifica il template utilizzato per i nuovi progetti.
-      ${hasGist ? '<span style="color:var(--green,#3d9970);font-weight:500;">✓ Sincronizzazione GitHub Gist attiva</span>' : 'Le modifiche vengono salvate localmente nel browser.'}
+    <div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;">Template Checklist Globale</div>
+      <div style="font-size:12px;color:var(--text-dimmer);">Modifica il template utilizzato per i nuovi progetti.</div>
     </div>`;
   panel.appendChild(header);
 
@@ -5929,7 +6417,7 @@ async function mostraTemplateDefault() {
       const btnRimuoviLista = document.createElement('button');
       btnRimuoviLista.textContent = '✕';
       btnRimuoviLista.title = 'Rimuovi lista';
-      btnRimuoviLista.style.cssText = 'background:transparent;border:none;cursor:pointer;color:var(--text-dimmer);font-size:13px;padding:4px 8px;';
+      btnRimuoviLista.className = 'btn-sm danger btn-x';
       btnRimuoviLista.addEventListener('click', () => { tpl.splice(li, 1); renderBody(); });
 
       cardHead.appendChild(headLeft);
@@ -5962,7 +6450,7 @@ async function mostraTemplateDefault() {
           const btnRimuoviVoce = document.createElement('button');
           btnRimuoviVoce.textContent = '✕';
           btnRimuoviVoce.title = 'Rimuovi voce';
-          btnRimuoviVoce.style.cssText = 'background:transparent;border:none;cursor:pointer;color:var(--text-dimmer);font-size:11px;padding:2px 6px;';
+          btnRimuoviVoce.className = 'btn-sm danger btn-x';
           btnRimuoviVoce.addEventListener('click', () => { tpl[li].voci.splice(vi, 1); renderVoci(); });
 
           row.appendChild(num);
@@ -5972,7 +6460,7 @@ async function mostraTemplateDefault() {
         });
 
         const btnAddVoce = document.createElement('button');
-        btnAddVoce.textContent = '+ voce';
+        btnAddVoce.textContent = '+ Aggiungi Voce';
         btnAddVoce.style.cssText = 'background:transparent;border:none;cursor:pointer;color:var(--text-dim);font-size:11px;margin-top:8px;padding:0;';
         btnAddVoce.addEventListener('click', () => { tpl[li].voci.push('Nuova voce di controllo'); renderVoci(); });
         cardBody.appendChild(btnAddVoce);
@@ -5992,13 +6480,14 @@ async function mostraTemplateDefault() {
 
   const btnAddLista = document.createElement('button');
   btnAddLista.className = 'btn-outline';
-  btnAddLista.style.cssText = 'font-size:12px;padding:8px 14px;';
-  btnAddLista.textContent = '+ Lista';
+  btnAddLista.style.cssText = 'font-size:12px;padding:8px 14px;flex-shrink:0;';
+  btnAddLista.textContent = '+ Aggiungi Lista';
   btnAddLista.addEventListener('click', () => {
     tpl.push({ id: _ckNextId('tpl'), lista: 'Nuova Lista', fase: 'Altro', voci: ['Prima voce di controllo'] });
     renderBody();
     body.scrollTop = body.scrollHeight;
   });
+  header.appendChild(btnAddLista);
 
   const btnRipristina = document.createElement('button');
   btnRipristina.className = 'btn-outline';
@@ -6012,7 +6501,6 @@ async function mostraTemplateDefault() {
     }
   });
 
-  leftBtns.appendChild(btnAddLista);
   leftBtns.appendChild(btnRipristina);
 
   const rightBtns = document.createElement('div');
@@ -6237,7 +6725,7 @@ async function esportaChecklistPDF() {
 
   // Footer last page
   pdf.setFont('helvetica','normal'); pdf.setFontSize(6); pdf.setTextColor(160,160,160);
-  pdf.text('Documento generato automaticamente dal Gestionale Cantiere — DL: ' + (dl||'—'), M, PH-6);
+  pdf.text('Documento generato automaticamente da Ge.Ka. (Gestionale Cantiere) — DL: ' + (dl||'—'), M, PH-6);
 
   const fn = 'Checklist_' + nomeCantiere.replace(/\s+/g,'_') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
   pdf.save(fn);
@@ -6254,7 +6742,7 @@ async function esportaChecklistPDF() {
 // ]
 let combos = [];
 
-const COMBO_COLORS = ['#0a85d1','#0f7b6c','#cb6b2e','#7c4ec4','#d44c47','#c9a84c'];
+const COMBO_COLORS = ['var(--blue)','#0f7b6c','#cb6b2e','#7c4ec4','#d44c47','#c9a84c'];
 
 function compAggiungiCombo() {
   const nome = 'Combo ' + String.fromCharCode(65 + combos.length);
@@ -6341,7 +6829,7 @@ function renderComparativoBuilder() {
     return;
   }
   if (combos.length === 0) {
-    container.innerHTML = '<div style="color:var(--text-dimmer);font-size:12px;padding:16px 0;">Clicca <strong>+ Nuova combinazione</strong> per aggiungere uno scenario di acquisto.</div>';
+    container.innerHTML = '<div style="color:var(--text-dimmer);font-size:12px;padding:16px 0;">Clicca <strong>+ Aggiungi Combinazione</strong> per aggiungere uno scenario di acquisto.</div>';
     renderComparativoSummary();
     return;
   }
@@ -6362,7 +6850,7 @@ function renderComparativoBuilder() {
           <input type="text" value="${c.nome}" onchange="compRinominaCombo(${ci},this.value)"
             style="background:transparent;border:none;border-bottom:1px dashed var(--border);font-size:12px;font-weight:600;color:var(--text);font-family:var(--font);outline:none;width:100%;min-width:0;padding:2px 0;">
         </div>
-        <button class="btn-sm danger" onclick="compRimuoviCombo(${ci})" style="flex-shrink:0;font-size:11px;padding:3px 7px;">✕</button>
+        <button class="btn-sm danger btn-x" onclick="compRimuoviCombo(${ci})">✕</button>
       </div>
     </th>`;
   });
@@ -6458,7 +6946,7 @@ function renderComparativoSummary() {
   // Solo se almeno una combo ha stelle e ci sono più combo con selezioni
   const hasStar = maxAvgStars > 0;
 
-  let html = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+  let html = `<div class="card" style="padding:24px;">
     <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dimmer);margin-bottom:20px;">Riepilogo scenari · ordine crescente di costo</div>`;
 
   totali.forEach((c, i) => {
@@ -6532,13 +7020,42 @@ function toggleSidebar() {
   } catch(e){}
 })();
 
+// ── Dark mode toggle ──
+function toggleDarkMode() {
+  const isDark = document.body.classList.toggle('dark-mode');
+  const sun = document.getElementById('icon-sun');
+  const moon = document.getElementById('icon-moon');
+  if (sun && moon) {
+    sun.style.display = isDark ? 'none' : '';
+    moon.style.display = isDark ? '' : 'none';
+  }
+  const label = document.getElementById('dark-mode-label');
+  if (label) label.textContent = isDark ? 'Tema chiaro' : 'Tema scuro';
+  try { localStorage.setItem('dark_mode', isDark ? '1' : '0'); } catch(e){}
+}
+
+// Restore dark mode preference on load
+(function() {
+  try {
+    if (localStorage.getItem('dark_mode') === '1') {
+      document.body.classList.add('dark-mode');
+      const sun = document.getElementById('icon-sun');
+      const moon = document.getElementById('icon-moon');
+      if (sun && moon) { sun.style.display = 'none'; moon.style.display = ''; }
+      const label = document.getElementById('dark-mode-label');
+      if (label) label.textContent = 'Tema chiaro';
+    }
+  } catch(e){}
+})();
+
 // Patch showTab to also update sidebar active state and topbar title
 const _origShowTab = showTab;
 const TAB_LABELS = {
   home: 'Home', progetto: 'Progetto', fasi: 'Fasi & Attività',
   preventivi: 'Preventivi', risorse: 'Risorse', gantt: 'Gantt',
   avanzamento: 'Avanzamento', verbali: 'Verbali',
-  problematiche: 'Problematiche', documenti: 'Documenti', checklist: 'Checklist'
+  problematiche: 'Problematiche', documenti: 'Documenti', checklist: 'Checklist',
+  help: 'Guida'
 };
 window.showTab = function(tab) {
   _origShowTab(tab);
