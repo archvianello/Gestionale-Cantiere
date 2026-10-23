@@ -3278,6 +3278,8 @@ function showGistConfig() {
           onfocus="this.style.borderColor='#666'" onblur="this.style.borderColor='#e3e2df'">
       </div>
 
+      <div id="delprot-box" style="margin-bottom:24px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;">${delProtInner()}</div>
+
       <div style="display:flex;gap:10px;justify-content:flex-end;">
         <button class="btn-outline" onclick="document.getElementById('gist-config-overlay').remove()">Annulla</button>
         <button class="btn" onclick="saveGistConfig()">Salva configurazione</button>
@@ -3285,6 +3287,7 @@ function showGistConfig() {
     </div>`;
   document.body.appendChild(overlay);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  refreshDelProtFromGist();
 }
 
 function saveGistConfig() {
@@ -3296,6 +3299,183 @@ function saveGistConfig() {
   else localStorage.removeItem(GIST_ID_KEY);
   document.getElementById('gist-config-overlay').remove();
   showSaveIndicator('✓ configurazione salvata');
+}
+
+// ========================
+// PROTEZIONE CON PASSWORD — ELIMINA PROGETTO
+// ========================
+// Attivabile/disattivabile dalla configurazione (⚙). La password non viene
+// salvata in chiaro: in localStorage restano solo salt + hash (SHA-256).
+const DEL_PROT_KEY = 'gantt_del_prot';
+
+// Fonte di verità = file nel Gist (condiviso con tutti i collaboratori).
+// localStorage è solo una cache usata se GitHub non è raggiungibile.
+const DEL_PROT_GIST_FILE = '_protezione_eliminazione.json';
+
+function getDelProt() {
+  try { return JSON.parse(localStorage.getItem(DEL_PROT_KEY)) || { enabled:false, salt:'', hash:'' }; }
+  catch(e) { return { enabled:false, salt:'', hash:'' }; }
+}
+function setDelProt(o) { try { localStorage.setItem(DEL_PROT_KEY, JSON.stringify(o)); } catch(e) {} }
+
+// Legge la configurazione dal Gist (aggiorna la cache). In caso di errore ritorna la cache.
+async function fetchDelProt() {
+  const token = getGithubToken();
+  if (!token) return getDelProt();
+  try {
+    const gistId = await resolveGistId(token);
+    const resp = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { 'Authorization': `token ${token}` }, cache: 'no-store'
+    });
+    if (!resp.ok) return getDelProt();
+    const gist = await resp.json();
+    const f = gist.files[DEL_PROT_GIST_FILE];
+    if (!f) { const none = { enabled:false, salt:'', hash:'' }; setDelProt(none); return none; }
+    let content = f.content;
+    if (!content && f.truncated) content = await (await fetch(f.raw_url, { headers: { 'Authorization': `token ${token}` } })).text();
+    const d = JSON.parse(content);
+    const cfg = { enabled: !!d.enabled, salt: d.salt || '', hash: d.hash || '' };
+    setDelProt(cfg);
+    return cfg;
+  } catch(e) {
+    console.warn('Lettura protezione dal Gist fallita:', e);
+    return getDelProt();
+  }
+}
+
+// Scrive la configurazione nel Gist. true se riuscito.
+async function pushDelProt(cfg) {
+  const token = getGithubToken();
+  if (!token) { alert('Configura e salva prima il token GitHub: la password viene salvata sul Gist.'); return false; }
+  try {
+    const gistId = await resolveGistId(token);
+    const resp = await fetch(`https://api.github.com/gists/${gistId}`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: { [DEL_PROT_GIST_FILE]: { content: JSON.stringify({ ...cfg, updatedAt: new Date().toISOString() }) } } })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    setDelProt(cfg);
+    return true;
+  } catch(e) {
+    alert('Impossibile salvare la protezione sul Gist. Riprova.');
+    return false;
+  }
+}
+
+async function hashPwd(pwd, salt) {
+  const txt = salt + '|' + pwd;
+  try {
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+  } catch(e) {}
+  // fallback (contesti senza crypto.subtle)
+  let h1 = 5381, h2 = 52711;
+  for (let i = 0; i < txt.length; i++) { const c = txt.charCodeAt(i); h1 = (h1 * 33) ^ c; h2 = (h2 * 33) ^ c; }
+  return 'f' + (h1 >>> 0).toString(16) + (h2 >>> 0).toString(16);
+}
+function randomSalt() {
+  try { return Array.from(crypto.getRandomValues(new Uint8Array(12))).map(b => b.toString(16).padStart(2,'0')).join(''); }
+  catch(e) { return String(Date.now()) + Math.random().toString(16).slice(2); }
+}
+
+// Dialogo modale con uno o più campi password. Ritorna array di valori oppure null se annullato.
+function askPasswords(title, message, labels) {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:10001;display:flex;align-items:center;justify-content:center;padding:20px;';
+    const fields = labels.map((l,i) => `
+      <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin:${i?'12px':'0'} 0 6px;">${l}</label>
+      <input type="password" data-pw="${i}" autocomplete="off" style="width:100%;border:1px solid #e3e2df;border-radius:8px;padding:10px 14px;font-size:14px;outline:none;color:var(--gold-light);box-sizing:border-box;">`).join('');
+    ov.innerHTML = `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:26px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.25);font-family:var(--font);">
+        <div style="font-size:15px;font-weight:600;color:var(--gold-light);margin-bottom:6px;">${title}</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.5;">${message}</div>
+        ${fields}
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+          <button class="btn-outline" data-act="no">Annulla</button>
+          <button class="btn" data-act="ok">Conferma</button>
+        </div>
+      </div>`;
+    const done = v => { ov.remove(); resolve(v); };
+    const ok = () => done(Array.from(ov.querySelectorAll('input[data-pw]')).map(i => i.value));
+    ov.querySelector('[data-act="ok"]').onclick = ok;
+    ov.querySelector('[data-act="no"]').onclick = () => done(null);
+    ov.addEventListener('mousedown', e => { if (e.target === ov) done(null); });
+    ov.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); ok(); }
+      if (e.key === 'Escape') done(null);
+    });
+    document.body.appendChild(ov);
+    setTimeout(() => ov.querySelector('input')?.focus(), 30);
+  });
+}
+
+// Chiede la password attuale e la confronta con cfg; true se corretta
+async function verifyDelPassword(cfg, title, message) {
+  const r = await askPasswords(title || 'Password richiesta', message || 'Inserisci la password per continuare.', ['Password']);
+  if (!r) return false;
+  if (await hashPwd(r[0], cfg.salt) === cfg.hash) return true;
+  alert('Password errata.');
+  return false;
+}
+
+// Chiede una nuova password (con conferma). Ritorna {salt, hash} oppure null
+async function askNewDelPassword(title) {
+  const r = await askPasswords(title || 'Imposta password', 'Scegli la password che verrà richiesta per eliminare un progetto. Sarà valida per tutti i collaboratori.', ['Nuova password', 'Ripeti password']);
+  if (!r) return null;
+  if (!r[0]) { alert('La password non può essere vuota.'); return null; }
+  if (r[0] !== r[1]) { alert('Le due password non coincidono.'); return null; }
+  const salt = randomSalt();
+  return { salt, hash: await hashPwd(r[0], salt) };
+}
+
+function delProtInner() {
+  const c = getDelProt();
+  const on = !!(c.enabled && c.hash);
+  return `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--gold-light);display:flex;align-items:center;gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Password per eliminare i progetti</div>
+        <div style="font-size:11px;color:var(--text-dimmer);margin-top:3px;">Salvata sul Gist · valida per tutti i collaboratori<br>Stato: <b style="color:${on?'var(--green,#2e7d32)':'var(--text-dim)'};">${on?'ATTIVA':'disattivata'}</b></div>
+      </div>
+      <button class="btn-outline" onclick="toggleDelProt()">${on?'Disattiva':'Attiva'}</button>
+    </div>
+    ${c.hash ? `<div style="margin-top:10px;"><button onclick="changeDelPassword()" style="background:none;border:none;padding:0;color:var(--blue);font-size:11px;cursor:pointer;font-family:var(--font);text-decoration:underline;">Cambia password</button></div>` : ''}`;
+}
+function refreshDelProt() {
+  const b = document.getElementById('delprot-box');
+  if (b) b.innerHTML = delProtInner();
+}
+async function refreshDelProtFromGist() {
+  await fetchDelProt();
+  refreshDelProt();
+}
+async function toggleDelProt() {
+  const c = await fetchDelProt();
+  if (c.enabled && c.hash) {
+    // disattivazione: serve la password
+    if (!await verifyDelPassword(c, 'Disattiva protezione', 'Inserisci la password per disattivare la protezione.')) return;
+    if (!await pushDelProt({ ...c, enabled:false })) return;
+    showSaveIndicator('protezione eliminazione disattivata');
+  } else {
+    // attivazione: se non c'è ancora una password va impostata
+    let n = { salt:c.salt, hash:c.hash };
+    if (!c.hash) { n = await askNewDelPassword('Attiva protezione'); if (!n) return; }
+    if (!await pushDelProt({ enabled:true, salt:n.salt, hash:n.hash })) return;
+    showSaveIndicator('✓ protezione eliminazione attiva');
+  }
+  refreshDelProt();
+}
+async function changeDelPassword() {
+  const c = await fetchDelProt();
+  if (!await verifyDelPassword(c, 'Cambia password', 'Inserisci la password attuale.')) return;
+  const n = await askNewDelPassword('Nuova password');
+  if (!n) return;
+  if (await pushDelProt({ enabled:c.enabled, salt:n.salt, hash:n.hash })) showSaveIndicator('✓ password aggiornata');
+  refreshDelProt();
 }
 
 // Crea un nuovo Gist privato (chiamato solo la prima volta)
@@ -3570,6 +3750,10 @@ async function openProject(key) {
 }
 
 async function deleteProject(key, nome) {
+  const _dp = await fetchDelProt();
+  if (_dp.enabled && _dp.hash) {
+    if (!await verifyDelPassword(_dp, 'Elimina progetto', `Inserisci la password per eliminare il progetto "${nome}".`)) return;
+  }
   if (!confirm(`Eliminare definitivamente il progetto "${nome}"?\nQuesta azione non può essere annullata.`)) return;
   const token = getGithubToken();
   const gistId = getGistId();
