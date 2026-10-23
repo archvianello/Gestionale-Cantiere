@@ -5389,7 +5389,9 @@ function renderPreventivi() {
             </div>
             <div style="text-align:right;flex-shrink:0;">
               <div style="font-size:18px;font-weight:700;color:${isAgg ? 'var(--green)' : 'var(--text)'};">${fmt(o.importo)}</div>
-              ${o.imponibile != null ? `<div style="font-size:10px;color:var(--text-dimmer);">Imp. ${fmt(o.imponibile)} + IVA ${o.ivaPerc||0}%</div>` : ''}
+              ${(o.imponibile != null || o.righe) ? (() => { const rr = _offertaRighe(o); return rr.length > 1
+                ? `<div style="font-size:10px;color:var(--text-dimmer);">Imp. ${fmt(o.imponibile)} (${rr.map(r => `${fmt(r.imponibile)} +${r.ivaPerc}%`).join(' · ')})</div>`
+                : `<div style="font-size:10px;color:var(--text-dimmer);">Imp. ${fmt(rr[0].imponibile)} + IVA ${rr[0].ivaPerc}%</div>`; })() : ''}
               <div style="font-size:10px;color:var(--text-dimmer);">${o.tempiGg ? o.tempiGg+'gg · ' : ''}${o.garanziaMesi ? o.garanziaMesi+'mesi gar.' : ''}</div>
             </div>
           </div>
@@ -5586,6 +5588,106 @@ function handleOffertaPdfUpload(input) {
   reader.readAsDataURL(file);
 }
 
+
+// ========================
+// OFFERTE: RIGHE DI IMPONIBILE (aliquote IVA multiple)
+// ========================
+// Ogni offerta ha: righe:[{imponibile, ivaPerc}], e i campi derivati imponibile (somma), importo (IVA incl.).
+// Le offerte vecchie (solo imponibile + ivaPerc) vengono lette come una riga singola.
+function _offertaRighe(o) {
+  if (Array.isArray(o.righe) && o.righe.length) {
+    return o.righe.map(r => ({ imponibile: parseFloat(r.imponibile) || 0, ivaPerc: r.ivaPerc != null ? parseFloat(r.ivaPerc) || 0 : 22 }));
+  }
+  const iva = o.ivaPerc != null ? o.ivaPerc : 22;
+  const imp = o.imponibile != null ? o.imponibile : ((o.importo || 0) / (1 + iva / 100));
+  return [{ imponibile: imp, ivaPerc: iva }];
+}
+
+function _applicaRigheAOfferta(o, righe) {
+  const r2 = x => Math.round(x * 100) / 100;
+  o.righe = righe;
+  o.imponibile = r2(righe.reduce((s, r) => s + r.imponibile, 0));
+  o.importo = r2(righe.reduce((s, r) => s + r.imponibile * (1 + r.ivaPerc / 100), 0));
+  // ivaPerc resta valorizzato solo se c'è un'unica aliquota (compatibilità con dati vecchi)
+  const aliquote = [...new Set(righe.map(r => r.ivaPerc))];
+  o.ivaPerc = aliquote.length === 1 ? aliquote[0] : null;
+}
+
+function _mpRigaHtml(r) {
+  return `<div class="mp-riga" style="display:grid;grid-template-columns:1fr 80px 1fr 30px;gap:8px;align-items:center;margin-bottom:8px;">
+    <input type="text" data-currency="true" class="mp-r-imp" placeholder="0" value="${r.imponibile ? formatThousands(r.imponibile) : ''}" oninput="formatCurrencyInput(this);_aggiornaTotalePreventivo()">
+    <input type="number" class="mp-r-iva" step="0.01" min="0" value="${r.ivaPerc}" oninput="_aggiornaTotalePreventivo()">
+    <div class="mp-r-tot" style="align-self:stretch;display:flex;align-items:center;padding:0 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;">€ 0,00</div>
+    <button type="button" class="btn-sm danger btn-x" title="Rimuovi riga" onclick="mpRimuoviRiga(this)">✕</button>
+  </div>`;
+}
+
+function _mpRigheSection(righe) {
+  const lbl = 'font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--text-dimmer);';
+  return `<div style="margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:1fr 80px 1fr 30px;gap:8px;margin-bottom:6px;">
+      <span style="${lbl}">IMPONIBILE (€)</span><span style="${lbl}">IVA (%)</span><span style="${lbl}">TOTALE RIGA</span><span></span>
+    </div>
+    <div id="mp-righe">${righe.map(_mpRigaHtml).join('')}</div>
+    <button type="button" class="btn-sm btn-x" onclick="mpAggiungiRiga()" style="font-size:16px;line-height:1;">+</button>
+    <div style="margin-top:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:12px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text-dimmer);">Totale imponibile</span><span id="mp-sum-imp" style="color:var(--text);">—</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:var(--text-dimmer);">Totale IVA</span><span id="mp-sum-iva" style="color:var(--text);">—</span></div>
+      <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid var(--border);font-weight:700;"><span style="color:var(--text);">TOTALE (IVA incl.)</span><span id="mp-tot-display" style="color:var(--text);">—</span></div>
+    </div>
+  </div>`;
+}
+
+function mpAggiungiRiga() {
+  const wrap = document.getElementById('mp-righe');
+  if (!wrap) return;
+  // Per comodità la nuova riga parte con l'IVA dell'ultima riga
+  const last = wrap.querySelector('.mp-riga:last-child .mp-r-iva');
+  wrap.insertAdjacentHTML('beforeend', _mpRigaHtml({ imponibile: 0, ivaPerc: last ? (parseFloat(last.value) || 0) : 22 }));
+  _aggiornaTotalePreventivo();
+  wrap.querySelector('.mp-riga:last-child .mp-r-imp')?.focus();
+}
+
+function mpRimuoviRiga(btn) {
+  const wrap = document.getElementById('mp-righe');
+  const row = btn.closest('.mp-riga');
+  if (!wrap || !row) return;
+  if (wrap.querySelectorAll('.mp-riga').length <= 1) {
+    // ultima riga: la svuoto invece di eliminarla
+    row.querySelector('.mp-r-imp').value = '';
+  } else {
+    row.remove();
+  }
+  _aggiornaTotalePreventivo();
+}
+
+function _leggiRigheModale() {
+  const righe = [...document.querySelectorAll('#mp-righe .mp-riga')].map(row => ({
+    imponibile: parseCurrency(row.querySelector('.mp-r-imp').value),
+    ivaPerc: parseFloat(row.querySelector('.mp-r-iva').value) || 0
+  }));
+  const conImporto = righe.filter(r => r.imponibile > 0);
+  if (conImporto.length) return conImporto;
+  return [{ imponibile: 0, ivaPerc: righe[0] ? righe[0].ivaPerc : 22 }];
+}
+
+// Ricalcola in tempo reale totali di riga e riepilogo nel modale offerta
+function _aggiornaTotalePreventivo() {
+  const wrap = document.getElementById('mp-righe');
+  if (!wrap) return;
+  let sumImp = 0, sumTot = 0;
+  wrap.querySelectorAll('.mp-riga').forEach(row => {
+    const imp = parseCurrency(row.querySelector('.mp-r-imp').value);
+    const iva = parseFloat(row.querySelector('.mp-r-iva').value) || 0;
+    const tot = imp * (1 + iva / 100);
+    row.querySelector('.mp-r-tot').textContent = fmt(tot);
+    sumImp += imp; sumTot += tot;
+  });
+  document.getElementById('mp-sum-imp').textContent = fmt(sumImp);
+  document.getElementById('mp-sum-iva').textContent = fmt(sumTot - sumImp);
+  document.getElementById('mp-tot-display').textContent = fmt(sumTot);
+}
+
 function aggiungiOfferta(gi) {
   _pendingOffertaPdfData = null;
   _pendingOffertaPdfName = null;
@@ -5596,11 +5698,7 @@ function aggiungiOfferta(gi) {
       <div class="input-group"><label>CONTATTO</label><input type="text" id="mp-contatto" placeholder="Nome referente"></div>
       <div class="input-group"><label>TELEFONO</label><input type="text" id="mp-tel" placeholder=""></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-      <div class="input-group"><label>IMPONIBILE (€)</label><input type="text" data-currency="true" id="mp-imponibile" placeholder="0" oninput="formatCurrencyInput(this);_aggiornaTotalePreventivo()"></div>
-      <div class="input-group"><label>IVA (%)</label><input type="number" id="mp-iva" placeholder="22" value="22" step="0.01" oninput="_aggiornaTotalePreventivo()"></div>
-      <div class="input-group"><label>TOTALE (IVA incl.)</label><input type="text" id="mp-tot-display" readonly style="background:var(--surface);cursor:default;font-weight:600;" value="€ 0"></div>
-    </div>
+    ${_mpRigheSection([{ imponibile: 0, ivaPerc: 22 }])}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="input-group"><label>TEMPI (giorni)</label><input type="number" id="mp-tempi" placeholder=""></div>
       <div class="input-group"><label>GARANZIA (mesi)</label><input type="number" id="mp-gar" placeholder=""></div>
@@ -5624,14 +5722,10 @@ function aggiungiOfferta(gi) {
   `, () => {
     const ditta = document.getElementById('mp-ditta').value.trim();
     if (!ditta) { alert('Inserisci il nome della ditta'); return false; }
-    const imponibile = parseCurrency(document.getElementById('mp-imponibile').value);
-    const ivaPerc = parseFloat(document.getElementById('mp-iva').value) || 0;
-    const importo = imponibile + (imponibile * ivaPerc / 100);
-    garePreventivi[gi].offerte.push({
+    const nuova = {
       id: Date.now(),
       ditta, contatto: document.getElementById('mp-contatto').value,
       telefono: document.getElementById('mp-tel').value,
-      imponibile, ivaPerc, importo,
       tempiGg: parseInt(document.getElementById('mp-tempi').value)||0,
       garanziaMesi: parseInt(document.getElementById('mp-gar').value)||0,
       valutazione: parseInt(document.getElementById('mp-val').value)||3,
@@ -5639,23 +5733,13 @@ function aggiungiOfferta(gi) {
       pdfData: _pendingOffertaPdfData || null,
       pdfName: _pendingOffertaPdfName || null,
       aggiudicata: false
-    });
+    };
+    _applicaRigheAOfferta(nuova, _leggiRigheModale());
+    garePreventivi[gi].offerte.push(nuova);
     _pendingOffertaPdfData = null;
     _pendingOffertaPdfName = null;
     return true;
   }, () => { setPrevStelle(3); _aggiornaTotalePreventivo(); });
-}
-
-// Calcola in tempo reale il Totale (IVA inclusa) nel modale Imponibile/IVA delle offerte preventivi
-function _aggiornaTotalePreventivo() {
-  const impEl = document.getElementById('mp-imponibile');
-  const ivaEl = document.getElementById('mp-iva');
-  const totEl = document.getElementById('mp-tot-display');
-  if (!impEl || !ivaEl || !totEl) return;
-  const imponibile = parseCurrency(impEl.value);
-  const ivaPerc = parseFloat(ivaEl.value) || 0;
-  const totale = imponibile + (imponibile * ivaPerc / 100);
-  totEl.value = fmt(totale);
 }
 
 function editOfferta(gi, oi) {
@@ -5669,11 +5753,7 @@ function editOfferta(gi, oi) {
       <div class="input-group"><label>CONTATTO</label><input type="text" id="mp-contatto" value="${o.contatto||''}"></div>
       <div class="input-group"><label>TELEFONO</label><input type="text" id="mp-tel" value="${o.telefono||''}"></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-      <div class="input-group"><label>IMPONIBILE (€)</label><input type="text" data-currency="true" id="mp-imponibile" value="${formatThousands(o.imponibile != null ? o.imponibile : (o.importo / (1 + ((o.ivaPerc != null ? o.ivaPerc : 22) / 100))))}" oninput="formatCurrencyInput(this);_aggiornaTotalePreventivo()"></div>
-      <div class="input-group"><label>IVA (%)</label><input type="number" id="mp-iva" value="${o.ivaPerc != null ? o.ivaPerc : 22}" step="0.01" oninput="_aggiornaTotalePreventivo()"></div>
-      <div class="input-group"><label>TOTALE (IVA incl.)</label><input type="text" id="mp-tot-display" readonly style="background:var(--surface);cursor:default;font-weight:600;" value="${fmt(o.importo)}"></div>
-    </div>
+    ${_mpRigheSection(_offertaRighe(o))}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="input-group"><label>TEMPI (giorni)</label><input type="number" id="mp-tempi" value="${o.tempiGg||''}"></div>
       <div class="input-group"><label>GARANZIA (mesi)</label><input type="number" id="mp-gar" value="${o.garanziaMesi||''}"></div>
@@ -5698,9 +5778,7 @@ function editOfferta(gi, oi) {
     o.ditta = document.getElementById('mp-ditta').value;
     o.contatto = document.getElementById('mp-contatto').value;
     o.telefono = document.getElementById('mp-tel').value;
-    o.imponibile = parseCurrency(document.getElementById('mp-imponibile').value);
-    o.ivaPerc = parseFloat(document.getElementById('mp-iva').value) || 0;
-    o.importo = o.imponibile + (o.imponibile * o.ivaPerc / 100);
+    _applicaRigheAOfferta(o, _leggiRigheModale());
     o.tempiGg = parseInt(document.getElementById('mp-tempi').value)||0;
     o.garanziaMesi = parseInt(document.getElementById('mp-gar').value)||0;
     o.valutazione = parseInt(document.getElementById('mp-val').value)||3;
@@ -6815,6 +6893,47 @@ function _compAggiornaTotali() {
   });
 }
 
+function compAggiudicaTutte(ci) {
+  const c = combos[ci];
+  const sel = Object.entries(c.selezioni)
+    .map(([gi, oi]) => ({ gi: +gi, oi: +oi, g: garePreventivi[+gi] }))
+    .filter(s => s.g && s.g.offerte[s.oi]);
+
+  if (!sel.length) { alert('Questa combinazione non ha nessuna offerta selezionata.'); return; }
+
+  const daFare = sel.filter(s => !s.g.offerte[s.oi].aggiudicata);
+  if (!daFare.length) { alert('Tutte le offerte di questa combinazione sono già aggiudicate.'); return; }
+
+  const cambi = daFare.filter(s => s.g.offerte.some(o => o.aggiudicata)).length;
+  const senzaSel = garePreventivi.length - sel.length;
+  const totale = sel.reduce((t, s) => t + s.g.offerte[s.oi].importo, 0);
+
+  let msg = `Aggiudicare ${daFare.length} gar${daFare.length === 1 ? 'a' : 'e'} della combinazione "${c.nome}"?\n\nTotale combinazione: ${fmt(totale)}`;
+  if (cambi) msg += `\n\nAttenzione: in ${cambi} gar${cambi === 1 ? 'a' : 'e'} l'aggiudicazione attuale verrà sostituita.`;
+  if (senzaSel > 0) msg += `\n\n${senzaSel} gar${senzaSel === 1 ? 'a' : 'e'} senza offerta selezionata in questa combo non verr${senzaSel === 1 ? 'à' : 'anno'} toccat${senzaSel === 1 ? 'a' : 'e'}.`;
+  if (!confirm(msg)) return;
+
+  daFare.forEach(({ g, oi }) => {
+    // Se la gara era già aggiudicata a un'altra impresa, ripulisco i dati collegati (come in rimuoviOfferta)
+    const prev = g.offerte.find(o => o.aggiudicata);
+    if (prev) {
+      const fi = fornitori.findIndex(f => f.nome === prev.ditta && f.cat === g.categoria);
+      if (fi !== -1) fornitori.splice(fi, 1);
+      tasks.forEach(t => {
+        if (!t.cat && t.nome === g.lavorazione && t.impresa === prev.ditta) { t.impresa = ''; t.costo = 0; }
+      });
+    }
+    g.offerte.forEach((o, i) => o.aggiudicata = (i === oi));
+    g.stato = 'Aggiudicata';
+  });
+
+  sincronizzaDaGare();
+  renderPreventivi();
+  renderTasks();
+  renderRisorse();
+  saveToStorage();
+}
+
 function compRinominaCombo(ci, val) {
   combos[ci].nome = val || ('Combo ' + (ci+1));
 }
@@ -6852,6 +6971,7 @@ function renderComparativoBuilder() {
         </div>
         <button class="btn-sm danger btn-x" onclick="compRimuoviCombo(${ci})">✕</button>
       </div>
+      <button class="btn-sm" onclick="compAggiudicaTutte(${ci})" title="Aggiudica in un colpo solo tutte le offerte selezionate in questa combinazione" style="margin-top:10px;width:100%;">✓ Aggiudica tutte le gare</button>
     </th>`;
   });
   html += '</tr></thead><tbody>';
