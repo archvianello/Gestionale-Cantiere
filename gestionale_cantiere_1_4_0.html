@@ -760,6 +760,238 @@
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
   }
 
+
+  /* ===================== VERBALI DI CANTIERE (v1.5) ===================== */
+  .vb-list { display: flex; flex-direction: column; }
+  .vb-row { display: flex; align-items: center; gap: 14px; padding: 14px 6px; border-bottom: 1px solid var(--border); cursor: pointer; border-radius: 6px; transition: background 0.15s; }
+  .vb-row:last-child { border-bottom: none; }
+  .vb-row:hover { background: var(--surface2); }
+  .vb-row-main { flex: 1; min-width: 0; }
+  .vb-row-t { font-size: 14px; font-weight: 600; color: var(--text); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .vb-row-s { font-size: 13px; color: var(--text); margin-top: 4px; overflow-wrap: anywhere; }
+  .vb-row-m { font-size: 11.5px; color: var(--text); opacity: 0.6; margin-top: 4px; overflow-wrap: anywhere; }
+  .vb-row-act { display: flex; gap: 6px; flex: none; }
+  .vb-empty { text-align: center; padding: 40px 16px; font-size: 13px; color: var(--text); opacity: 0.7; line-height: 1.6; }
+  .vb-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .vb-select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-family: var(--font); font-size: 12px; outline: none; }
+
+  .vb-ov { position: fixed; inset: 0; z-index: 9999; background: var(--bg); color: var(--text); font-family: var(--font); display: flex; flex-direction: column; }
+  .vb-top { flex: none; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .vb-back { flex: none; width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--text); cursor: pointer; border-radius: 8px; }
+  .vb-back:hover { background: var(--surface2); }
+  .vb-ttl { flex: 1; min-width: 0; }
+  .vb-kick { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; }
+  .vb-h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.2px; overflow-wrap: anywhere; line-height: 1.25; }
+  .vb-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .vb-wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
+  .vb-dock { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--border); background: var(--bg); }
+  .vb-status { font-size: 12px; opacity: 0.65; min-width: 0; }
+  .vb-status.err { color: var(--red); opacity: 1; }
+
+  .vb-sec { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+  .vb-sh { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); }
+  .vb-sh::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .vb-no { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; letter-spacing: 0; }
+  .vb-ov .input-group input, .vb-ov .input-group select, .vb-ov .input-group textarea, .vb-dlg .input-group input, .vb-dlg .input-group select { font-size: 16px; min-height: 46px; }
+  .vb-ov .input-group label, .vb-lbl { display: block; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text); opacity: 0.75; margin-bottom: 6px; }
+  .vb-ov .input-group label { opacity: 1; color: var(--text); }
+  .vb-ov .input-group label, .vb-lbl { font-family: var(--font); }
+  .vb-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .vb-grid2 > * { min-width: 0; }
+  .vb-inline { display: flex; gap: 8px; }
+  .vb-inline input { flex: 1; min-width: 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-family: var(--font); font-size: 16px; outline: none; min-height: 46px; }
+  .vb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .vb-chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; border-radius: 20px; cursor: pointer; transition: all 0.15s; }
+  .vb-chip[aria-pressed=true] { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .vb-big { font-size: 20px; font-weight: 600; margin-left: 10px; letter-spacing: 0; text-transform: none; }
+  .vb-ov input[type=range] { width: 100%; height: 36px; margin: 0; accent-color: var(--accent); padding: 0; border: none; background: transparent; min-height: 0; }
+  .vb-chk { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .vb-chk:last-of-type { border-bottom: none; }
+  .vb-chk-l { font-size: 13.5px; margin-bottom: 8px; }
+  .vb-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .vb-seg button { min-height: 42px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+  .vb-seg button[aria-pressed=true][data-v=ok] { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+  .vb-seg button[aria-pressed=true][data-v=ko] { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+  .vb-seg button[aria-pressed=true][data-v=na] { background: var(--surface2); border-color: var(--text); }
+  .vb-obs { border: 1px solid var(--border); background: var(--bg); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .vb-obs.done { opacity: 0.6; }
+  .vb-obs-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .vb-obs-top .n { flex: 1; font-size: 13px; font-weight: 600; }
+  .vb-pill { min-height: 38px; padding: 0 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: var(--font); font-size: 12px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+  .vb-pill[data-act=prio][aria-pressed=true] { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+  .vb-pill[data-act=done][aria-pressed=true] { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+  .vb-x { flex: none; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 8px; cursor: pointer; }
+  .vb-x:hover { color: var(--red); border-color: var(--red); background: var(--red-dim); }
+  .vb-photo-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+  .vb-photo-btns .btn, .vb-photo-btns .btn-outline { min-height: 48px; flex: 1 1 160px; }
+  .vb-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 12px; margin-top: 14px; }
+  .vb-ph { margin: 0; border: 1px solid var(--border); background: var(--bg); border-radius: 10px; overflow: hidden; min-width: 0; }
+  .vb-ph-img { position: relative; aspect-ratio: 4/3; background: var(--surface2); display: flex; align-items: center; justify-content: center; }
+  .vb-ph-img img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+  .vb-ph-ov { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); color: #fff; font-size: 12px; font-weight: 600; }
+  .vb-ph-file { padding: 10px; font-size: 11px; text-align: center; overflow-wrap: anywhere; }
+  .vb-ph-f { display: flex; flex-direction: column; gap: 8px; padding: 10px; }
+  .vb-ph-f input { width: 100%; min-width: 0; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 8px; font-family: var(--font); font-size: 16px; outline: none; }
+  .vb-msg { padding: 10px 12px; border-left: 3px solid var(--border-btn); background: var(--surface2); border-radius: 6px; margin: 12px 0; font-size: 13px; line-height: 1.5; }
+  .vb-msg.warn { border-color: var(--orange); background: var(--orange-dim); }
+  .vb-msg.bad { border-color: var(--red); background: var(--red-dim); }
+  .vb-msg.ok { border-color: var(--green); background: var(--green-dim); }
+  .vb-muted { font-size: 12.5px; opacity: 0.65; line-height: 1.5; }
+  .vb-dz { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .vb-link { background: none; border: none; padding: 6px 2px; font-family: var(--font); font-size: 13px; color: var(--text); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .vb-link.danger { color: var(--red); }
+  .vb-paper { background: #fff; color: #1f2328; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; }
+  .vb-paper img { max-width: 100%; }
+  .vb-grp { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; margin: 16px 0 0; }
+  .vb-rec { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .vb-rec input { width: 22px; height: 22px; margin-top: 2px; flex: none; accent-color: var(--accent); }
+  .vb-rec label { flex: 1; min-width: 0; cursor: pointer; font-size: 14px; }
+  .vb-rec small { display: block; font-size: 12px; opacity: 0.65; overflow-wrap: anywhere; }
+  .vb-stack { display: flex; flex-direction: column; gap: 10px; }
+  .vb-stack .btn, .vb-stack .btn-outline { min-height: 48px; width: 100%; text-decoration: none; }
+  .vb-toast { position: absolute; left: 0; right: 0; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 5; display: flex; justify-content: center; padding: 0 16px; pointer-events: none; }
+  .vb-toast span { background: var(--accent); color: var(--bg); padding: 11px 16px; border-radius: 8px; font-size: 13px; max-width: 520px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+
+  .vb-cam { position: absolute; inset: 0; z-index: 10; background: #000; display: flex; flex-direction: column; }
+  .vb-cam video { flex: 1; min-height: 0; width: 100%; object-fit: contain; background: #000; }
+  .vb-cam-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px)); background: #000; color: #fff; }
+  .vb-cam-bar button { background: rgba(255,255,255,0.14); color: #fff; border: none; border-radius: 8px; min-height: 44px; min-width: 88px; padding: 0 14px; font-family: var(--font); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .vb-cam-bar .vb-shutter { width: 68px; height: 68px; min-width: 0; padding: 0; border-radius: 50%; background: #fff; border: 4px solid rgba(255,255,255,0.45); background-clip: padding-box; }
+  .vb-cam-bar .vb-shutter:active { transform: scale(0.92); }
+  .vb-cam-info { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); left: 0; right: 0; text-align: center; color: #fff; font-size: 13px; text-shadow: 0 1px 3px #000; pointer-events: none; }
+  .vb-cam.flash video { opacity: 0.25; }
+  .vb-zoom { position: absolute; inset: 0; z-index: 9; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; cursor: zoom-out; padding: 12px; }
+  .vb-zoom img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  .vb-dlg-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10002; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 20px 12px; }
+  .vb-dlg { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 640px; max-width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.2); font-family: var(--font); color: var(--text); }
+  .vb-crow { display: grid; grid-template-columns: 1fr 1fr 130px 38px; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .vb-crow .input-group { margin: 0; }
+  @media (max-width: 600px) {
+    .vb-row { flex-wrap: wrap; }
+    .vb-row-act { width: 100%; justify-content: flex-end; }
+    .vb-crow { grid-template-columns: 1fr 38px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .vb-crow .vb-x { grid-row: 1; grid-column: 2; }
+    .vb-crow > .input-group:nth-child(2), .vb-crow > .input-group:nth-child(3) { grid-column: 1 / -1; }
+    .vb-dock .btn { padding: 11px 16px; }
+  }
+  .vb-ov [hidden], .vb-dlg [hidden] { display: none !important; }
+
+
+  /* ===================== FOTO SU PIANTA (v1.6) ===================== */
+  .ft-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .ft-bar .sp { flex: 1; }
+  .ft-hint { font-size: 12.5px; padding: 9px 12px; border-radius: 8px; background: var(--surface2); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; line-height: 1.45; }
+  .ft-hint.on { background: var(--orange-dim); border: 1px solid var(--orange); }
+  .ft-view { border: 1px solid var(--border); border-radius: 10px; overflow: auto; max-height: 72vh; background: var(--surface2); -webkit-overflow-scrolling: touch; }
+  .ft-canvas { position: relative; cursor: crosshair; line-height: 0; }
+  .ft-canvas img { width: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+  .ft-pin { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 26px; padding: 0 4px; border-radius: 13px; border: 2px solid #fff; background: #d44c47; color: #fff; font-family: var(--font); font-size: 11px; font-weight: 700; line-height: 1; cursor: pointer; box-shadow: 0 1px 5px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; }
+  .ft-pin:hover, .ft-pin.hl { background: #111; transform: translate(-50%, -50%) scale(1.25); z-index: 2; }
+  .ft-pin.spot { background: #0a85d1; pointer-events: none; animation: ftPulse 1s ease infinite alternate; }
+  @keyframes ftPulse { from { box-shadow: 0 0 0 0 rgba(10,133,209,0.6); } to { box-shadow: 0 0 0 10px rgba(10,133,209,0); } }
+  .ft-spotbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .ft-spotbar .btn, .ft-spotbar .btn-outline { min-height: 46px; flex: 1 1 150px; }
+  .ft-filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 12px; }
+  .ft-filters label { display: flex; flex-direction: column; gap: 4px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  .ft-filters input[type=date] { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: 6px; font-family: var(--font); font-size: 13px; outline: none; }
+  .ft-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .ft-tags .vb-chip { min-height: 32px; font-size: 12px; padding: 0 12px; }
+  .ft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .ft-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg); cursor: pointer; min-width: 0; transition: transform 0.15s, box-shadow 0.15s; }
+  .ft-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+  .ft-card-img { position: relative; aspect-ratio: 4/3; background: var(--surface2); }
+  .ft-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ft-num { position: absolute; top: 6px; left: 6px; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: #d44c47; color: #fff; border: 2px solid #fff; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .ft-num.off { background: #8a8f96; }
+  .ft-card-b { padding: 8px 10px 10px; font-size: 12px; line-height: 1.4; }
+  .ft-card-b b { display: block; font-size: 12px; }
+  .ft-card-b .d { opacity: 0.65; font-size: 11px; overflow-wrap: anywhere; }
+  .ft-card-b .tag { font-size: 9.5px; padding: 1px 6px; margin: 4px 3px 0 0; }
+  .ft-dimg { width: 100%; max-height: 46vh; object-fit: contain; background: #000; border-radius: 8px; display: block; margin-bottom: 14px; }
+  .ft-dtags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .ft-dtags .vb-chip { min-height: 34px; font-size: 12px; }
+  @media (max-width: 600px) { .ft-grid { grid-template-columns: repeat(2, 1fr); } .ft-view { max-height: 62vh; } }
+
+
+  /* ===================== INTERFACCIA v1.8: icone, schede progetto, Home generale ===================== */
+  #topbar { left: 0 !important; height: 48px; padding: 0 14px 0 0; justify-content: flex-start; align-items: stretch; gap: 0; z-index: 210; }
+  .ui-icons { flex: none; width: 240px; display: flex; align-items: center; gap: 8px; padding: 0 12px; transition: width 0.28s cubic-bezier(.4,0,.2,1); }
+  body.ui-collapsed .ui-icons { width: auto; }
+  .ui-ico { width: 34px; height: 34px; flex: none; border-radius: 8px; border: 1px solid var(--border-btn); background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
+  .ui-ico:hover { background: var(--surface2); }
+  .ui-ico.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .ui-tabs { flex: 1; min-width: 0; display: flex; align-items: flex-end; gap: 3px; overflow-x: auto; scrollbar-width: none; padding: 0 6px; }
+  .ui-tabs::-webkit-scrollbar { display: none; }
+  .ui-tab { flex: 0 1 200px; min-width: 96px; height: 38px; margin-bottom: -1px; display: flex; align-items: center; gap: 6px; padding: 0 8px 0 14px; border: 1px solid var(--border); border-radius: 10px 10px 0 0; background: var(--surface2); color: var(--text); font-family: var(--font); font-size: 12.5px; cursor: pointer; opacity: 0.7; transition: opacity 0.15s, background 0.15s; }
+  .ui-tab:hover { opacity: 1; }
+  .ui-tab.active { background: var(--bg); opacity: 1; font-weight: 600; border-color: var(--border-btn); border-bottom-color: var(--bg); }
+  .ui-tab .l { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-tab .l b { font-weight: 700; letter-spacing: 0.5px; }
+  .ui-tab .x { flex: none; width: 20px; height: 20px; border-radius: 50%; border: none; background: transparent; color: var(--text); font-size: 13px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .ui-tab .x:hover { background: var(--border); }
+  .ui-tab.add { flex: none; min-width: 0; width: 42px; padding: 0; justify-content: center; font-size: 20px; font-weight: 400; }
+  #topbar .topbar-right { flex: none; align-self: center; margin-left: 8px; }
+
+  #sidebar { top: 48px; }
+  #sb-home, #sb-proj { flex: 1; min-height: 0; display: none; flex-direction: column; }
+  body.ui-project #sb-proj { display: flex; }
+  body:not(.ui-project) #sb-home { display: flex; }
+  .ui-sb-title { flex: none; height: 46px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; overflow: hidden; color: var(--text); }
+  .ui-sb-title #topbar-nome { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; }
+  .ui-code { flex: none; min-width: 15px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+  #ui-proj-list .nav-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-sb-empty { padding: 14px 16px; font-size: 12px; line-height: 1.5; opacity: 0.7; }
+  #sidebar.collapsed .ui-sb-title { justify-content: center; padding: 0 4px; font-size: 10px; letter-spacing: 0; }
+  #sidebar.collapsed .ui-sb-title #topbar-nome, #sidebar.collapsed .ui-sb-empty { display: none; }
+  .ui-sb-bottom { flex: none; display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+  #sidebar.collapsed .ui-sb-bottom { flex-direction: column; align-items: center; padding: 10px 0; }
+  .ui-handle { position: fixed; left: 227px; top: 50%; z-index: 206; width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border-btn); background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: left 0.28s cubic-bezier(.4,0,.2,1); padding: 0; }
+  .ui-handle:hover { background: var(--surface2); }
+  body.ui-collapsed .ui-handle { left: 43px; }
+  body.ui-collapsed .ui-handle svg { transform: rotate(180deg); }
+  #export-menu { position: fixed !important; left: 12px !important; right: auto !important; top: auto !important; bottom: 62px; z-index: 400 !important; }
+
+  .ui-welcome { font-size: 40px; font-weight: 600; letter-spacing: -1px; text-align: center; margin: 6px 0 26px; color: var(--text); overflow-wrap: anywhere; }
+  #ui-map { height: 360px; border-radius: 10px; overflow: hidden; background: var(--surface2); z-index: 0; }
+  .ui-map-note { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; font-size: 12.5px; }
+  .ui-pin { width: 26px; height: 26px; border-radius: 50% 50% 50% 0; background: #d44c47; border: 2px solid #fff; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
+  .ui-pin span { transform: rotate(45deg); color: #fff; font: 700 9px/1 var(--font); }
+  .ui-pin.next { background: #0a85d1; }
+  .ui-me { width: 38px; height: 38px; border-radius: 50%; background: #111; color: #fff; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; }
+  .ui-dcard { cursor: default; }
+  .ui-big { font-size: 26px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .ui-li { display: flex; gap: 10px; align-items: baseline; padding: 9px 4px; border-top: 1px solid var(--border); font-size: 13px; cursor: pointer; border-radius: 4px; }
+  .ui-li:hover { background: var(--surface2); }
+  .ui-li .c { flex: none; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; min-width: 38px; }
+  .ui-li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-li .r { flex: none; font-size: 12px; opacity: 0.7; }
+  .ui-recent { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ui-rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; cursor: pointer; min-width: 0; text-align: left; font-family: var(--font); color: var(--text); transition: transform 0.15s, box-shadow 0.15s; }
+  .ui-rcard:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+  .ui-rcard .c { font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .ui-rcard .n { font-size: 15px; font-weight: 600; margin: 6px 0 4px; overflow-wrap: anywhere; }
+  .ui-rcard .a { font-size: 12px; opacity: 0.7; min-height: 32px; overflow-wrap: anywhere; }
+  .ui-rcard .d { font-size: 11px; opacity: 0.6; margin-top: 10px; }
+  .ui-h2 { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin: 28px 0 12px; }
+  .ui-set-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .ui-set-row p { margin: 0; font-size: 13px; line-height: 1.5; flex: 1 1 220px; }
+  @media (max-width: 900px) {
+    .ui-icons { width: auto; padding: 0 8px; }
+    .ui-handle { left: 0 !important; top: auto; bottom: 18px; width: 40px; height: 40px; border-radius: 0 10px 10px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    body.ui-mobile-open .ui-handle { left: 240px !important; }
+    body.ui-mobile-open .ui-handle svg { transform: none; }
+    .ui-handle svg { transform: rotate(180deg); }
+    #sidebar.collapsed { width: 240px !important; }
+    .ui-recent { grid-template-columns: repeat(2, 1fr); }
+    .ui-welcome { font-size: 28px; }
+    #ui-map { height: 280px; }
+    #topbar { padding-right: 8px; }
+    .ui-tab { min-width: 0; flex: 0 0 auto; padding-left: 12px; }
+    .ui-tab .l .n { display: none; }
+  }
+  @media (max-width: 520px) { .ui-recent { grid-template-columns: 1fr; } #header-status-badge { display: none !important; } }
+
   /* ===================== GUIDA / HELP ===================== */
   .help-steps { display: flex; flex-direction: column; gap: 0; margin-top: 8px; }
   .help-step {
@@ -873,26 +1105,37 @@
 </head>
 <body>
 
-<!-- ══ SIDEBAR ══ -->
-<aside id="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-text">
-        Ge.Ka.
-        <small>Gestionale Cantiere</small>
-      </div>
-    </div>
-    <button id="sidebar-toggle" title="Comprimi/espandi menu" onclick="toggleSidebar()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+<!-- ══ BARRA IN ALTO: icone, schede dei progetti aperti ══ -->
+<div id="topbar">
+  <div class="ui-icons">
+    <button type="button" class="ui-ico" id="ui-btn-home" onclick="uiGoHome()" title="Home" aria-label="Home"></button>
+    <button type="button" class="ui-ico" id="ui-btn-settings" onclick="uiGoSettings()" title="Impostazioni" aria-label="Impostazioni">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
+  <div class="ui-tabs" id="ui-tabs" role="tablist" aria-label="Progetti aperti"></div>
+  <div class="topbar-right">
+    <div id="header-status-badge" style="display:none;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.3px;border:1px solid transparent;"></div>
+    <span class="save-indicator" id="save-indicator">✓ salvato</span>
+    <button class="btn-header icon-only" onclick="saveToStorage()" title="Salva il progetto" aria-label="Salva il progetto">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    </button>
+  </div>
+  <span id="topbar-title" hidden></span><span id="topbar-project-info" hidden></span>
+</div>
 
+<!-- ══ BARRA LATERALE ══ -->
+<aside id="sidebar">
+  <div id="sb-home">
+    <div class="ui-sb-title">Home</div>
+    <nav class="sidebar-nav" id="ui-proj-list" aria-label="Progetti"></nav>
+  </div>
+  <div id="sb-proj">
+    <div class="ui-sb-title"><span id="topbar-codice"></span><span id="topbar-nome"></span></div>
   <nav class="sidebar-nav">
-    <div class="sidebar-section-label">Navigazione</div>
-
     <button class="sidebar-nav-item active" id="nav-home" onclick="showTab('home')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="nav-label">Home</span>
+      <span class="nav-label">Panoramica</span>
     </button>
 
     <button class="sidebar-nav-item" id="nav-progetto" onclick="showTab('progetto')">
@@ -944,67 +1187,22 @@
       <span class="nav-label">Documenti</span>
     </button>
 
+    <button class="sidebar-nav-item" id="nav-foto" onclick="showTab('foto')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span class="nav-label">Foto</span>
+    </button>
     <button class="sidebar-nav-item" id="nav-checklist" onclick="showTab('checklist')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span class="nav-label">Checklist</span>
     </button>
 
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-section-label">Supporto</div>
-
-    <button class="sidebar-nav-item" id="nav-help" onclick="showTab('help')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span class="nav-label">Guida</span>
-    </button>
   </nav>
-
-  <div class="sidebar-bottom">
-    <div class="sidebar-actions">
-      <button class="btn-header" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Tema chiaro/scuro" style="width:100%;justify-content:flex-start;">
-        <svg id="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg id="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <span class="nav-label" id="dark-mode-label">Tema scuro</span>
-      </button>
-      <button class="btn-header" onclick="showGistConfig()" title="Configura GitHub Gist" style="width:100%;justify-content:flex-start;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
-        <span class="nav-label">GitHub Gist</span>
-      </button>
-      <button class="btn-header" onclick="showProjectPicker()" style="width:100%;justify-content:flex-start;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        <span class="nav-label">Apri progetto</span>
-      </button>
-      <button class="btn-header" onclick="newProject()" style="width:100%;justify-content:flex-start;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span class="nav-label">Nuovo progetto</span>
-      </button>
-    </div>
   </div>
-</aside>
-
-<!-- ══ TOP BAR SLIM ══ -->
-<div id="topbar">
-  <div style="display:flex;align-items:center;gap:14px;min-width:0;overflow:hidden;">
-    <div class="topbar-title" id="topbar-title">Home</div>
-    <div id="topbar-project-info" style="display:flex;align-items:center;gap:8px;padding-left:14px;border-left:1px solid var(--border);min-width:0;overflow:hidden;">
-      <span id="topbar-codice" style="font-size:11px;font-weight:700;color:var(--text-dimmer);letter-spacing:0.8px;white-space:nowrap;"></span>
-      <span id="topbar-nome" style="font-size:12px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;"></span>
-    </div>
-  </div>
-  <div class="topbar-right">
-    <div id="header-status-badge" style="display:none;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.3px;border:1px solid transparent;"></div>
-    <span class="save-indicator" id="save-indicator">✓ salvato</span>
-    <button class="btn-header" onclick="importaJSON()" title="Importa progetto da file JSON">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Importa
-    </button>
-    <input type="file" id="import-file-input" accept="application/json" style="display:none;" onchange="handleImportFile(this)">
-    <div style="position:relative;" id="export-menu-wrap">
-      <button class="btn-header" onclick="toggleExportMenu(event)">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Esporta
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px;"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
+  <div class="ui-sb-bottom">
+    <button type="button" class="ui-ico" onclick="newProject()" title="Nuovo progetto" aria-label="Nuovo progetto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    <button type="button" class="ui-ico" onclick="importaJSON()" title="Importa un progetto da file" aria-label="Importa un progetto da file"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></button>
+    <div id="export-menu-wrap">
+      <button type="button" class="ui-ico" onclick="toggleExportMenu(event)" title="Esporta il progetto (PDF o file)" aria-label="Esporta il progetto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
       <div id="export-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.15);min-width:170px;overflow:hidden;z-index:300;">
         <button onclick="closeExportMenu();esportaPDF()" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:transparent;border:none;cursor:pointer;font-family:var(--font);font-size:12.5px;color:var(--text);text-align:left;transition:background 0.15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='transparent'">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
@@ -1017,16 +1215,63 @@
         </button>
       </div>
     </div>
-    <button class="btn-header" onclick="saveToStorage()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Salva
-    </button>
   </div>
-</div>
+</aside>
+<button type="button" id="sidebar-toggle" class="ui-handle" onclick="uiToggleSidebar()" title="Comprimi o espandi la barra laterale" aria-label="Comprimi o espandi la barra laterale"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"/></svg></button>
+<input type="file" id="import-file-input" accept="application/json" style="display:none;" onchange="handleImportFile(this)">
 
 <!-- ══ MAIN CONTENT ══ -->
 <div id="app-content">
 <main>
+
+<!-- HOME GENERALE: tutti i progetti -->
+<div class="tab-panel" id="tab-dash">
+  <div class="ui-welcome" id="ui-welcome">Benvenuto</div>
+  <div class="card full-width">
+    <div class="card-label">Mappa dei cantieri</div>
+    <div id="ui-map"></div>
+    <div class="ui-map-note" id="ui-map-note"></div>
+  </div>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card ui-dcard"><div class="card-label">Prossimo sopralluogo</div><div id="ui-card-sop"></div></div>
+    <div class="card ui-dcard"><div class="card-label">Problematiche aperte</div><div id="ui-card-prob"></div></div>
+  </div>
+  <div class="ui-h2">Progetti recenti</div>
+  <div class="ui-recent" id="ui-recent"></div>
+</div>
+
+<!-- IMPOSTAZIONI -->
+<div class="tab-panel" id="tab-settings">
+  <div class="section-title">Impostazioni</div>
+  <div class="section-subtitle">PROFILO, ASPETTO, COLLEGAMENTI E GUIDA</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label">Profilo</div>
+      <div class="input-group" style="margin:0"><label>IL TUO NOME</label><input type="text" id="ui-user" placeholder="Compare nel benvenuto della Home" oninput="uiSetUser(this.value)"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Aspetto</div>
+      <div class="ui-set-row"><p>Tema chiaro o scuro dell'interfaccia.</p>
+        <button class="btn-outline" id="dark-mode-toggle" onclick="toggleDarkMode()">
+          <svg id="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+          <svg id="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="dark-mode-label">Tema scuro</span>
+        </button></div>
+    </div>
+    <div class="card">
+      <div class="card-label">GitHub · progetti</div>
+      <div class="ui-set-row"><p id="ui-gh-status">I progetti vengono salvati su GitHub Gist.</p><button class="btn-outline" onclick="showGistConfig()">Configura GitHub</button></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Dropbox · foto e piante</div>
+      <div class="ui-set-row"><p>Stato: <b id="dbx-nav-label">Dropbox</b><br><span class="vb-muted">Foto, piante e PDF dei verbali nel Dropbox dello studio.</span></p><button class="btn-outline" onclick="dbxConfig()">Configura Dropbox</button></div>
+    </div>
+    <div class="card full-width">
+      <div class="card-label">Guida</div>
+      <div class="ui-set-row"><p>Come funziona il gestionale, sincronizzazione e domande frequenti.</p><button class="btn-outline" onclick="showTab('help')">Apri la guida</button></div>
+    </div>
+  </div>
+</div>
 
 <!-- TAB HOME: LANDING PAGE -->
 <div class="tab-panel active" id="tab-home">
@@ -1284,20 +1529,28 @@
 <!-- TAB 6: VERBALI DI CANTIERE -->
 <div class="tab-panel" id="tab-verbali">
   <div class="section-title">Verbali di Cantiere</div>
-  <div class="section-subtitle">RIUNIONI, SOPRALLUOGHI E VERBALI DI AVANZAMENTO</div>
+  <div class="section-subtitle">SOPRALLUOGHI, RIUNIONI E VERBALI DI AVANZAMENTO — CON FOTO, ANTEPRIMA E INVIO</div>
 
-  <div class="flex-between">
-    <div style="display:flex;gap:10px;align-items:center;">
-      <select id="verbali-filter" onchange="renderVerbali()" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:12px;outline:none;">
+  <div class="flex-between" style="flex-wrap:wrap;gap:12px;">
+    <div class="vb-toolbar">
+      <select id="verbali-filter" class="vb-select" onchange="renderVerbali()">
         <option value="">Tutti i tipi</option>
-        <option value="Riunione di cantiere">Riunione di cantiere</option>
         <option value="Sopralluogo DL">Sopralluogo DL</option>
+        <option value="Riunione di cantiere">Riunione di cantiere</option>
         <option value="Verbale SAL">Verbale SAL</option>
         <option value="Riunione sicurezza">Riunione sicurezza</option>
         <option value="Collaudo parziale">Collaudo parziale</option>
       </select>
+      <select id="verbali-filter-stato" class="vb-select" onchange="renderVerbali()">
+        <option value="">Tutti gli stati</option>
+        <option value="bozza">Bozze</option>
+        <option value="chiuso">Chiusi</option>
+      </select>
     </div>
-    <button class="btn" onclick="apriModaleVerbale()">+ Aggiungi Verbale</button>
+    <div class="vb-toolbar">
+      <button class="btn-outline" onclick="vbContatti()">Destinatari</button>
+      <button class="btn" onclick="vbNuovo()">+ Nuovo Verbale</button>
+    </div>
   </div>
 
   <div class="grid-3" style="margin-top:20px;">
@@ -1312,28 +1565,15 @@
       <div class="kpi-sub">data</div>
     </div>
     <div class="kpi-card orange">
-      <div class="kpi-label">Azioni Aperte</div>
+      <div class="kpi-label">Osservazioni Aperte</div>
       <div class="kpi-value orange" id="v-kpi-azioni">0</div>
-      <div class="kpi-sub">da completare</div>
+      <div class="kpi-sub" id="v-kpi-azioni-sub">da risolvere</div>
     </div>
   </div>
 
   <div class="card full-width" style="margin-top:4px;">
     <div class="card-label">Registro Verbali</div>
-    <table class="tasks-table" id="verbali-table">
-      <thead>
-        <tr>
-          <th style="width:40px;">#</th>
-          <th style="width:110px;">Data</th>
-          <th style="width:160px;">Tipo</th>
-          <th>Oggetto</th>
-          <th style="width:140px;">Presenti</th>
-          <th style="width:120px;">Prossimo incontro</th>
-          <th style="width:80px;">Azioni</th>
-        </tr>
-      </thead>
-      <tbody id="verbali-body"></tbody>
-    </table>
+    <div class="vb-list" id="verbali-body"></div>
   </div>
 </div>
 
@@ -1504,6 +1744,39 @@
 </div>
 
 <!-- TAB CHECKLIST -->
+<!-- TAB: FOTO SU PIANTA -->
+<div class="tab-panel" id="tab-foto">
+  <div class="section-title">Foto di Cantiere</div>
+  <div class="section-subtitle">FOTO POSIZIONATE SULLE PIANTE — FILTRI PER DATA E TAG</div>
+
+  <div class="flex-between" style="flex-wrap:wrap;gap:12px;">
+    <div class="vb-toolbar" id="ft-plans"></div>
+    <div class="vb-toolbar">
+      <button class="btn-outline" onclick="document.getElementById('ft-gal-input').click()">Carica foto</button>
+      <button class="btn" onclick="ftScatta()">Scatta foto</button>
+    </div>
+  </div>
+  <input id="ft-plan-input" type="file" accept="image/*,application/pdf" hidden onchange="ftAddPlan(this)">
+  <input id="ft-cam-input" type="file" accept="image/*" capture="environment" hidden onchange="ftOnFiles(this)">
+  <input id="ft-gal-input" type="file" accept="image/*" multiple hidden onchange="ftOnFiles(this)">
+
+  <div class="card full-width" style="margin-top:20px;">
+    <div class="card-label">Pianta</div>
+    <div id="ft-plan"></div>
+  </div>
+
+  <div class="card full-width" style="margin-top:20px;">
+    <div class="card-label">Foto</div>
+    <div id="ft-filters"></div>
+    <div class="ft-grid" id="ft-grid"></div>
+  </div>
+  <div class="grid-3" style="margin-top:20px;margin-bottom:0;">
+    <div class="kpi-card"><div class="kpi-label">Foto</div><div class="kpi-value" id="ft-kpi-tot">0</div><div class="kpi-sub" id="ft-kpi-tot-sub">in archivio</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Sulla pianta</div><div class="kpi-value blue" id="ft-kpi-pin">0</div><div class="kpi-sub">posizionate</div></div>
+    <div class="kpi-card orange"><div class="kpi-label">Piante</div><div class="kpi-value orange" id="ft-kpi-plans">0</div><div class="kpi-sub">caricate</div></div>
+  </div>
+</div>
+
 <div class="tab-panel" id="tab-checklist">
   <div class="section-title">Checklist di Cantiere</div>
   <div class="section-subtitle">LISTE DI VERIFICA PER IL DIRETTORE LAVORI</div>
@@ -1606,7 +1879,7 @@
       </div>
       <div class="help-menu-item">
         <div class="help-menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-        <div class="help-menu-text"><b>Verbali · Problematiche · Documenti · Checklist</b><span>Sezioni documentali: verbali di riunione, non conformità/problemi aperti, documenti/allegati e liste di controllo (es. sicurezza, collaudi).</span></div>
+        <div class="help-menu-text"><b>Verbali · Problematiche · Documenti · Checklist</b><span>Sezioni documentali: verbali di sopralluogo e riunione (scheda guidata, foto scattate dal telefono, PDF e invio ai destinatari), non conformità/problemi aperti, documenti/allegati e liste di controllo (es. sicurezza, collaudi).</span></div>
       </div>
     </div>
   </div>
@@ -1824,6 +2097,7 @@ function showTab(id) {
   if (id === 'verbali') renderVerbali();
   if (id === 'problematiche') renderProblematiche();
   if (id === 'documenti') renderDocumenti();
+  if (id === 'foto') renderFoto();
   if (id === 'preventivi') renderPreventivi();
   if (id === 'checklist') renderChecklist();
   if (id === 'help') { /* pagina statica, nessun render dinamico necessario */ }
@@ -3051,7 +3325,10 @@ function esportaJSON() {
     tasks:           tasks,
     fornitori:       fornitori,
     sals:            sals,
-    verbali:         verbali,
+    verbali:         dbxLeanVerbali(),
+    contattiVerbali: contattiVerbali,
+    piante:          dbxLeanList(piante),
+    fotoCantiere:    dbxLeanList(fotoCantiere),
     problematiche:   problematiche,
     documenti:       documenti,
     garePreventivi:  garePreventivi,
@@ -3201,6 +3478,9 @@ function eseguiImporta(data) {
   if (data.fornitori) { fornitori.length = 0; data.fornitori.forEach(f => fornitori.push(f)); }
   if (data.sals)      { sals.length = 0;      data.sals.forEach(s => sals.push(s)); }
   if (data.verbali)   { verbali.length = 0;   data.verbali.forEach(v => verbali.push(v)); }
+  contattiVerbali.length = 0; (data.contattiVerbali || []).forEach(c => contattiVerbali.push(c));
+  piante.length = 0; (data.piante || []).forEach(p => piante.push(p)); fotoCantiere.length = 0; (data.fotoCantiere || []).forEach(f => fotoCantiere.push(f));
+  try { dbxAfterLoad(); } catch (e) {}
   if (data.problematiche) { problematiche.length = 0; data.problematiche.forEach(p => problematiche.push(p)); }
   if (data.documenti) { documenti.length = 0; data.documenti.forEach(d => documenti.push(d)); }
   if (data.garePreventivi) { garePreventivi.length = 0; data.garePreventivi.forEach(g => garePreventivi.push(g)); }
@@ -3545,7 +3825,9 @@ async function saveToStorage() {
     riserve: document.getElementById('riserve')?.value,
     penale_giorno: document.getElementById('penale_giorno')?.value,
     note_generali: document.getElementById('note_generali')?.value,
-    tasks, fornitori, sals, verbali, problematiche, documenti, garePreventivi, checklist, combos,
+    impresa: document.getElementById('impresa')?.value, dl: document.getElementById('dl')?.value, tipo_intervento: document.getElementById('tipo_intervento')?.value,
+    gg_sett: document.getElementById('gg_sett')?.value, gg_festivi: document.getElementById('gg_festivi')?.value,
+    tasks, fornitori, sals, verbali: dbxLeanVerbali(), contattiVerbali, piante: dbxLeanList(piante), fotoCantiere: dbxLeanList(fotoCantiere), problematiche, documenti, garePreventivi, checklist, combos,
     savedAt: new Date().toISOString()
   };
 
@@ -3630,7 +3912,7 @@ async function loadFromStorage(key) {
     const data = JSON.parse(content);
 
     const fields = ['codice_progetto','nome_cantiere','committente','indirizzo','data_inizio','durata_sett',
-      'importo_contratto','importo_varianti','sal_liquidati','pct_ritenuta','riserve','penale_giorno','note_generali'];
+      'importo_contratto','importo_varianti','sal_liquidati','pct_ritenuta','riserve','penale_giorno','note_generali','impresa','dl','tipo_intervento','gg_sett','gg_festivi'];
     fields.forEach(f => {
       const el = document.getElementById(f);
       if (el && data[f] !== undefined) {
@@ -3643,6 +3925,9 @@ async function loadFromStorage(key) {
     if (data.fornitori) { fornitori.length = 0; data.fornitori.forEach(f => fornitori.push(f)); }
     if (data.sals) { sals.length = 0; data.sals.forEach(s => sals.push(s)); }
     if (data.verbali) { verbali.length = 0; data.verbali.forEach(v => verbali.push(v)); }
+    contattiVerbali.length = 0; (data.contattiVerbali || []).forEach(c => contattiVerbali.push(c));
+  piante.length = 0; (data.piante || []).forEach(p => piante.push(p)); fotoCantiere.length = 0; (data.fotoCantiere || []).forEach(f => fotoCantiere.push(f));
+  try { dbxAfterLoad(); } catch (e) {}
     if (data.problematiche) { problematiche.length = 0; data.problematiche.forEach(p => problematiche.push(p)); }
     if (data.documenti) { documenti.length = 0; data.documenti.forEach(d => documenti.push(d)); }
     if (data.garePreventivi) { garePreventivi.length = 0; data.garePreventivi.forEach(g => garePreventivi.push(g)); }
@@ -4801,6 +5086,11 @@ async function esportaPDF() {
 // DATI: VERBALI
 // ========================
 let verbali = [];
+// Destinatari dei verbali per il cantiere corrente: [{ nome, email, ruolo }]
+let contattiVerbali = [];
+// Piante [{ id, nome, data, w, h }] e foto di cantiere [{ id, data, did, tags, date, piantaId, x, y }]
+let piante = [];
+let fotoCantiere = [];
 
 // ========================
 // DATI: PROBLEMATICHE
@@ -4813,144 +5103,1311 @@ let problematiche = [];
 let documenti = [];
 
 // ========================
-// VERBALI — RENDER & MODALE
+// DROPBOX — ARCHIVIO DI FOTO E PIANTE (v1.7)
+// Le immagini vengono caricate su Dropbox (un file ciascuna); nel progetto restano una miniatura
+// e il riferimento al file. Collegamento OAuth con PKCE: nessuna chiave segreta, nessun server.
 // ========================
-function renderVerbali() {
-  const filtro = document.getElementById('verbali-filter')?.value || '';
-  const lista = filtro ? verbali.filter(v => v.tipo === filtro) : verbali;
+const DBX_KEY = 'gantt_dbx';
+const DBX_THUMB = 320, DBX_THUMB_PLAN = 640;
+let DBX = (() => { try { return JSON.parse(localStorage.getItem(DBX_KEY) || '{}') || {}; } catch (e) { return {}; } })();
+const DBX_RUN = { busy: false, again: false, done: 0, tot: 0, err: '' };
+const DBX_DL = new Map(); // scaricamenti in corso, per id del file
 
-  // KPI
-  document.getElementById('v-kpi-totali').textContent = verbali.length;
-  const ult = verbali.slice().sort((a,b) => new Date(b.data)-new Date(a.data))[0];
-  document.getElementById('v-kpi-ultimo').textContent = ult ? fmtD(parseD(ult.data)) : '—';
-  document.getElementById('v-kpi-azioni').textContent = verbali.filter(v => !v.azioniChiuse && v.azioni).length;
+const dbxStore = () => { try { localStorage.setItem(DBX_KEY, JSON.stringify(DBX)); } catch (e) {} };
+const dbxOn = () => !!(DBX.appKey && DBX.refresh);
+const dbxSrc = f => (f && (f.data || f.thumb)) || '';
+const dbxThumbSrc = f => (f && (f.thumb || f.data)) || '';
+// Le intestazioni HTTP accettano solo ASCII: i caratteri accentati dei percorsi vanno codificati
+const dbxArg = o => JSON.stringify(o).replace(/[\u007f-\uffff]/g, c => '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4));
+const dbxClean = s => String(s || '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, ' ').replace(/\s+/g, ' ').replace(/[. ]+$/g, '').trim().slice(0, 80);
+const dbxB64url = buf => btoa(String.fromCharCode.apply(null, new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
-  const tbody = document.getElementById('verbali-body');
-  tbody.innerHTML = '';
-  if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-dimmer);font-size:13px;">Nessun verbale registrato.</td></tr>';
-    return;
+function dbxBase() { let b = String(DBX.base == null ? '/Cantieri' : DBX.base).trim().replace(/\\/g, '/').replace(/\/+$/g, ''); if (b && b[0] !== '/') b = '/' + b; return b; }
+function dbxProjFolder() { const p = vbProj(); return dbxBase() + '/' + (dbxClean([p.codice, p.nome].filter(Boolean).join(' - ')) || 'Cantiere'); }
+function dbxDataToBlob(dataUrl) {
+  const i = dataUrl.indexOf(','), bin = atob(dataUrl.slice(i + 1)), u = new Uint8Array(bin.length);
+  for (let k = 0; k < bin.length; k++) u[k] = bin.charCodeAt(k);
+  return new Blob([u], { type: (dataUrl.slice(5, i).split(';')[0]) || 'image/jpeg' });
+}
+const dbxBlobToData = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(new Error('lettura')); r.readAsDataURL(blob); });
+async function dbxMakeThumb(data, max) {
+  const img = await vbLoadImg(data), k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+  const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(img.naturalWidth * k)); cv.height = Math.max(1, Math.round(img.naturalHeight * k));
+  const x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height); x.drawImage(img, 0, 0, cv.width, cv.height);
+  return cv.toDataURL('image/jpeg', 0.6);
+}
+
+// ---------- autorizzazione ----------
+async function dbxAuthUrl(appKey) {
+  const rnd = new Uint8Array(48); crypto.getRandomValues(rnd);
+  const verifier = dbxB64url(rnd);
+  let challenge = verifier, method = 'plain';
+  if (window.crypto && crypto.subtle) { try { challenge = dbxB64url(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))); method = 'S256'; } catch (e) {} }
+  DBX.pending = { appKey, verifier }; dbxStore();
+  return 'https://www.dropbox.com/oauth2/authorize?client_id=' + encodeURIComponent(appKey) + '&response_type=code&token_access_type=offline&code_challenge_method=' + method + '&code_challenge=' + challenge;
+}
+async function dbxTokenCall(params) {
+  const r = await fetch('https://api.dropboxapi.com/oauth2/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(params).toString() });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error_description || j.error || ('Dropbox ' + r.status)); e.code = j.error || String(r.status); throw e; }
+  return j;
+}
+async function dbxConnect(code) {
+  const p = DBX.pending; if (!p) throw new Error('Riparti dal passo 2: apri Dropbox per autorizzare.');
+  const j = await dbxTokenCall({ code: code.trim(), grant_type: 'authorization_code', client_id: p.appKey, code_verifier: p.verifier });
+  if (!j.refresh_token) throw new Error('Dropbox non ha restituito il token di rinnovo.');
+  DBX = { appKey: p.appKey, refresh: j.refresh_token, access: j.access_token, exp: Date.now() + (j.expires_in || 14400) * 1000, base: DBX.base, team: false, rootNs: '', homeNs: '' };
+  dbxStore();
+  try {
+    const a = await (await dbxFetch('https://api.dropboxapi.com/2/users/get_current_account', { headers: { 'Content-Type': 'application/json' }, body: 'null' })).json();
+    DBX.name = (a.name && a.name.display_name) || ''; DBX.email = a.email || '';
+    const ri = a.root_info || {};
+    DBX.rootNs = ri.root_namespace_id || ''; DBX.homeNs = ri.home_namespace_id || '';
+    DBX.team = !!(DBX.rootNs && DBX.homeNs && DBX.rootNs !== DBX.homeNs); // spazio del team, se l'account lo prevede
+  } catch (e) {}
+  dbxStore();
+}
+async function dbxToken() {
+  if (!dbxOn()) throw new Error('Dropbox non collegato');
+  if (DBX.access && DBX.exp && DBX.exp - Date.now() > 60000) return DBX.access;
+  try {
+    const j = await dbxTokenCall({ grant_type: 'refresh_token', refresh_token: DBX.refresh, client_id: DBX.appKey });
+    DBX.access = j.access_token; DBX.exp = Date.now() + (j.expires_in || 14400) * 1000; dbxStore();
+    return DBX.access;
+  } catch (e) {
+    if (e.code === 'invalid_grant') { DBX.refresh = ''; DBX.access = ''; dbxStore(); dbxUpdBtn(); const x = new Error('Il collegamento a Dropbox è stato revocato: ricollegalo dal menu.'); x.auth = true; throw x; }
+    throw e;
   }
-  lista.forEach((v, i) => {
-    const idx = verbali.indexOf(v);
-    const tipoColors = { 'Riunione di cantiere':'blue','Sopralluogo DL':'orange','Verbale SAL':'green','Riunione sicurezza':'red','Collaudo parziale':'purple' };
-    const tipoClass = tipoColors[v.tipo] || '';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="color:var(--text-dimmer);font-size:12px;">${v.n}</td>
-      <td style="white-space:nowrap;font-size:12px;">${fmtD(parseD(v.data))}</td>
-      <td><span class="tag ${tipoClass}" style="font-size:10px;">${v.tipo}</span></td>
-      <td>
-        <div style="font-size:13px;color:var(--text);margin-bottom:3px;">${v.oggetto}</div>
-        ${v.azioni ? `<div style="font-size:11px;color:${v.azioniChiuse?'var(--green)':'var(--orange)'};display:flex;align-items:center;gap:4px;">
-          ${v.azioniChiuse
-            ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
-            : `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
-          } ${v.azioni}
-        </div>` : ''}
-        ${v.foto && v.foto.length ? `<div style="margin-top:4px;display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dimmer);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> ${v.foto.length} allegat${v.foto.length===1?'o':'i'}</div>` : ''}
-      </td>
-      <td style="font-size:11px;color:var(--text-dim);">${v.presenti}</td>
-      <td style="font-size:12px;white-space:nowrap;">${v.prossimo ? fmtD(parseD(v.prossimo)) : '—'}</td>
-      <td>
-        <div style="display:flex;gap:6px;">
-          <button class="btn-sm" onclick="apriDettaglioVerbale(${idx})">Apri</button>
-          <button class="btn-sm danger btn-x" onclick="rimuoviVerbale(${idx})">✕</button>
-        </div>
-      </td>`;
-    tbody.appendChild(tr);
+}
+async function dbxFetch(url, opts, ns, retry) {
+  const tok = await dbxToken();
+  const h = Object.assign({ Authorization: 'Bearer ' + tok }, opts.headers || {});
+  const root = ns === undefined ? (DBX.team ? DBX.rootNs : '') : ns;
+  if (root) h['Dropbox-API-Path-Root'] = JSON.stringify({ '.tag': 'root', root });
+  const r = await fetch(url, { method: 'POST', headers: h, body: opts.body });
+  if (r.status === 401 && !retry) { DBX.access = ''; return dbxFetch(url, opts, ns, true); }
+  if (r.status === 429 && !retry) { await new Promise(s => setTimeout(s, Math.min(30, Number(r.headers.get('Retry-After')) || 3) * 1000)); return dbxFetch(url, opts, ns, true); }
+  if (!r.ok) { const t = await r.text().catch(() => ''); const e = new Error('Dropbox ' + r.status + (t ? ': ' + t.slice(0, 160) : '')); e.status = r.status; e.body = t; throw e; }
+  return r;
+}
+
+// ---------- caricamento e scaricamento ----------
+async function dbxUpload(path, blob, mode) {
+  const r = await dbxFetch('https://content.dropboxapi.com/2/files/upload', {
+    headers: { 'Content-Type': 'application/octet-stream', 'Dropbox-API-Arg': dbxArg({ path, mode: mode || 'add', autorename: mode !== 'overwrite', mute: true }) }, body: blob
+  });
+  return r.json();
+}
+function dbxEnsure(f) {
+  if (!f || f.data || !f.dbx || !f.dbx.id) return Promise.resolve(f);
+  if (!dbxOn()) return Promise.reject(new Error('Collega Dropbox per vedere l\'immagine a piena risoluzione.'));
+  const id = f.dbx.id;
+  if (!DBX_DL.has(id)) {
+    DBX_DL.set(id, (async () => {
+      try {
+        const r = await dbxFetch('https://content.dropboxapi.com/2/files/download', { headers: { 'Dropbox-API-Arg': dbxArg({ path: id }) } }, f.dbx.ns || '');
+        const blob = await r.blob();
+        return await dbxBlobToData(new Blob([blob], { type: f.type || 'image/jpeg' }));
+      } finally { DBX_DL.delete(id); }
+    })());
+  }
+  return DBX_DL.get(id).then(data => { f.data = data; return f; }, e => {
+    if (e.status === 409) throw new Error('File non trovato su Dropbox: è stato eliminato o non è accessibile da questo account.');
+    throw e;
   });
 }
+const dbxEnsureAll = list => Promise.all((list || []).map(f => dbxEnsure(f).catch(() => f)));
 
-function apriDettaglioVerbale(idx) {
-  const v = verbali[idx];
-  apriModaleVerbale(v, idx);
+// Elenco di ciò che non è ancora su Dropbox, con la cartella di destinazione
+function dbxPending() {
+  const root = dbxProjFolder(), out = [];
+  const ok = f => f && !(f.dbx && f.dbx.id) && /^data:image\//.test(String(f.data || ''));
+  piante.forEach(p => { if (ok(p)) out.push({ f: p, max: DBX_THUMB_PLAN, path: root + '/Piante/' + (dbxClean(p.nome) || 'pianta') + '.jpg' }); });
+  fotoCantiere.forEach(f => { if (ok(f)) out.push({ f, max: DBX_THUMB, path: root + '/Foto/' + (f.date || vbToday()) + '_' + (dbxClean(String(f.name || 'foto').replace(/\.[^.]+$/, '')) || 'foto') + '.jpg' }); });
+  verbali.forEach(v => (v.foto || []).forEach((f, i) => { if (ok(f)) out.push({ f, max: DBX_THUMB, path: root + '/Verbali/Verbale ' + vbPad(v.n || 0) + ' - ' + (v.data || vbToday()) + '/foto-' + vbPad(i + 1) + '.jpg' }); }));
+  return out;
 }
-
-function apriModaleVerbale(v, idx) {
-  const isEdit = v !== undefined;
-  _pendingImages = [];
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:20px;';
-  const dialog = document.createElement('div');
-  dialog.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:32px;width:640px;max-width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);font-family:var(--font);';
-  const num = isEdit ? v.n : (verbali.length + 1);
-  const existingImages = v?.foto || [];
-  dialog.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="font-size:16px;font-weight:600;color:var(--text);">${isEdit ? 'Verbale #'+v.n : 'Nuovo Verbale'}</div>
-      <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-dimmer);">✕</button>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-      <div class="input-group"><label>DATA</label><input type="date" id="vm-data" value="${v?.data||new Date().toISOString().slice(0,10)}"></div>
-      <div class="input-group"><label>TIPO</label><select id="vm-tipo">
-        ${['Riunione di cantiere','Sopralluogo DL','Verbale SAL','Riunione sicurezza','Collaudo parziale'].map(t=>`<option${v?.tipo===t?' selected':''}>${t}</option>`).join('')}
-      </select></div>
-    </div>
-    <div class="input-group"><label>OGGETTO / TITOLO</label><input type="text" id="vm-oggetto" value="${v?.oggetto||''}" placeholder="es. Verifica avanzamento strutture"></div>
-    <div class="input-group"><label>PRESENTI</label><input type="text" id="vm-presenti" value="${v?.presenti||''}" placeholder="es. DL Bianchi, Rossi (Struct.)"></div>
-    <div class="input-group"><label>VERBALE / NOTE</label><textarea id="vm-note" style="min-height:80px;">${v?.note||''}</textarea></div>
-    <div class="input-group"><label>AZIONI DA SVOLGERE</label><input type="text" id="vm-azioni" value="${v?.azioni||''}" placeholder="es. Inviare campionatura entro il 20/05"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-      <div class="input-group"><label>PROSSIMO INCONTRO</label><input type="date" id="vm-prossimo" value="${v?.prossimo||''}"></div>
-      <div class="input-group" style="display:flex;align-items:flex-end;gap:10px;">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text-dim);">
-          <input type="checkbox" id="vm-chiuse" ${v?.azioniChiuse?'checked':''} style="width:auto;"> Azioni completate
-        </label>
-      </div>
-    </div>
-    <div class="input-group">
-      <label>FOTO / ALLEGATI</label>
-      <div style="border:1px dashed var(--border);border-radius:8px;padding:14px;background:var(--surface);cursor:pointer;transition:border-color 0.2s;display:flex;align-items:center;gap:10px;"
-        onclick="document.getElementById('vm-foto-input').click()"
-        onmouseover="this.style.borderColor='#888'" onmouseout="this.style.borderColor='var(--border)'">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-dimmer)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="5" x2="12" y2="17"/></svg>
-        <span style="font-size:12px;color:var(--text-dimmer);">Clicca per allegare foto o documenti (JPG, PNG, PDF)</span>
-      </div>
-      <input type="file" id="vm-foto-input" multiple accept="image/*,application/pdf" style="display:none;" onchange="handleFotoUpload(this, window._vmExistingImages)">
-      <div id="foto-preview-zone"></div>
-    </div>
-    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
-      <button class="btn-outline" onclick="this.closest('[style*=fixed]').remove()">Annulla</button>
-      <button class="btn" onclick="salvaVerbale(${isEdit?idx:'null'}, this)">Salva</button>
-    </div>`;
-  overlay.appendChild(dialog);
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  // Store existing images globally for the upload handler
-  window._vmExistingImages = existingImages;
-  // Render existing images immediately
-  if (existingImages.length) renderFotoPreview('foto-preview-zone', existingImages);
+function dbxStats() {
+  let su = 0, da = 0;
+  const c = f => { if (f && f.dbx && f.dbx.id) su++; else if (f && /^data:image\//.test(String(f.data || ''))) da++; };
+  piante.forEach(c); fotoCantiere.forEach(c); verbali.forEach(v => (v.foto || []).forEach(c));
+  return { su, da };
 }
+function dbxKick() {
+  if (!dbxOn()) return;
+  if (DBX_RUN.busy) { DBX_RUN.again = true; return; }
+  dbxRun();
+}
+async function dbxRun() {
+  const R = DBX_RUN, proj = dbxProjFolder();
+  R.busy = true; R.done = 0; R.err = '';
+  let ok = 0;
+  try {
+    do {
+      R.again = false;
+      const jobs = dbxPending(); R.tot = R.done + jobs.length;
+      for (const j of jobs) {
+        if (dbxProjFolder() !== proj) { R.again = false; break; } // nel frattempo è stato aperto un altro progetto
+        dbxNotify();
+        try {
+          if (!j.f.thumb) j.f.thumb = await dbxMakeThumb(j.f.data, j.max);
+          const m = await dbxUpload(j.path, dbxDataToBlob(j.f.data));
+          j.f.dbx = { id: m.id, path: m.path_display || j.path, ns: DBX.team ? DBX.rootNs : '' };
+          ok++;
+        } catch (e) { R.err = e.message || String(e); if (e.auth || !navigator.onLine) { R.again = false; R.done = R.tot; break; } }
+        R.done++;
+      }
+    } while (R.again);
+  } finally { R.busy = false; }
+  dbxNotify();
+  if (ok || R.err) {
+    // si salva comunque: ciò che non è arrivato su Dropbox resta dentro il progetto, come prima
+    if (VB) vbSync(VB.v);
+    try { await saveToStorage(); } catch (e) {}
+    if (VB) { VB.dirty = false; vbStatus('Salvato alle ' + vbHHMM()); }
+    showSaveIndicator(!R.err ? '✓ ' + ok + ' immagini su Dropbox' : ok ? '⚠ Dropbox: alcune immagini non caricate' : '⚠ Dropbox non raggiungibile: immagini salvate nel progetto', !!R.err);
+  }
+}
+function dbxNotify() {
+  dbxUpdBtn();
+  const s = document.getElementById('dbx-prog');
+  if (s) s.textContent = DBX_RUN.busy ? 'Carico su Dropbox: ' + Math.min(DBX_RUN.done + 1, DBX_RUN.tot) + ' di ' + DBX_RUN.tot + '…' : (DBX_RUN.err ? 'Ultimo errore: ' + DBX_RUN.err : '');
+  if (!DBX_RUN.busy) { const d = document.getElementById('dbx-dlg'); if (d && d._draw) d._draw(); }
+}
+function dbxUpdBtn() {
+  const l = document.getElementById('dbx-nav-label'); if (!l) return;
+  l.textContent = !dbxOn() ? 'Dropbox' : DBX_RUN.busy ? 'Dropbox ↑ ' + DBX_RUN.done + '/' + DBX_RUN.tot : 'Dropbox ✓';
+}
+// Copia "leggera" per il salvataggio: senza l'immagine piena quando è già su Dropbox
+function dbxLean(f) { if (!f || !(f.dbx && f.dbx.id) || !f.thumb) return f; const o = Object.assign({}, f); delete o.data; delete o._ko; return o; }
+const dbxLeanList = a => a.map(dbxLean);
+const dbxLeanVerbali = () => verbali.map(v => Array.isArray(v.foto) && v.foto.some(f => f && f.dbx) ? Object.assign({}, v, { foto: v.foto.map(dbxLean) }) : v);
+function dbxAfterLoad() { dbxUpdBtn(); setTimeout(dbxKick, 1500); }
+window.addEventListener('online', () => dbxKick());
+document.addEventListener('DOMContentLoaded', dbxUpdBtn);
 
-function salvaVerbale(idx, btn) {
-  const existingImages = window._vmExistingImages || [];
-  const v = {
-    n: idx !== null ? verbali[idx].n : (verbali.length + 1),
-    data: document.getElementById('vm-data').value,
-    tipo: document.getElementById('vm-tipo').value,
-    oggetto: document.getElementById('vm-oggetto').value,
-    presenti: document.getElementById('vm-presenti').value,
-    note: document.getElementById('vm-note').value,
-    azioni: document.getElementById('vm-azioni').value,
-    prossimo: document.getElementById('vm-prossimo').value,
-    azioniChiuse: document.getElementById('vm-chiuse').checked,
-    foto: [...existingImages, ..._pendingImages],
+// ---------- finestra di configurazione ----------
+function dbxConfig() {
+  const old = document.getElementById('dbx-dlg-ov'); if (old) old.remove();
+  const ov = document.createElement('div');
+  ov.className = 'vb-dlg-ov'; ov.id = 'dbx-dlg-ov';
+  ov.innerHTML = '<div class="vb-dlg" id="dbx-dlg" role="dialog" aria-label="Dropbox"></div>';
+  const dlg = ov.firstChild;
+  let err = '', busy = false, key = DBX.appKey || (DBX.pending && DBX.pending.appKey) || '';
+  const head = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><div style="font-size:16px;font-weight:600;">Dropbox · archivio foto e piante</div><button type="button" data-a="close" aria-label="Chiudi" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text);">✕</button></div>`;
+  const draw = () => {
+    if (dbxOn()) {
+      const st = dbxStats(), hasTeam = !!(DBX.rootNs && DBX.homeNs && DBX.rootNs !== DBX.homeNs);
+      dlg.innerHTML = head + `<div class="vb-msg ok" style="margin-top:10px">Collegato${DBX.name ? ' come <b>' + vbEsc(DBX.name) + '</b>' : ''}${DBX.email ? ' (' + vbEsc(DBX.email) + ')' : ''}.</div>
+        <div class="input-group"><label>CARTELLA DI BASE</label><input type="text" id="dbx-base" value="${vbEsc(dbxBase())}" placeholder="/Cantieri"></div>
+        <p class="vb-muted" style="margin:-6px 0 14px">Questo cantiere va in <b>${vbEsc(dbxProjFolder())}</b>, con le sottocartelle Foto, Verbali e Piante.</p>
+        ${hasTeam ? `<label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;margin-bottom:14px;cursor:pointer;"><input type="checkbox" id="dbx-team"${DBX.team ? ' checked' : ''} style="width:20px;height:20px;flex:none;accent-color:var(--accent);"><span><b>Usa lo spazio condiviso del team</b><br><span class="vb-muted">Se disattivato, i file vanno nella tua cartella personale.</span></span></label>` : ''}
+        <div class="vb-msg" style="margin:0 0 12px"><b>${st.su}</b> immagini su Dropbox · <b>${st.da}</b> ancora da caricare in questo progetto.<div id="dbx-prog" style="margin-top:4px"></div></div>
+        ${err ? `<div class="vb-msg bad" role="alert">${vbEsc(err)}</div>` : ''}
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;margin-top:18px;"><button type="button" class="vb-link danger" data-a="off">Scollega Dropbox</button><div style="display:flex;gap:10px;flex-wrap:wrap;"><button type="button" class="btn-outline" data-a="sync"${st.da && !DBX_RUN.busy ? '' : ' disabled'}>Carica ora</button><button type="button" class="btn" data-a="save">Salva</button></div></div>`;
+      const s = dlg.querySelector('#dbx-prog'); if (s) s.textContent = DBX_RUN.busy ? 'Carico su Dropbox: ' + Math.min(DBX_RUN.done + 1, DBX_RUN.tot) + ' di ' + DBX_RUN.tot + '…' : (DBX_RUN.err ? 'Ultimo errore: ' + DBX_RUN.err : '');
+    } else {
+      dlg.innerHTML = head + `<p class="vb-muted" style="margin:0 0 16px">Foto e piante vengono salvate nel tuo Dropbox, un file ciascuna. Il collegamento si fa una volta per dispositivo. La guida passo passo è nel file <b>Configurazione Dropbox</b>.</p>
+        <div class="input-group"><label>1 · APP KEY DELLA TUA APP DROPBOX</label><input type="text" id="dbx-key" value="${vbEsc(key)}" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="es. a1b2c3d4e5f6g7h"></div>
+        <div style="margin-bottom:16px"><span class="vb-lbl">2 · Autorizza l'accesso</span><button type="button" class="btn-outline" data-a="auth">Apri Dropbox per autorizzare</button><p class="vb-muted" style="margin:6px 0 0">Si apre una pagina di Dropbox: premi Consenti e copia il codice che compare.</p></div>
+        <div class="input-group"><label>3 · INCOLLA QUI IL CODICE</label><input type="text" id="dbx-code" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="codice mostrato da Dropbox"></div>
+        ${err ? `<div class="vb-msg bad" role="alert">${vbEsc(err)}</div>` : ''}
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px;"><button type="button" class="btn-outline" data-a="close">Annulla</button><button type="button" class="btn" data-a="connect"${busy ? ' disabled' : ''}>${busy ? 'Collego…' : 'Collega'}</button></div>`;
+    }
   };
-  _pendingImages = [];
-  window._vmExistingImages = [];
-  if (idx !== null) { verbali[idx] = v; } else { verbali.push(v); }
-  btn.closest('[style*=fixed]').remove();
-  renderVerbali();
-  saveToStorage();
+  dlg._draw = () => { if (document.body.contains(dlg) && dbxOn()) draw(); };
+  ov.addEventListener('input', e => { if (e.target.id === 'dbx-key') key = e.target.value.trim(); });
+  ov.addEventListener('click', async e => {
+    if (e.target === ov) return ov.remove();
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const a = b.dataset.a;
+    if (a === 'close') return ov.remove();
+    if (a === 'auth') {
+      if (!key) { err = 'Inserisci prima la App key.'; return draw(); }
+      const w = window.open('about:blank', '_blank'); // aperta subito, dentro il clic, per non essere bloccata
+      try { const url = await dbxAuthUrl(key); if (w) w.location.href = url; else location.href = url; err = ''; } catch (x) { if (w) w.close(); err = 'Non riesco a preparare l\'autorizzazione: ' + x.message; draw(); }
+      return;
+    }
+    if (a === 'connect') {
+      const code = (dlg.querySelector('#dbx-code').value || '').trim();
+      if (!code) { err = 'Incolla il codice mostrato da Dropbox.'; return draw(); }
+      busy = true; err = ''; draw();
+      try { await dbxConnect(code); busy = false; draw(); dbxUpdBtn(); dbxKick(); }
+      catch (x) { busy = false; err = x.code === 'invalid_grant' ? 'Codice non valido o scaduto: ripeti il passo 2 e incolla il nuovo codice.' : x.code === 'invalid_client' || /client_id/.test(x.message) ? 'App key non riconosciuta da Dropbox: controllala nella console sviluppatori.' : 'Collegamento non riuscito: ' + x.message; draw(); }
+      return;
+    }
+    if (a === 'save' || a === 'sync') {
+      const base = dlg.querySelector('#dbx-base'), team = dlg.querySelector('#dbx-team');
+      if (base) DBX.base = base.value.trim() || '/Cantieri';
+      if (team) DBX.team = team.checked;
+      dbxStore();
+      if (a === 'save') return ov.remove();
+      err = ''; dbxKick(); draw(); return;
+    }
+    if (a === 'off') {
+      if (!confirm('Scollegare Dropbox da questo dispositivo? I file già caricati restano in Dropbox; le foto si vedranno solo in miniatura finché non ricolleghi.')) return;
+      DBX = { appKey: DBX.appKey, base: DBX.base }; dbxStore(); dbxUpdBtn(); err = ''; draw();
+    }
+  });
+  document.body.appendChild(ov);
+  draw();
 }
+
+// ========================
+// VERBALI DI CANTIERE — SOPRALLUOGHI STRUTTURATI (v1.5)
+// Editor a schermo intero in 6 sezioni, foto da fotocamera/galleria,
+// anteprima, PDF e invio ai destinatari del cantiere.
+// ========================
+const VB_TIPI = ['Sopralluogo DL', 'Riunione di cantiere', 'Verbale SAL', 'Riunione sicurezza', 'Collaudo parziale'];
+const VB_TIPO_COL = { 'Riunione di cantiere': 'blue', 'Sopralluogo DL': 'orange', 'Verbale SAL': 'green', 'Riunione sicurezza': 'red', 'Collaudo parziale': 'purple' };
+const VB_SIC = [
+  ['recinzione', 'Recinzione e accessi di cantiere'],
+  ['cartello', 'Cartello di cantiere e titolo edilizio esposti'],
+  ['ponteggi', 'Ponteggi e opere provvisionali'],
+  ['dpi', 'Uso dei DPI da parte degli operatori'],
+  ['elettrico', 'Quadro elettrico e impianto di cantiere'],
+  ['ordine', 'Ordine, pulizia e percorsi liberi'],
+  ['rifiuti', 'Gestione di rifiuti e macerie'],
+  ['documenti', 'Documenti in cantiere: PSC, POS, notifica preliminare']
+];
+const VB_METEO = ['Sereno', 'Nuvoloso', 'Pioggia', 'Vento forte', 'Neve', 'Gelo'];
+const VB_AREE = ['Cantiere generale', 'Esterno', 'Facciata', 'Copertura', 'Strutture', 'Murature', 'Impianto elettrico', 'Impianto idraulico', 'Impianto termico', 'Serramenti', 'Finiture', 'Bagno', 'Cucina'];
+const VB_RUOLI = ['Committente', 'Impresa', 'Ufficio', 'Altro'];
+const VB_FOTO_MAX = 1280, VB_FOTO_Q = 0.75; // lato lungo e qualità JPEG: tengono leggero il salvataggio
+
+const vbPad = n => String(n).padStart(2, '0');
+const vbEsc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const vbNl2br = s => vbEsc(s).replace(/\n/g, '<br>');
+const vbUid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const vbToday = () => { const d = new Date(); return d.getFullYear() + '-' + vbPad(d.getMonth() + 1) + '-' + vbPad(d.getDate()); };
+const vbHHMM = (d = new Date()) => vbPad(d.getHours()) + ':' + vbPad(d.getMinutes());
+const vbValidEmail = e => /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+$/.test(String(e || '').trim());
+const vbFmt = (iso, opts) => { if (!iso) return '—'; const d = new Date(String(iso).slice(0, 10) + 'T12:00:00'); return isNaN(d) ? String(iso) : d.toLocaleDateString('it-IT', opts); };
+const vbFmtLong = iso => vbFmt(iso, { day: 'numeric', month: 'long', year: 'numeric' });
+const vbFmtShort = iso => vbFmt(iso, { day: '2-digit', month: '2-digit', year: 'numeric' });
+const vbSlug = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+const vbIsImg = f => !!f && (/^data:image\//.test(String(f.data || f.thumb || '')) || !!(f.dbx && f.dbx.id));
+const VB_ICONS = {
+  back: '<path d="M15 5l-7 7 7 7"/>', chev: '<path d="M9 5l7 7-7 7"/>', plus: '<path d="M12 5v14M5 12h14"/>',
+  cam: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  img: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+  trash: '<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>',
+  send: '<path d="M3 11l18-7-7 18-3-8z"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="1"/><path d="M16 8V4H4v12h4"/>',
+  down: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', check: '<path d="M5 12l5 5 9-10"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>', share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/>'
+};
+const vbIco = (n, s = 18) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VB_ICONS[n]}</svg>`;
+
+let VB = null;          // stato dell'editor aperto
+let vbCam = null;       // stato della fotocamera in-app
+let vbToastT = null;
+let vbSaveErr = false;  // esito dell'ultimo salvataggio su GitHub
+
+// Intercetta l'indicatore di salvataggio per sapere se la sincronizzazione è fallita
+const _vbShowSaveIndicator = showSaveIndicator;
+showSaveIndicator = function (msg, isError) { vbSaveErr = !!isError; return _vbShowSaveIndicator(msg, isError); };
+
+function vbProj() {
+  const g = id => (document.getElementById(id)?.value || '').trim();
+  return { nome: g('nome_cantiere') || 'Cantiere', indirizzo: g('indirizzo'), committente: g('committente'), impresa: g('impresa'), dl: g('dl'), codice: g('codice_progetto') };
+}
+
+// Porta un verbale (anche del vecchio formato) alla struttura completa
+function vbNorm(v) {
+  const legacy = !v.v2;
+  v.tipo = v.tipo || 'Sopralluogo DL';
+  v.oggetto = v.oggetto || ''; v.ora = v.ora || ''; v.meteo = v.meteo || '';
+  if (!Array.isArray(v.presentiList)) v.presentiList = String(v.presenti || '').split(/\s*[,;]\s*/).map(s => s.trim()).filter(Boolean);
+  v.presenti = v.presentiList.join(', ');
+  v.avanzamento = Math.max(0, Math.min(100, Number(v.avanzamento) || 0));
+  v.lavorazioni = v.lavorazioni || '';
+  v.sicurezza = v.sicurezza || {}; v.sicurezzaNote = v.sicurezzaNote || '';
+  if (!Array.isArray(v.osservazioni)) {
+    v.osservazioni = [];
+    if (v.azioni) v.osservazioni.push({ id: vbUid(), testo: String(v.azioni), priorita: 'normale', carico: '', entro: '', chiusa: !!v.azioniChiuse });
+  }
+  v.foto = Array.isArray(v.foto) ? v.foto : [];
+  v.foto.forEach(f => { if (f.did == null) f.did = ''; if (f.area == null) f.area = ''; });
+  v.prossimo = v.prossimo || ''; v.note = v.note || '';
+  v.stato = v.stato || (legacy ? 'chiuso' : 'bozza');
+  v.v2 = true;
+  return v;
+}
+// Mantiene allineati i campi usati dal resto del gestionale (report PDF di progetto, vecchie versioni)
+function vbSync(v) {
+  v.presenti = (v.presentiList || []).join(', ');
+  const obs = (v.osservazioni || []).filter(o => (o.testo || '').trim());
+  v.azioni = obs.map(o => o.testo.trim()).join(' · ');
+  v.azioniChiuse = obs.length > 0 && obs.every(o => o.chiusa);
+  v.aggiornatoAt = new Date().toISOString();
+}
+function vbSetPath(o, p, val) { const k = p.split('.'); let t = o; for (let i = 0; i < k.length - 1; i++) t = t[k[i]]; t[k[k.length - 1]] = val; }
+
+// ---------- registro ----------
+function renderVerbali() {
+  verbali.forEach(vbNorm);
+  const fTipo = document.getElementById('verbali-filter')?.value || '';
+  const fStato = document.getElementById('verbali-filter-stato')?.value || '';
+  const lista = verbali.filter(v => (!fTipo || v.tipo === fTipo) && (!fStato || v.stato === fStato)).sort((a, b) => (b.n || 0) - (a.n || 0));
+
+  document.getElementById('v-kpi-totali').textContent = verbali.length;
+  const ult = verbali.slice().sort((a, b) => new Date(b.data) - new Date(a.data))[0];
+  document.getElementById('v-kpi-ultimo').textContent = ult ? fmtD(parseD(ult.data)) : '—';
+  const aperte = verbali.reduce((s, v) => s.concat(v.osservazioni.filter(o => !o.chiusa && (o.testo || '').trim())), []);
+  const urg = aperte.filter(o => o.priorita === 'urgente').length;
+  document.getElementById('v-kpi-azioni').textContent = aperte.length;
+  const sub = document.getElementById('v-kpi-azioni-sub');
+  if (sub) sub.textContent = urg ? `di cui ${urg} urgent${urg === 1 ? 'e' : 'i'}` : 'da risolvere';
+
+  const body = document.getElementById('verbali-body');
+  if (!lista.length) {
+    body.innerHTML = `<div class="vb-empty">${verbali.length ? 'Nessun verbale corrisponde ai filtri.' : 'Nessun verbale registrato.<br>Con <b>+ Nuovo Verbale</b> parte una scheda già pronta: dati generali, avanzamento, sicurezza, osservazioni, foto.'}</div>`;
+    return;
+  }
+  body.innerHTML = lista.map(v => {
+    const idx = verbali.indexOf(v);
+    const o = v.osservazioni.filter(x => (x.testo || '').trim()), ap = o.filter(x => !x.chiusa).length, u = o.filter(x => !x.chiusa && x.priorita === 'urgente').length;
+    const meta = [`${v.avanzamento}%`, `${o.length} osservazion${o.length === 1 ? 'e' : 'i'}${ap ? ` (${ap} apert${ap === 1 ? 'a' : 'e'}${u ? `, ${u} urgent${u === 1 ? 'e' : 'i'}` : ''})` : ''}`, `${v.foto.length} foto`];
+    if (v.presenti) meta.push('Presenti: ' + v.presenti);
+    if (v.prossimo) meta.push('Prossimo: ' + fmtD(parseD(v.prossimo)));
+    if (v.inviatoAt) meta.push('inviato il ' + vbFmtShort(v.inviatoAt));
+    return `<div class="vb-row" onclick="vbApri(${idx})">
+      <div class="vb-row-main">
+        <div class="vb-row-t">Verbale n. ${vbPad(v.n || 0)}
+          <span class="tag ${VB_TIPO_COL[v.tipo] || ''}" style="font-size:10px;">${vbEsc(v.tipo)}</span>
+          <span class="tag ${v.stato === 'chiuso' ? 'green' : 'orange'}" style="font-size:10px;">${v.stato === 'chiuso' ? 'Chiuso' : 'Bozza'}</span>
+        </div>
+        <div class="vb-row-s">${fmtD(parseD(v.data))}${v.ora ? ', ore ' + vbEsc(v.ora) : ''}${v.oggetto ? ' — ' + vbEsc(v.oggetto) : ''}</div>
+        <div class="vb-row-m">${vbEsc(meta.join(' · '))}</div>
+      </div>
+      <div class="vb-row-act">
+        <button class="btn-sm" onclick="event.stopPropagation();vbApri(${idx})">Apri</button>
+        <button class="btn-sm" onclick="event.stopPropagation();vbApri(${idx},'invio')">Invia</button>
+        <button class="btn-sm danger btn-x" title="Elimina" onclick="event.stopPropagation();rimuoviVerbale(${idx})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function vbNuovo() {
+  const prev = verbali.slice().sort((a, b) => (b.n || 0) - (a.n || 0))[0];
+  const p = vbProj(), now = new Date();
+  const fTipo = document.getElementById('verbali-filter')?.value || '';
+  const v = vbNorm({
+    v2: true, n: (prev ? prev.n || 0 : 0) + 1, data: vbToday(), ora: vbHHMM(now), tipo: fTipo || 'Sopralluogo DL', oggetto: '', meteo: '',
+    presentiList: p.dl ? [p.dl] : [], avanzamento: prev ? Number(prev.avanzamento) || 0 : 0, lavorazioni: '',
+    sicurezza: {}, sicurezzaNote: '', osservazioni: [], foto: [], prossimo: '', note: '', stato: 'bozza', creatoAt: now.toISOString()
+  });
+  verbali.push(v);
+  renderVerbali();
+  vbApri(verbali.length - 1);
+}
+// Compatibilità con i vecchi richiami
+function apriModaleVerbale(v, idx) { if (v === undefined) vbNuovo(); else vbApri(idx); }
+function apriDettaglioVerbale(idx) { vbApri(idx); }
 
 function rimuoviVerbale(idx) {
-  if (!confirm('Eliminare il verbale #' + verbali[idx].n + '?')) return;
+  const v = verbali[idx]; if (!v) return;
+  const nf = (v.foto || []).length;
+  if (!confirm('Eliminare il verbale n. ' + v.n + (nf ? ' e le sue ' + nf + ' foto' : '') + '?')) return;
   verbali.splice(idx, 1);
-  verbali.forEach((v,i) => v.n = i+1);
+  verbali.forEach((x, i) => x.n = i + 1);
   renderVerbali();
   saveToStorage();
+}
+
+// ---------- overlay ----------
+function vbApri(idx, view) {
+  const v = verbali[idx]; if (!v) return;
+  if (VB) vbChiudi();
+  vbNorm(v);
+  const ov = document.createElement('div');
+  ov.className = 'vb-ov'; ov.id = 'vb-ov';
+  ov.innerHTML = `<div class="vb-top" id="vb-top"></div><div class="vb-body" id="vb-body"><div class="vb-wrap" id="vb-main"></div></div><div class="vb-dock" id="vb-dock"></div><div class="vb-toast" id="vb-toast" role="status" aria-live="polite" hidden><span></span></div>`;
+  document.body.appendChild(ov);
+  VB = { v, view: null, t: null, dirty: false, saving: false, again: false, confirmDel: false, pending: [], I: null, prevOverflow: document.body.style.overflow };
+  document.body.style.overflow = 'hidden';
+  ov.addEventListener('click', vbOnClick);
+  ov.addEventListener('input', vbOnInput);
+  ov.addEventListener('change', vbOnInput);
+  if (view === 'invio') vbViewInvio(); else vbViewEdit();
+}
+function vbChiudi(skipSave) {
+  const S = VB; if (!S) return;
+  clearTimeout(S.t);
+  vbCloseCam();
+  if (!skipSave) vbSync(S.v);
+  const ov = document.getElementById('vb-ov'); if (ov) ov.remove();
+  document.body.style.overflow = S.prevOverflow || '';
+  VB = null;
+  renderVerbali();
+  if (!skipSave && S.dirty) saveToStorage();
+}
+function vbFrame(h, main, dock) {
+  document.getElementById('vb-top').innerHTML = `<button type="button" class="vb-back" data-act="back" aria-label="Indietro">${vbIco('back', 24)}</button><div class="vb-ttl"><div class="vb-kick">${vbEsc(h.kick)}</div><div class="vb-h1">${vbEsc(h.title)}</div></div>`;
+  document.getElementById('vb-main').innerHTML = main;
+  const d = document.getElementById('vb-dock');
+  d.innerHTML = dock || ''; d.style.display = dock ? '' : 'none';
+  document.getElementById('vb-body').scrollTop = 0;
+}
+function vbToast(msg) {
+  const t = document.getElementById('vb-toast');
+  if (!t) { alert(msg); return; }
+  t.querySelector('span').textContent = msg; t.hidden = false;
+  clearTimeout(vbToastT); vbToastT = setTimeout(() => { t.hidden = true; }, 4200);
+}
+function vbStatus(msg, err) { const s = document.getElementById('vb-status'); if (s) { s.textContent = msg; s.classList.toggle('err', !!err); } }
+function vbTouch(delay) {
+  if (!VB) return;
+  VB.dirty = true;
+  vbStatus('Modifiche non salvate…');
+  clearTimeout(VB.t); VB.t = setTimeout(vbFlush, delay || 4000);
+}
+async function vbFlush() {
+  const S = VB; if (!S) return;
+  clearTimeout(S.t);
+  vbSync(S.v);
+  if (!getGithubToken()) { vbStatus('Non sincronizzato: configura GitHub per salvare', true); return; }
+  if (S.saving) { S.again = true; return; }
+  S.saving = true;
+  try {
+    do {
+      S.again = false; S.dirty = false; vbSaveErr = false;
+      if (VB === S) vbStatus('Salvataggio…');
+      await saveToStorage();
+      if (vbSaveErr) { S.dirty = true; if (VB === S) vbStatus('Salvataggio non riuscito: riprovo alla prossima modifica', true); break; }
+      if (VB === S) vbStatus('Salvato alle ' + vbHHMM());
+    } while (S.again);
+  } finally { S.saving = false; }
+}
+
+// ---------- editor ----------
+function vbKnownNames() {
+  const p = vbProj(), a = [];
+  [p.dl, p.committente, p.impresa].forEach(n => n && a.push(n));
+  contattiVerbali.forEach(c => c.nome && a.push(c.nome));
+  fornitori.slice(0, 12).forEach(f => { if (f && f.nome && f.nome !== 'Nuovo Fornitore') a.push(f.nome); });
+  return [...new Set(a)];
+}
+function vbCarichi(cur) {
+  const p = vbProj();
+  const o = ['Direzione lavori'];
+  if (p.impresa) o.push(p.impresa);
+  fornitori.forEach(f => { if (f && f.nome && f.nome !== 'Nuovo Fornitore') o.push(f.nome); });
+  contattiVerbali.forEach(c => { if (c.ruolo === 'Impresa' && c.nome) o.push(c.nome); });
+  if (p.committente) o.push(p.committente);
+  if (cur) o.push(cur);
+  return '<option value="">Da assegnare</option>' + [...new Set(o)].map(n => `<option${n === cur ? ' selected' : ''}>${vbEsc(n)}</option>`).join('');
+}
+function vbRenderPresenti() {
+  const el = document.getElementById('vb-presenti'); if (!el) return;
+  const names = [...new Set(vbKnownNames().concat(VB.v.presentiList))];
+  el.innerHTML = names.map(n => `<button type="button" class="vb-chip" data-act="presente" data-n="${vbEsc(n)}" aria-pressed="${VB.v.presentiList.includes(n)}">${vbEsc(n)}</button>`).join('') || '<span class="vb-muted">Aggiungi i presenti qui sotto.</span>';
+}
+function vbRenderObs() {
+  const el = document.getElementById('vb-obs'); if (!el) return;
+  el.innerHTML = VB.v.osservazioni.map((x, i) => `<div class="vb-obs${x.chiusa ? ' done' : ''}"><div class="vb-obs-top"><span class="n">${i + 1}</span>
+<button type="button" class="vb-pill" data-act="prio" data-i="${i}" aria-pressed="${x.priorita === 'urgente'}">Urgente</button>
+<button type="button" class="vb-pill" data-act="done" data-i="${i}" aria-pressed="${!!x.chiusa}">Risolta</button>
+<button type="button" class="vb-x" data-act="rm-obs" data-i="${i}" aria-label="Elimina osservazione ${i + 1}">${vbIco('trash')}</button></div>
+<div class="input-group"><textarea data-f="osservazioni.${i}.testo" rows="3" aria-label="Osservazione ${i + 1}" placeholder="Cosa è stato rilevato o richiesto">${vbEsc(x.testo)}</textarea></div>
+<div class="vb-grid2"><div class="input-group" style="margin:0"><label for="vb-oc${i}">A carico di</label><select id="vb-oc${i}" data-f="osservazioni.${i}.carico">${vbCarichi(x.carico)}</select></div><div class="input-group" style="margin:0"><label for="vb-oe${i}">Entro il</label><input id="vb-oe${i}" type="date" data-f="osservazioni.${i}.entro" value="${vbEsc(x.entro)}"></div></div></div>`).join('')
+    || '<p class="vb-muted">Nessuna osservazione. Aggiungine una per ogni cosa da correggere o decidere.</p>';
+}
+function vbRenderPhotos() {
+  const el = document.getElementById('vb-photos'); if (!el || !VB) return;
+  const pend = VB.pending.map(() => `<figure class="vb-ph"><div class="vb-ph-img"><div class="vb-ph-ov">Elaborazione…</div></div></figure>`).join('');
+  const done = VB.v.foto.map((f, i) => `<figure class="vb-ph"><div class="vb-ph-img">${vbIsImg(f) ? `<img loading="lazy" src="${dbxThumbSrc(f)}" alt="Foto ${i + 1}" data-zoom="${i}">` : `<div class="vb-ph-file">${vbEsc(f.name || 'Allegato')}</div>`}</div>
+<div class="vb-ph-f"><input data-f="foto.${i}.did" value="${vbEsc(f.did)}" placeholder="Didascalia" aria-label="Didascalia foto ${i + 1}"><input data-f="foto.${i}.area" value="${vbEsc(f.area)}" list="vb-aree" placeholder="Zona o locale" aria-label="Zona foto ${i + 1}"><button type="button" class="btn-sm danger" data-act="rm-foto" data-i="${i}">${vbIco('trash', 14)} Rimuovi</button></div></figure>`).join('');
+  el.innerHTML = done + pend || '<p class="vb-muted" style="grid-column:1/-1">Nessuna foto. Scatta dal cantiere o scegli dalla galleria: compariranno qui con didascalia e zona.</p>';
+}
+function vbViewEdit() {
+  const d = VB.v, p = vbProj();
+  VB.view = 'edit'; VB.confirmDel = false;
+  const sic = VB_SIC.map(([k, l]) => `<div class="vb-chk"><div class="vb-chk-l">${vbEsc(l)}</div><div class="vb-seg" role="group" aria-label="${vbEsc(l)}">${[['ok', 'Ok'], ['ko', 'No'], ['na', 'N/A']].map(([val, t]) => `<button type="button" data-act="sic" data-k="${k}" data-v="${val}" aria-pressed="${d.sicurezza[k] === val}">${t}</button>`).join('')}</div></div>`).join('');
+  vbFrame({ kick: 'Verbale n. ' + vbPad(d.n || 0) + (d.stato === 'chiuso' ? ' · chiuso' : ' · bozza'), title: p.nome },
+    `<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">1</span>Dati generali</h2>
+<div class="vb-grid2"><div class="input-group"><label for="vb-data">Data</label><input id="vb-data" type="date" data-f="data" value="${vbEsc(d.data)}"></div><div class="input-group"><label for="vb-ora">Ora</label><input id="vb-ora" type="time" data-f="ora" value="${vbEsc(d.ora)}"></div></div>
+<div class="vb-grid2"><div class="input-group"><label for="vb-tipo">Tipo</label><select id="vb-tipo" data-f="tipo">${VB_TIPI.concat(VB_TIPI.includes(d.tipo) ? [] : [d.tipo]).map(t => `<option${t === d.tipo ? ' selected' : ''}>${vbEsc(t)}</option>`).join('')}</select></div><div class="input-group"><label for="vb-meteo">Meteo</label><select id="vb-meteo" data-f="meteo"><option value="">Non indicato</option>${VB_METEO.map(m => `<option${m === d.meteo ? ' selected' : ''}>${m}</option>`).join('')}</select></div></div>
+<div class="input-group"><label for="vb-ogg">Oggetto</label><input id="vb-ogg" type="text" data-f="oggetto" value="${vbEsc(d.oggetto)}" placeholder="es. Verifica avanzamento strutture"></div>
+<div><span class="vb-lbl" id="vb-lpres">Presenti</span><div id="vb-presenti" class="vb-chips" role="group" aria-labelledby="vb-lpres"></div><div class="vb-inline"><input id="vb-altro" placeholder="Altro presente: nome e ruolo" aria-label="Altro presente"><button type="button" class="btn-outline" data-act="add-presente">Aggiungi</button></div></div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">2</span>Avanzamento dei lavori</h2>
+<div class="input-group"><label for="vb-av">Avanzamento complessivo<output id="vb-av-out" class="vb-big">${d.avanzamento}%</output></label><input id="vb-av" type="range" min="0" max="100" step="5" data-f="avanzamento" value="${d.avanzamento}"></div>
+<div class="input-group" style="margin:0"><label for="vb-lav">Lavorazioni in corso e stato dei luoghi</label><textarea id="vb-lav" rows="5" data-f="lavorazioni" placeholder="Es. completata la demolizione dei tramezzi; in corso le tracce per gli impianti.">${vbEsc(d.lavorazioni)}</textarea></div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">3</span>Sicurezza e documenti</h2>${sic}
+<div class="input-group" style="margin:14px 0 0"><label for="vb-sn">Note sulla sicurezza</label><textarea id="vb-sn" rows="3" data-f="sicurezzaNote" placeholder="Solo se serve">${vbEsc(d.sicurezzaNote)}</textarea></div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">4</span>Osservazioni e prescrizioni</h2><div id="vb-obs"></div><button type="button" class="btn-outline" data-act="add-obs">${vbIco('plus', 16)} Aggiungi osservazione</button></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">5</span>Fotografie</h2>
+<div class="vb-photo-btns"><button type="button" class="btn" data-act="scatta">${vbIco('cam')} Scatta foto</button><button type="button" class="btn-outline" data-act="galleria">${vbIco('img')} Dalla galleria</button></div>
+<input id="vb-cam-input" type="file" accept="image/*" capture="environment" hidden><input id="vb-gal-input" type="file" accept="image/*" multiple hidden>
+<div id="vb-photos" class="vb-photos"></div><datalist id="vb-aree">${VB_AREE.map(a => `<option value="${vbEsc(a)}">`).join('')}</datalist></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">6</span>Prossimi passi</h2>
+<div class="input-group"><label for="vb-pr">Prossimo sopralluogo</label><input id="vb-pr" type="date" data-f="prossimo" value="${vbEsc(d.prossimo)}"></div>
+<div class="input-group" style="margin:0"><label for="vb-note">Note finali</label><textarea id="vb-note" rows="3" data-f="note">${vbEsc(d.note)}</textarea></div></section>
+<div class="vb-dz"><button type="button" class="vb-link danger" data-act="del">Elimina verbale</button></div>`,
+    `<div class="vb-status" id="vb-status" aria-live="polite">${VB.dirty ? 'Modifiche non salvate…' : 'Salvato'}</div><button type="button" class="btn" data-act="invio">Anteprima e invio ${vbIco('chev', 16)}</button>`);
+  vbRenderPresenti(); vbRenderObs(); vbRenderPhotos();
+}
+
+// ---------- foto ----------
+function vbLoadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('img')); i.src = src; }); }
+function vbScale(source, w, h) {
+  const k = Math.min(1, VB_FOTO_MAX / Math.max(w, h));
+  const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(w * k)); cv.height = Math.max(1, Math.round(h * k));
+  const x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height); x.drawImage(source, 0, 0, cv.width, cv.height);
+  return cv.toDataURL('image/jpeg', VB_FOTO_Q);
+}
+async function vbFileToJpeg(file) {
+  const url = URL.createObjectURL(file);
+  try { const img = await vbLoadImg(url); return vbScale(img, img.naturalWidth, img.naturalHeight); }
+  finally { URL.revokeObjectURL(url); }
+}
+function vbPushFoto(data, name) {
+  const n = VB.v.foto.length + 1;
+  VB.v.foto.push({ data, name: name || ('foto-' + vbPad(n) + '.jpg'), type: 'image/jpeg', did: '', area: '', at: new Date().toISOString() });
+}
+async function vbAddPhotos(files) {
+  const S = VB; let ko = 0;
+  for (const f of files) {
+    const p = {}; S.pending.push(p); vbRenderPhotos();
+    try { const data = await vbFileToJpeg(f); if (VB === S) vbPushFoto(data, (f.name || '').replace(/\.[^.]+$/, '') + '.jpg'); }
+    catch (e) { ko++; }
+    S.pending = S.pending.filter(x => x !== p);
+    if (VB === S) vbRenderPhotos();
+  }
+  if (VB !== S) return;
+  if (ko) vbToast(ko === 1 ? 'Una foto non è stata letta: formato non supportato.' : ko + ' foto non lette: formato non supportato.');
+  if (files.length > ko) { if (dbxOn()) { VB.dirty = true; dbxKick(); } else vbTouch(1200); }
+}
+function vbScatta() {
+  const live = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && window.isSecureContext !== false;
+  const touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  // Su telefono e tablet si apre la fotocamera nativa (messa a fuoco, flash, piena risoluzione);
+  // su computer la webcam dentro l'app. Se non disponibile si ripiega sulla scelta del file.
+  if (touch || !live) document.getElementById('vb-cam-input').click();
+  else vbOpenCam();
+}
+async function vbOpenCam(host, onShot, onClose) {
+  const ov = host || document.getElementById('vb-ov'); if (!ov || vbCam) return;
+  const el = document.createElement('div');
+  el.className = 'vb-cam';
+  el.innerHTML = `<video autoplay playsinline muted></video><div class="vb-cam-info" id="vb-cam-info">Avvio della fotocamera…</div><div class="vb-cam-bar"><button type="button" data-act="cam-close">Fine</button><button type="button" class="vb-shutter" data-act="cam-shot" aria-label="Scatta"></button><button type="button" data-act="cam-flip">Cambia</button></div>`;
+  ov.appendChild(el);
+  vbCam = { el, stream: null, facing: 'environment', n: 0, onShot, onClose };
+  await vbCamStart();
+}
+async function vbCamStart() {
+  const c = vbCam; if (!c) return;
+  if (c.stream) { c.stream.getTracks().forEach(t => t.stop()); c.stream = null; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: c.facing }, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+    if (vbCam !== c) { stream.getTracks().forEach(t => t.stop()); return; }
+    c.stream = stream;
+    const video = c.el.querySelector('video');
+    video.srcObject = stream;
+    try { await video.play(); } catch (e) {}
+    vbCamInfo();
+  } catch (e) {
+    if (vbCam !== c) return;
+    vbCloseCam();
+    const n = e && e.name;
+    vbToast(n === 'NotAllowedError' || n === 'SecurityError' ? 'Accesso alla fotocamera negato: consentilo dalle impostazioni del browser, oppure usa "Dalla galleria".'
+      : n === 'NotFoundError' || n === 'OverconstrainedError' ? 'Nessuna fotocamera trovata su questo dispositivo: usa "Dalla galleria".'
+      : 'Fotocamera non disponibile: usa "Dalla galleria".');
+  }
+}
+function vbCamInfo() { const i = document.getElementById('vb-cam-info'); if (i && vbCam) i.textContent = vbCam.n ? vbCam.n + (vbCam.n === 1 ? ' foto scattata' : ' foto scattate') : 'Inquadra e premi il pulsante'; }
+function vbCamShot() {
+  const c = vbCam; if (!c || !c.stream || (!c.onShot && !VB)) return;
+  const video = c.el.querySelector('video');
+  if (!video.videoWidth) return;
+  const data = vbScale(video, video.videoWidth, video.videoHeight);
+  c.n++; vbCamInfo();
+  c.el.classList.add('flash'); setTimeout(() => c.el.classList.remove('flash'), 120);
+  if (c.onShot) c.onShot(data);
+  else { vbPushFoto(data); vbRenderPhotos(); if (dbxOn()) { VB.dirty = true; dbxKick(); } else vbTouch(2500); }
+}
+function vbCloseCam() {
+  const c = vbCam; if (!c) return;
+  vbCam = null;
+  if (c.stream) c.stream.getTracks().forEach(t => t.stop());
+  c.el.remove();
+  if (c.onClose) c.onClose();
+}
+
+// ---------- eventi ----------
+function vbOnInput(e) {
+  if (!VB) return;
+  const el = e.target;
+  if (VB.view === 'edit') {
+    if (el.type === 'file') { const fs = Array.from(el.files || []); el.value = ''; if (fs.length) vbAddPhotos(fs); return; }
+    const f = el.dataset && el.dataset.f; if (!f) return;
+    const val = el.type === 'range' ? Number(el.value) : el.value;
+    vbSetPath(VB.v, f, val);
+    if (f === 'avanzamento') document.getElementById('vb-av-out').textContent = val + '%';
+    vbTouch();
+  } else if (VB.view === 'invio') {
+    const I = VB.I;
+    if (el.dataset.k) { if (el.checked) I.sel.add(el.dataset.k); else I.sel.delete(el.dataset.k); }
+    else if (el.id === 'vb-x-extra') I.extra = el.value;
+    else if (el.id === 'vb-x-sub') I.subject = el.value;
+    else if (el.id === 'vb-x-intro') I.intro = el.value;
+    else return;
+    vbUpdAddr();
+  }
+}
+async function vbOnClick(e) {
+  if (!VB) return;
+  const zoom = e.target.closest('.vb-zoom');
+  if (zoom) { zoom.remove(); return; }
+  const zi = e.target.closest('img[data-zoom]');
+  if (zi) {
+    const zf = VB.v.foto[Number(zi.dataset.zoom)], z = document.createElement('div');
+    z.className = 'vb-zoom'; z.innerHTML = `<img src="${dbxSrc(zf) || zi.src}" alt="">`; document.getElementById('vb-ov').appendChild(z);
+    if (zf && !zf.data) dbxEnsure(zf).then(() => { const im = z.querySelector('img'); if (im && zf.data) im.src = zf.data; }).catch(x => vbToast(x.message));
+    return;
+  }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act, i = Number(b.dataset.i), v = VB.v;
+  if (act === 'cam-close') return vbCloseCam();
+  if (act === 'cam-shot') return vbCamShot();
+  if (act === 'cam-flip') { vbCam.facing = vbCam.facing === 'environment' ? 'user' : 'environment'; return vbCamStart(); }
+  if (act === 'back') { if (VB.view === 'invio') vbViewEdit(); else vbChiudi(); return; }
+  if (VB.view === 'edit') {
+    if (act === 'presente') { const n = b.dataset.n, a = v.presentiList, k = a.indexOf(n); if (k >= 0) a.splice(k, 1); else a.push(n); vbRenderPresenti(); vbTouch(); }
+    else if (act === 'add-presente') { const inp = document.getElementById('vb-altro'), n = inp.value.trim(); if (n && !v.presentiList.includes(n)) { v.presentiList.push(n); vbTouch(); } inp.value = ''; vbRenderPresenti(); }
+    else if (act === 'sic') { const s = v.sicurezza, k = b.dataset.k, val = b.dataset.v; s[k] = s[k] === val ? '' : val; b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(s[k] === x.dataset.v))); vbTouch(); }
+    else if (act === 'add-obs') { v.osservazioni.push({ id: vbUid(), testo: '', priorita: 'normale', carico: '', entro: '', chiusa: false }); vbRenderObs(); const ta = document.querySelector('#vb-obs .vb-obs:last-child textarea'); if (ta) ta.focus(); vbTouch(); }
+    else if (act === 'rm-obs') { v.osservazioni.splice(i, 1); vbRenderObs(); vbTouch(); }
+    else if (act === 'prio') { const x = v.osservazioni[i]; x.priorita = x.priorita === 'urgente' ? 'normale' : 'urgente'; b.setAttribute('aria-pressed', String(x.priorita === 'urgente')); vbTouch(); }
+    else if (act === 'done') { const x = v.osservazioni[i]; x.chiusa = !x.chiusa; b.setAttribute('aria-pressed', String(x.chiusa)); b.closest('.vb-obs').classList.toggle('done', x.chiusa); vbTouch(); }
+    else if (act === 'scatta') vbScatta();
+    else if (act === 'galleria') document.getElementById('vb-gal-input').click();
+    else if (act === 'rm-foto') { v.foto.splice(i, 1); vbRenderPhotos(); vbTouch(1200); }
+    else if (act === 'invio') { vbSync(v); vbViewInvio(); }
+    else if (act === 'del') {
+      if (!VB.confirmDel) { VB.confirmDel = true; b.textContent = 'Conferma: elimina questo verbale e le sue foto'; return; }
+      const idx = verbali.indexOf(v);
+      if (idx >= 0) { verbali.splice(idx, 1); verbali.forEach((x, k) => x.n = k + 1); }
+      vbChiudi(true); saveToStorage();
+    }
+  } else if (VB.view === 'invio') vbInvioClick(act, b);
+}
+
+// ---------- report: anteprima HTML, testo, PDF ----------
+const VB_R = {
+  box: 'font-family:Arial,Helvetica,sans-serif;color:#1f2328;font-size:14px;line-height:1.5;max-width:640px;margin:0 auto',
+  head: 'background:#111111;color:#ffffff;padding:16px 18px',
+  kick: 'font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#cfcfcf;font-weight:bold',
+  h2: 'font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#111111;font-weight:bold;margin:24px 0 8px;padding-top:8px;border-top:2px solid #111111',
+  tbl: 'width:100%;border-collapse:collapse',
+  td: 'padding:7px 8px;border-bottom:1px solid #e3e2df;vertical-align:top'
+};
+const vbSicLabel = s => s === 'ok' ? ['Conforme', '#0f7b6c'] : s === 'ko' ? ['Non conforme', '#d44c47'] : s === 'na' ? ['Non applicabile', '#585e66'] : ['Non verificato', '#8a8f96'];
+function vbBuildReport(v, c, intro) {
+  const R = VB_R, obs = v.osservazioni.filter(x => (x.testo || '').trim());
+  const sicRows = VB_SIC.map(([k, l]) => { const m = vbSicLabel(v.sicurezza[k]); return `<tr><td style="${R.td}">${vbEsc(l)}</td><td style="${R.td};white-space:nowrap;font-weight:bold;color:${m[1]}">${m[0]}</td></tr>`; }).join('');
+  const obsRows = obs.map((x, i) => `<tr><td style="${R.td};width:26px;color:#585e66">${i + 1}</td><td style="${R.td}">${x.chiusa ? '<span style="background:#0f7b6c;color:#ffffff;font-size:11px;font-weight:bold;padding:1px 6px;letter-spacing:1px">RISOLTA</span> ' : x.priorita === 'urgente' ? '<span style="background:#d44c47;color:#ffffff;font-size:11px;font-weight:bold;padding:1px 6px;letter-spacing:1px">URGENTE</span> ' : ''}${vbNl2br(x.testo)}</td><td style="${R.td};font-size:13px">${x.carico ? vbEsc(x.carico) + '<br>' : ''}${x.entro ? 'entro ' + vbEsc(vbFmtShort(x.entro)) : ''}</td></tr>`).join('');
+  const ph = v.foto.map((f, i) => ({ f, i })).filter(p => vbIsImg(p.f));
+  const altri = v.foto.filter(f => !vbIsImg(f));
+  let photoHtml = '';
+  if (ph.length) {
+    const cell = p => `<td style="width:50%;padding:6px;vertical-align:top"><img src="${dbxSrc(p.f)}" alt="Foto ${p.i + 1}" style="width:100%;max-width:300px;height:auto;display:block;border:0"><div style="font-size:12px;color:#585e66;margin-top:3px"><b>Foto ${p.i + 1}</b>${p.f.area ? ' · ' + vbEsc(p.f.area) : ''}${p.f.did ? '<br>' + vbEsc(p.f.did) : ''}</div></td>`;
+    let rows = '';
+    for (let k = 0; k < ph.length; k += 2) rows += `<tr>${cell(ph[k])}${ph[k + 1] ? cell(ph[k + 1]) : '<td></td>'}</tr>`;
+    photoHtml = `<table style="${R.tbl}">${rows}</table>`;
+  }
+  if (altri.length) photoHtml += `<p style="font-size:12px;color:#585e66">Altri allegati: ${altri.map(f => vbEsc(f.name || 'file')).join(', ')}</p>`;
+  if (!photoHtml) photoHtml = '<p style="color:#585e66;margin:0">Nessuna fotografia allegata.</p>';
+  const pct = v.avanzamento;
+  const bar = `<table style="${R.tbl};margin:6px 0 4px"><tr>${pct > 0 ? `<td style="width:${pct}%;background:#111111;height:9px;font-size:0;line-height:0">&nbsp;</td>` : ''}${pct < 100 ? '<td style="background:#e3e2df;height:9px;font-size:0;line-height:0">&nbsp;</td>' : ''}</tr></table>`;
+  const row = (k, val) => `<tr><td style="${R.td};width:38%;color:#585e66">${k}</td><td style="${R.td}">${val}</td></tr>`;
+  return `${intro ? `<p style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#1f2328;max-width:640px;margin:0 auto 18px">${vbNl2br(intro)}</p>` : ''}<div style="${R.box}">
+<div style="${R.head}"><div style="${R.kick}">Verbale n. ${vbPad(v.n || 0)} · ${vbEsc(v.tipo)}</div><div style="font-size:21px;font-weight:bold;margin-top:4px">${vbEsc(c.nome)}</div>${c.indirizzo ? `<div style="font-size:13px;opacity:.85">${vbEsc(c.indirizzo)}</div>` : ''}${c.codice ? `<div style="font-size:12px;opacity:.75;margin-top:4px">Progetto ${vbEsc(c.codice)}${c.committente ? ' · Committente: ' + vbEsc(c.committente) : ''}</div>` : ''}</div>
+<div style="${R.h2}">1 · Dati generali</div>
+<table style="${R.tbl}">${row('Data e ora', vbEsc(vbFmtLong(v.data)) + (v.ora ? ', ore ' + vbEsc(v.ora) : ''))}${v.oggetto ? row('Oggetto', vbEsc(v.oggetto)) : ''}${row('Meteo', vbEsc(v.meteo || '—'))}${row('Presenti', v.presentiList.length ? vbEsc(v.presentiList.join(', ')) : '—')}</table>
+<div style="${R.h2}">2 · Avanzamento dei lavori</div>
+<div><b>${pct}%</b> dell'intervento</div>${bar}
+<div style="margin-top:8px">${v.lavorazioni ? vbNl2br(v.lavorazioni) : '<span style="color:#585e66">Nessuna annotazione.</span>'}</div>
+<div style="${R.h2}">3 · Sicurezza e documenti di cantiere</div>
+<table style="${R.tbl}">${sicRows}</table>${v.sicurezzaNote ? `<div style="margin-top:8px">${vbNl2br(v.sicurezzaNote)}</div>` : ''}
+<div style="${R.h2}">4 · Osservazioni e prescrizioni</div>
+${obs.length ? `<table style="${R.tbl}">${obsRows}</table>` : '<p style="color:#585e66;margin:0">Nessuna osservazione.</p>'}
+<div style="${R.h2}">5 · Fotografie</div>
+${photoHtml}
+<div style="${R.h2}">6 · Prossimi passi</div>
+<div>Prossimo sopralluogo: <b>${v.prossimo ? vbEsc(vbFmtLong(v.prossimo)) : 'da definire'}</b></div>${v.note ? `<div style="margin-top:8px">${vbNl2br(v.note)}</div>` : ''}
+${c.dl ? `<div style="margin-top:26px;padding-top:10px;border-top:1px solid #111111;font-size:13px;color:#585e66">Il direttore dei lavori<br><b style="color:#1f2328;font-size:14px">${vbEsc(c.dl)}</b></div>` : ''}
+</div>`;
+}
+function vbBuildPlain(v, c, intro) {
+  const L = [];
+  if (intro) L.push(intro, '');
+  L.push('VERBALE N. ' + vbPad(v.n || 0) + ' - ' + v.tipo.toUpperCase(), c.nome + (c.indirizzo ? ' - ' + c.indirizzo : ''), 'Data: ' + vbFmtLong(v.data) + (v.ora ? ', ore ' + v.ora : ''));
+  if (v.oggetto) L.push('Oggetto: ' + v.oggetto);
+  L.push('Meteo: ' + (v.meteo || '-'), 'Presenti: ' + (v.presentiList.join(', ') || '-'), '', 'AVANZAMENTO: ' + v.avanzamento + '%');
+  if (v.lavorazioni) L.push(v.lavorazioni);
+  L.push('', 'SICUREZZA');
+  VB_SIC.forEach(([k, l]) => { const s = v.sicurezza[k]; L.push('- ' + l + ': ' + (s === 'ko' ? 'NON CONFORME' : vbSicLabel(s)[0].toLowerCase())); });
+  if (v.sicurezzaNote) L.push(v.sicurezzaNote);
+  L.push('', 'OSSERVAZIONI E PRESCRIZIONI');
+  const obs = v.osservazioni.filter(x => (x.testo || '').trim());
+  if (!obs.length) L.push('Nessuna osservazione.');
+  obs.forEach((x, i) => L.push((i + 1) + '. ' + (x.chiusa ? '[RISOLTA] ' : x.priorita === 'urgente' ? '[URGENTE] ' : '') + x.testo.trim() + (x.carico ? ' (a carico di ' + x.carico + ')' : '') + (x.entro ? ' entro ' + vbFmtShort(x.entro) : '')));
+  L.push('', 'Fotografie: ' + v.foto.length, 'Prossimo sopralluogo: ' + (v.prossimo ? vbFmtLong(v.prossimo) : 'da definire'));
+  if (v.note) L.push(v.note);
+  if (c.dl) L.push('', c.dl);
+  return L.join('\n');
+}
+// I font standard dei PDF coprono solo i caratteri latini: il resto viene semplificato
+const vbPdfTxt = s => String(s == null ? '' : s).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/…/g, '...').replace(/€/g, 'EUR').replace(/\t/g, ' ').replace(/[^\n\x20-\x7E\xA0-\xFF]/g, '');
+async function vbBuildPdf(v, c) {
+  if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('nolib');
+  await dbxEnsureAll(v.foto); // scarica da Dropbox le foto a piena risoluzione
+  const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, H = 297, M = 15, CW = W - 2 * M, BOT = H - 16;
+  let y = 0;
+  const T = vbPdfTxt;
+  const font = (style, size, col) => { pdf.setFont('helvetica', style); pdf.setFontSize(size); const k = col == null ? 30 : col; if (Array.isArray(k)) pdf.setTextColor(k[0], k[1], k[2]); else pdf.setTextColor(k, k, k); };
+  const need = h => { if (y + h > BOT) { pdf.addPage(); y = 16; } };
+  const lines = (txt, w) => pdf.splitTextToSize(T(txt), w);
+  const para = (txt, x, w, lh) => { lines(txt, w).forEach(l => { need(lh); pdf.text(l, x, y + lh - 1.2); y += lh; }); };
+  const sec = t => { need(16); y += 5; pdf.setDrawColor(17, 17, 17); pdf.setLineWidth(0.5); pdf.line(M, y, M + CW, y); font('bold', 8.5, 17); pdf.text(T(t).toUpperCase(), M, y + 5, { charSpace: 0.4 }); y += 9; };
+  const hair = () => { pdf.setDrawColor(227, 226, 223); pdf.setLineWidth(0.2); pdf.line(M, y, M + CW, y); };
+  const kv = (k, val) => { const ls = lines(val, CW - 50); need(ls.length * 4.6 + 3); font('normal', 9, 110); pdf.text(T(k), M, y + 4); font('normal', 9.5, 30); ls.forEach((l, i) => pdf.text(l, M + 50, y + 4 + i * 4.6)); y += ls.length * 4.6 + 2.4; hair(); y += 0.6; };
+
+  // intestazione
+  pdf.setFillColor(17, 17, 17); pdf.rect(0, 0, W, 34, 'F');
+  font('bold', 8, 205); pdf.text(T('VERBALE N. ' + vbPad(v.n || 0) + '  ·  ' + v.tipo).toUpperCase(), M, 11, { charSpace: 0.4 });
+  font('bold', 16, 255); pdf.text(lines(c.nome, CW)[0] || '', M, 19.5);
+  font('normal', 9, 220);
+  if (c.indirizzo) pdf.text(lines(c.indirizzo, CW)[0] || '', M, 25.5);
+  const sub = [c.codice ? 'Progetto ' + c.codice : '', c.committente ? 'Committente: ' + c.committente : ''].filter(Boolean).join('  ·  ');
+  if (sub) { font('normal', 8, 190); pdf.text(lines(sub, CW)[0] || '', M, 30.5); }
+  y = 36;
+
+  sec('1 · Dati generali');
+  kv('Data e ora', vbFmtLong(v.data) + (v.ora ? ', ore ' + v.ora : ''));
+  if (v.oggetto) kv('Oggetto', v.oggetto);
+  kv('Meteo', v.meteo || '-');
+  kv('Presenti', v.presentiList.join(', ') || '-');
+
+  sec('2 · Avanzamento dei lavori');
+  font('bold', 10, 30); pdf.text(v.avanzamento + "% dell'intervento", M, y + 3.5); y += 6;
+  pdf.setFillColor(227, 226, 223); pdf.rect(M, y, CW, 2.6, 'F');
+  if (v.avanzamento > 0) { pdf.setFillColor(17, 17, 17); pdf.rect(M, y, CW * v.avanzamento / 100, 2.6, 'F'); }
+  y += 6;
+  if (v.lavorazioni) { font('normal', 9.5, 30); para(v.lavorazioni, M, CW, 4.6); } else { font('italic', 9, 120); para('Nessuna annotazione.', M, CW, 4.6); }
+
+  sec('3 · Sicurezza e documenti di cantiere');
+  VB_SIC.forEach(([k, l]) => {
+    const m = vbSicLabel(v.sicurezza[k]);
+    need(7); font('normal', 9.5, 30); pdf.text(T(l), M, y + 4);
+    const rgb = [parseInt(m[1].slice(1, 3), 16), parseInt(m[1].slice(3, 5), 16), parseInt(m[1].slice(5, 7), 16)];
+    font('bold', 9, rgb); pdf.text(T(m[0]), M + CW, y + 4, { align: 'right' });
+    y += 6.2; hair(); y += 0.6;
+  });
+  if (v.sicurezzaNote) { y += 2; font('normal', 9.5, 30); para(v.sicurezzaNote, M, CW, 4.6); }
+
+  sec('4 · Osservazioni e prescrizioni');
+  const obs = v.osservazioni.filter(x => (x.testo || '').trim());
+  if (!obs.length) { font('italic', 9, 120); para('Nessuna osservazione.', M, CW, 4.6); }
+  obs.forEach((x, i) => {
+    const tag = x.chiusa ? 'RISOLTA' : x.priorita === 'urgente' ? 'URGENTE' : '';
+    const meta = [x.carico ? 'A carico di: ' + x.carico : '', x.entro ? 'Entro: ' + vbFmtShort(x.entro) : ''].filter(Boolean).join('   ·   ');
+    const ls = lines(x.testo.trim(), CW - 8);
+    need(Math.min(ls.length, 4) * 4.6 + (tag ? 5 : 0) + (meta ? 5 : 0) + 3);
+    font('bold', 9.5, 110); pdf.text(String(i + 1) + '.', M, y + 4);
+    if (tag) { font('bold', 7.5, x.chiusa ? [15, 123, 108] : [212, 76, 71]); pdf.text(tag, M + 8, y + 3.6, { charSpace: 0.3 }); y += 4.4; }
+    font('normal', 9.5, 30);
+    ls.forEach(l => { need(4.6); pdf.text(l, M + 8, y + 4); y += 4.6; });
+    if (meta) { need(5); font('normal', 8.5, 110); pdf.text(T(meta), M + 8, y + 4); y += 4.6; }
+    y += 1.8; hair(); y += 0.8;
+  });
+
+  const ph = v.foto.map((f, i) => ({ f, i })).filter(p => vbIsImg(p.f));
+  if (ph.length) need(90); // il titolo non resta da solo a fondo pagina
+  sec('5 · Fotografie');
+  if (!ph.length) { font('italic', 9, 120); para('Nessuna fotografia allegata.', M, CW, 4.6); }
+  const gap = 6, cw = (CW - gap) / 2, maxH = 78;
+  for (let k = 0; k < ph.length; k += 2) {
+    const pair = [ph[k], ph[k + 1]].filter(Boolean), boxes = [];
+    for (const p of pair) {
+      let w = cw, h = cw * 0.75, ok = true;
+      try { const im = await vbLoadImg(dbxSrc(p.f)); h = cw * im.naturalHeight / im.naturalWidth; if (h > maxH) { w = cw * maxH / h; h = maxH; } } catch (e) { ok = false; }
+      const cap = lines('Foto ' + (p.i + 1) + (p.f.area ? ' · ' + p.f.area : '') + (p.f.did ? ' - ' + p.f.did : ''), cw);
+      boxes.push({ p, w, h, ok, cap });
+    }
+    const rowH = Math.max(...boxes.map(b => b.h + 2 + b.cap.length * 3.8)) + 5;
+    need(rowH);
+    boxes.forEach((b, j) => {
+      const x = M + j * (cw + gap);
+      if (b.ok) { try { pdf.addImage(dbxSrc(b.p.f), /^data:image\/png/.test(dbxSrc(b.p.f)) ? 'PNG' : 'JPEG', x, y, b.w, b.h, undefined, 'FAST'); } catch (e) { b.ok = false; } }
+      if (!b.ok) { pdf.setDrawColor(200, 200, 200); pdf.rect(x, y, b.w, b.h); font('italic', 8, 140); pdf.text('Immagine non leggibile', x + 3, y + 6); }
+      font('normal', 8, 90); b.cap.forEach((l, n) => pdf.text(l, x, y + b.h + 4.2 + n * 3.8));
+    });
+    y += rowH;
+  }
+  const altri = v.foto.filter(f => !vbIsImg(f));
+  if (altri.length) { font('normal', 8.5, 110); para('Altri allegati: ' + altri.map(f => f.name || 'file').join(', '), M, CW, 4.4); }
+
+  sec('6 · Prossimi passi');
+  font('normal', 9.5, 30); para('Prossimo sopralluogo: ' + (v.prossimo ? vbFmtLong(v.prossimo) : 'da definire'), M, CW, 4.6);
+  if (v.note) { y += 1.5; para(v.note, M, CW, 4.6); }
+  if (c.dl) { need(22); y += 10; pdf.setDrawColor(17, 17, 17); pdf.setLineWidth(0.3); pdf.line(M, y, M + 70, y); font('normal', 8.5, 110); pdf.text('Il direttore dei lavori', M, y + 5); font('bold', 10, 30); pdf.text(T(c.dl), M, y + 10.5); }
+
+  const tot = pdf.getNumberOfPages();
+  for (let pg = 1; pg <= tot; pg++) {
+    pdf.setPage(pg); font('normal', 7.5, 140);
+    pdf.text(T('Verbale n. ' + vbPad(v.n || 0) + ' - ' + c.nome + ' - ' + vbFmtShort(v.data)).slice(0, 110), M, H - 8);
+    pdf.text('Pag. ' + pg + ' di ' + tot, W - M, H - 8, { align: 'right' });
+  }
+  return pdf;
+}
+const vbFileName = (v, c) => vbSlug('verbale-' + vbPad(v.n || 0) + '-' + c.nome + '-' + (v.data || '')) + '.pdf';
+
+// ---------- anteprima e invio ----------
+function vbRecipients() {
+  return contattiVerbali.map((r, i) => ({ key: 'c' + i, group: r.ruolo || 'Altro', to: r.ruolo !== 'Ufficio', nome: r.nome || r.ruolo || 'Contatto', email: r.email || '' }));
+}
+function vbAddrs() {
+  const I = VB.I, to = [], cc = [], seen = new Set();
+  const add = (arr, e) => { const k = e.trim().toLowerCase(); if (vbValidEmail(e) && !seen.has(k)) { seen.add(k); arr.push(e.trim()); } };
+  vbRecipients().forEach(r => { if (I.sel.has(r.key)) add(r.to ? to : cc, r.email); });
+  I.extra.split(/[,;\s]+/).filter(Boolean).forEach(e => add(to, e));
+  return { to, cc };
+}
+function vbUpdAddr() {
+  const el = document.getElementById('vb-addrs'); if (!el) return;
+  const { to, cc } = vbAddrs(), I = VB.I;
+  el.innerHTML = (to.length || cc.length) ? `${to.length ? `<b>A:</b> ${vbEsc(to.join(', '))}<br>` : ''}${cc.length ? `<b>Cc:</b> ${vbEsc(cc.join(', '))}` : ''}` : 'Nessun destinatario selezionato.';
+  const m = document.getElementById('vb-mailto');
+  if (m) {
+    let body = vbBuildPlain(VB.v, vbProj(), I.intro);
+    if (body.length > 1700) body = body.slice(0, 1700) + '\n[…] Il verbale completo è nel PDF allegato.';
+    m.href = 'mailto:' + to.join(',') + '?' + (cc.length ? 'cc=' + encodeURIComponent(cc.join(',')) + '&' : '') + 'subject=' + encodeURIComponent(I.subject) + '&body=' + encodeURIComponent(body);
+  }
+}
+function vbViewInvio() {
+  const v = VB.v, c = vbProj();
+  VB.view = 'invio';
+  const rec = vbRecipients();
+  if (!VB.I) VB.I = {
+    sel: new Set(rec.filter(r => vbValidEmail(r.email)).map(r => r.key)), extra: '', busy: false,
+    subject: `Verbale n. ${vbPad(v.n || 0)} – ${c.nome} – ${vbFmtLong(v.data)}`,
+    intro: `Buongiorno,\nin allegato il verbale del ${vbFmtLong(v.data)} relativo al cantiere ${c.nome}. Le osservazioni con scadenza sono al punto 4.\nCordiali saluti${c.dl ? '\n' + c.dl : ''}`
+  };
+  const I = VB.I;
+  const groups = VB_RUOLI.map(g => {
+    const items = rec.filter(r => r.group === g); if (!items.length) return '';
+    return `<div class="vb-grp">${g}</div>` + items.map(r => { const ok = vbValidEmail(r.email); return `<div class="vb-rec"><input type="checkbox" id="vb-r-${r.key}" data-k="${r.key}"${ok && I.sel.has(r.key) ? ' checked' : ''}${ok ? '' : ' disabled'}><label for="vb-r-${r.key}"><b>${vbEsc(r.nome)}</b><small>${ok ? vbEsc(r.email) : 'indirizzo mancante o non valido'}</small></label><span class="tag" style="font-size:10px;">${r.to ? 'A' : 'Cc'}</span></div>`; }).join('');
+  }).join('') || '<p class="vb-muted">Nessun destinatario salvato per questo cantiere: aggiungi committente, imprese e ufficio una volta sola e li ritrovi a ogni verbale.</p>';
+  const canShare = !!(navigator.canShare && navigator.share);
+  vbFrame({ kick: 'Anteprima e invio', title: 'Verbale n. ' + vbPad(v.n || 0) },
+    `<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">1</span>Anteprima</h2><div class="vb-paper">${vbBuildReport(v, c)}</div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">2</span>Destinatari</h2>${groups}
+<div style="margin-top:12px"><button type="button" class="btn-outline" data-act="contatti">Gestisci destinatari</button></div>
+<div class="input-group" style="margin:16px 0 0"><label for="vb-x-extra">Altri indirizzi</label><input id="vb-x-extra" type="text" inputmode="email" autocapitalize="off" autocomplete="off" placeholder="separati da virgola" value="${vbEsc(I.extra)}"></div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">3</span>Messaggio</h2>
+<div class="input-group"><label for="vb-x-sub">Oggetto</label><input id="vb-x-sub" type="text" value="${vbEsc(I.subject)}"></div>
+<div class="input-group" style="margin:0"><label for="vb-x-intro">Testo di accompagnamento</label><textarea id="vb-x-intro" rows="5">${vbEsc(I.intro)}</textarea></div></section>
+<section class="vb-sec"><h2 class="vb-sh"><span class="vb-no">4</span>Invio</h2>
+<p class="vb-muted" id="vb-addrs" style="margin:0 0 12px;opacity:1"></p>
+<div class="vb-stack">
+${canShare ? `<button type="button" class="btn" data-act="share">${vbIco('share')} Condividi il PDF (email, WhatsApp…)</button>` : ''}
+<button type="button" class="${canShare ? 'btn-outline' : 'btn'}" data-act="pdf">${vbIco('down')} Scarica il verbale in PDF</button>
+${dbxOn() ? `<button type="button" class="btn-outline" data-act="dbx-pdf">${vbIco('down')} Salva il PDF su Dropbox</button>` : ''}
+<a class="btn-outline" id="vb-mailto" data-act="mailto" href="#">${vbIco('mail')} Apri l'email con destinatari e testo</a>
+<button type="button" class="btn-outline" data-act="copy">${vbIco('copy')} Copia testo email</button>
+<button type="button" class="btn-outline" data-act="copy-addr">${vbIco('copy')} Copia indirizzi</button>
+</div>
+<div id="vb-sendst" class="vb-msg" role="status" hidden></div>
+<textarea id="vb-fallback" rows="6" readonly hidden aria-label="Testo da copiare" style="margin-top:12px;width:100%;font-size:14px;"></textarea>
+<p class="vb-muted" style="margin:12px 0 0">Il PDF contiene il verbale completo con le foto. L'email aperta dal pulsante parte già con destinatari, oggetto e testo: il PDF va allegato a mano, perché un link non può allegare file.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)"><span style="font-size:13px">Stato: <b id="vb-stbadge">${v.stato === 'chiuso' ? 'Chiuso' : 'Bozza'}</b></span><button type="button" class="btn-outline" data-act="stato">${v.stato === 'chiuso' ? 'Riapri verbale' : 'Segna come chiuso'}</button></div></section>`);
+  vbUpdAddr();
+}
+function vbSendStatus(m, k) { const el = document.getElementById('vb-sendst'); if (!el) return; el.className = 'vb-msg' + (k ? ' ' + k : ''); el.textContent = m; el.hidden = !m; }
+async function vbCopy(text, ok) {
+  try { await navigator.clipboard.writeText(text); vbToast(ok); }
+  catch (e) { const box = document.getElementById('vb-fallback'); box.hidden = false; box.value = text; box.focus(); box.select(); vbToast('Copia automatica non permessa: il testo è selezionato, copialo a mano.'); }
+}
+function vbMarkSent() { VB.v.inviatoAt = new Date().toISOString(); vbTouch(800); }
+async function vbInvioClick(act, b) {
+  const v = VB.v, c = vbProj(), I = VB.I, S = VB;
+  if (act === 'contatti') return vbContatti();
+  if (act === 'copy') return vbCopy(I.subject + '\n\n' + vbBuildPlain(v, c, I.intro), 'Testo copiato');
+  if (act === 'copy-addr') { const { to, cc } = vbAddrs(); if (!to.length && !cc.length) return vbToast('Nessun destinatario selezionato.'); return vbCopy(to.concat(cc).join(', '), 'Indirizzi copiati'); }
+  if (act === 'mailto') { vbMarkSent(); return; }
+  if (act === 'stato') {
+    v.stato = v.stato === 'chiuso' ? 'bozza' : 'chiuso';
+    b.textContent = v.stato === 'chiuso' ? 'Riapri verbale' : 'Segna come chiuso';
+    document.getElementById('vb-stbadge').textContent = v.stato === 'chiuso' ? 'Chiuso' : 'Bozza';
+    return vbTouch(800);
+  }
+  if (act === 'pdf' || act === 'share' || act === 'dbx-pdf') {
+    if (I.busy) return;
+    I.busy = true; b.disabled = true; vbSendStatus('Preparo il PDF con le foto…');
+    try {
+      const pdf = await vbBuildPdf(v, c), name = vbFileName(v, c);
+      if (VB !== S) return;
+      if (act === 'pdf') { pdf.save(name); vbSendStatus('PDF scaricato: ' + name, 'ok'); }
+      else if (act === 'dbx-pdf') { const m = await dbxUpload(dbxProjFolder() + '/Verbali/' + name, pdf.output('blob'), 'overwrite'); vbSendStatus('PDF salvato su Dropbox: ' + (m.path_display || name), 'ok'); }
+      else {
+        const file = new File([pdf.output('blob')], name, { type: 'application/pdf' });
+        if (!navigator.canShare({ files: [file] })) { pdf.save(name); vbSendStatus('Questo dispositivo non condivide file dal browser: ho scaricato il PDF, allegalo all\'email.', 'warn'); }
+        else {
+          const { to, cc } = vbAddrs();
+          await navigator.share({ files: [file], title: I.subject, text: I.intro });
+          vbSendStatus('PDF passato all\'app scelta.' + (to.length || cc.length ? ' Se è un\'email, incolla i destinatari con "Copia indirizzi".' : ''), 'ok');
+          vbMarkSent();
+        }
+      }
+    } catch (e) {
+      if (e && e.name === 'AbortError') vbSendStatus('', '');
+      else if (e && e.message === 'nolib') vbSendStatus('La libreria per i PDF non è stata caricata (serve la connessione a internet all\'apertura dell\'app). Intanto puoi copiare il testo.', 'bad');
+      else vbSendStatus('Non sono riuscito a creare il PDF. ' + (e && e.message ? String(e.message).slice(0, 140) : ''), 'bad');
+    } finally { I.busy = false; b.disabled = false; }
+  }
+}
+
+// ---------- destinatari del cantiere ----------
+function vbContatti() {
+  const p = vbProj();
+  let rows = contattiVerbali.map(r => ({ nome: r.nome || '', email: r.email || '', ruolo: r.ruolo || 'Altro' }));
+  if (!rows.length) {
+    if (p.committente) rows.push({ nome: p.committente, email: '', ruolo: 'Committente' });
+    if (p.impresa) rows.push({ nome: p.impresa, email: '', ruolo: 'Impresa' });
+    if (p.dl) rows.push({ nome: p.dl, email: '', ruolo: 'Ufficio' });
+    if (!rows.length) rows.push({ nome: '', email: '', ruolo: 'Committente' });
+  }
+  const ov = document.createElement('div');
+  ov.className = 'vb-dlg-ov';
+  ov.innerHTML = `<div class="vb-dlg" role="dialog" aria-label="Destinatari dei verbali">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><div style="font-size:16px;font-weight:600;">Destinatari dei verbali</div><button type="button" data-a="close" aria-label="Chiudi" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text);">✕</button></div>
+    <p class="vb-muted" style="margin:0 0 16px">Valgono per questo cantiere. Committente, imprese e altri vanno in <b>A</b>; l'ufficio in <b>Cc</b>.</p>
+    <div id="vb-clist"></div>
+    <button type="button" class="btn-sm" data-a="add">+ Aggiungi destinatario</button>
+    <div id="vb-cerr" class="vb-msg bad" role="alert" hidden></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;"><button type="button" class="btn-outline" data-a="close">Annulla</button><button type="button" class="btn" data-a="save">Salva</button></div></div>`;
+  const list = () => {
+    ov.querySelector('#vb-clist').innerHTML = rows.map((r, i) => `<div class="vb-crow">
+      <div class="input-group"><input type="text" data-i="${i}" data-k="nome" value="${vbEsc(r.nome)}" placeholder="Nome o impresa" aria-label="Nome"></div>
+      <div class="input-group"><input type="email" inputmode="email" autocapitalize="off" data-i="${i}" data-k="email" value="${vbEsc(r.email)}" placeholder="nome@dominio.it" aria-label="Email"></div>
+      <div class="input-group"><select data-i="${i}" data-k="ruolo" aria-label="Ruolo">${VB_RUOLI.map(x => `<option${x === r.ruolo ? ' selected' : ''}>${x}</option>`).join('')}</select></div>
+      <button type="button" class="vb-x" data-a="rm" data-i="${i}" aria-label="Rimuovi">${vbIco('trash')}</button></div>`).join('') || '<p class="vb-muted">Nessun destinatario.</p>';
+  };
+  const upd = e => { const el = e.target; if (el.dataset && el.dataset.k) rows[Number(el.dataset.i)][el.dataset.k] = el.value; };
+  ov.addEventListener('input', upd); ov.addEventListener('change', upd);
+  ov.addEventListener('click', e => {
+    if (e.target === ov) return ov.remove();
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const a = b.dataset.a;
+    if (a === 'close') ov.remove();
+    else if (a === 'add') { rows.push({ nome: '', email: '', ruolo: 'Impresa' }); list(); const ins = ov.querySelectorAll('#vb-clist input[data-k=nome]'); if (ins.length) ins[ins.length - 1].focus(); }
+    else if (a === 'rm') { rows.splice(Number(b.dataset.i), 1); list(); }
+    else if (a === 'save') {
+      const out = rows.map(r => ({ nome: r.nome.trim(), email: r.email.trim(), ruolo: r.ruolo })).filter(r => r.nome || r.email);
+      const bad = out.find(r => r.email && !vbValidEmail(r.email));
+      const err = ov.querySelector('#vb-cerr');
+      if (bad) { err.textContent = 'Indirizzo email non valido: ' + bad.email; err.hidden = false; return; }
+      contattiVerbali.length = 0; out.forEach(r => contattiVerbali.push(r));
+      ov.remove();
+      saveToStorage();
+      if (VB && VB.view === 'invio') { VB.I.sel = new Set(vbRecipients().filter(r => vbValidEmail(r.email)).map(r => r.key)); vbViewInvio(); }
+    }
+  });
+  document.body.appendChild(ov);
+  list();
+}
+
+// ========================
+// FOTO SU PIANTA (v1.6)
+// Piante caricate come immagine o PDF, foto appuntate sul punto in cui sono state scattate,
+// filtri per data, tag, origine. Comprende anche le foto dei verbali (stessi oggetti, nessuna copia).
+// ========================
+const FT_ZOOM = [1, 1.5, 2, 3, 4];
+const FT_PLAN_MAX = 2200;
+const FT = { pianta: null, zoom: 0, placing: null, spot: null, pendingSpot: null, saveT: null, f: { dal: '', al: '', src: '', nopin: false, tags: new Set() } };
+
+const ftPinned = f => !!(f && f.piantaId && f.x != null && piante.some(p => p.id === f.piantaId));
+const ftTagsOf = it => [...new Set([...(it.f.tags || []), it.f.area].map(t => String(t || '').trim()).filter(Boolean))];
+function ftItems() {
+  const out = [];
+  const prep = f => { if (!f.id) f.id = vbUid(); if (!Array.isArray(f.tags)) f.tags = []; if (f.did == null) f.did = ''; };
+  fotoCantiere.forEach(f => { prep(f); out.push({ f, src: 'foto', date: f.date || String(f.at || '').slice(0, 10) }); });
+  verbali.forEach(v => (v.foto || []).forEach(f => { if (!vbIsImg(f)) return; prep(f); out.push({ f, src: 'verbale', v, date: String(v.data || '').slice(0, 10) }); }));
+  return out.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+function ftFiltered(items) {
+  const F = FT.f;
+  return items.filter(it => {
+    if (F.dal && (!it.date || it.date < F.dal)) return false;
+    if (F.al && (!it.date || it.date > F.al)) return false;
+    if (F.src && it.src !== F.src) return false;
+    if (F.nopin && ftPinned(it.f)) return false;
+    if (F.tags.size) { const t = ftTagsOf(it); for (const x of F.tags) if (!t.includes(x)) return false; }
+    return true;
+  });
+}
+const ftFind = id => ftItems().find(it => it.f.id === id);
+function ftSaveSoon() { clearTimeout(FT.saveT); FT.saveT = setTimeout(() => saveToStorage(), 1500); }
+function ftMsg(m, err) { try { showSaveIndicator(m, err); } catch (e) {} }
+
+function renderFoto() {
+  if (!document.getElementById('ft-grid')) return;
+  if (!piante.some(p => p.id === FT.pianta)) FT.pianta = piante[0] ? piante[0].id : null;
+  const items = ftItems(), list = ftFiltered(items);
+  document.getElementById('ft-kpi-tot').textContent = items.length;
+  const nv = items.filter(it => it.src === 'verbale').length;
+  document.getElementById('ft-kpi-tot-sub').textContent = nv ? `di cui ${nv} dai verbali` : 'in archivio';
+  document.getElementById('ft-kpi-pin').textContent = items.filter(it => ftPinned(it.f)).length;
+  document.getElementById('ft-kpi-plans').textContent = piante.length;
+  document.getElementById('ft-plans').innerHTML = piante.map(p => `<button type="button" class="vb-chip" aria-pressed="${p.id === FT.pianta}" onclick="ftSelPlan('${p.id}')">${vbEsc(p.nome)}</button>`).join('') + `<button type="button" class="btn-sm" onclick="document.getElementById('ft-plan-input').click()">+ Pianta</button>`;
+  ftRenderPlan(list); ftRenderFilters(items, list); ftRenderGrid(list);
+}
+function ftRenderPlan(list) {
+  const el = document.getElementById('ft-plan'); if (!el) return;
+  if (!list) list = ftFiltered(ftItems());
+  const p = piante.find(x => x.id === FT.pianta);
+  if (!p) {
+    el.innerHTML = `<div class="vb-empty">Nessuna pianta caricata.<br>Carica la pianta del piano (immagine o PDF): poi tocchi il punto in cui scatti e la foto resta appuntata lì.<div style="margin-top:16px"><button class="btn" onclick="document.getElementById('ft-plan-input').click()">Carica una pianta</button></div></div>`;
+    return;
+  }
+  const old = document.getElementById('ft-view'), sc = old ? [old.scrollLeft, old.scrollTop] : null;
+  const pins = list.map((it, i) => ({ it, i })).filter(o => o.it.f.piantaId === p.id && o.it.f.x != null);
+  const pl = FT.placing && ftFind(FT.placing);
+  const z = FT_ZOOM[FT.zoom];
+  el.innerHTML = `<div class="ft-bar">
+      <button type="button" class="btn-sm btn-x" title="Riduci" onclick="ftZoom(-1)"${FT.zoom === 0 ? ' disabled' : ''}>−</button>
+      <span style="font-size:12px;min-width:44px;text-align:center;">${Math.round(z * 100)}%</span>
+      <button type="button" class="btn-sm btn-x" title="Ingrandisci" onclick="ftZoom(1)"${FT.zoom === FT_ZOOM.length - 1 ? ' disabled' : ''}>+</button>
+      <span class="sp"></span>
+      <span class="vb-muted">${pins.length} foto su questa pianta</span>
+      <button type="button" class="btn-sm" onclick="ftRenamePlan()">Rinomina</button>
+      <button type="button" class="btn-sm danger" onclick="ftDelPlan()">Elimina pianta</button>
+    </div>
+    <div class="ft-hint${pl ? ' on' : ''}">${pl ? `<span><b>Posiziona la foto:</b> tocca il punto della pianta in cui è stata scattata.</span><button type="button" class="btn-sm" onclick="ftCancelPlace()">Annulla</button>` : 'Tocca un punto della pianta per aggiungere lì una foto. Tocca un segnaposto per aprire la foto.'}</div>
+    <div class="ft-view" id="ft-view"><div class="ft-canvas" id="ft-canvas" style="width:${z * 100}%" onclick="ftPlanClick(event)">
+      <img id="ft-img" src="${dbxSrc(p)}" alt="${vbEsc(p.nome)}" draggable="false">
+      ${pins.map(o => `<button type="button" class="ft-pin" data-id="${o.it.f.id}" style="left:${(o.it.f.x * 100).toFixed(2)}%;top:${(o.it.f.y * 100).toFixed(2)}%" title="${vbEsc((o.it.f.did || 'Foto') + ' · ' + vbFmtShort(o.it.date))}" onclick="event.stopPropagation();ftApri('${o.it.f.id}')">${o.i + 1}</button>`).join('')}
+      ${FT.spot ? `<span class="ft-pin spot" style="left:${(FT.spot.x * 100).toFixed(2)}%;top:${(FT.spot.y * 100).toFixed(2)}%">+</span>` : ''}
+    </div></div>
+    ${FT.spot ? `<div class="ft-spotbar"><button type="button" class="btn" onclick="ftScatta(true)">${vbIco('cam')} Scatta foto qui</button><button type="button" class="btn-outline" onclick="ftGalleria(true)">${vbIco('img')} Carica foto qui</button><button type="button" class="btn-outline" onclick="FT.spot=null;ftRenderPlan()">Annulla</button></div>` : ''}`;
+  const view = document.getElementById('ft-view');
+  if (sc) { view.scrollLeft = sc[0]; view.scrollTop = sc[1]; }
+  // pianta archiviata su Dropbox: si vede subito la miniatura, poi arriva quella nitida
+  if (!p.data && p.dbx && !p._ko) dbxEnsure(p).then(() => { if (FT.pianta === p.id) ftRenderPlan(); }).catch(x => { p._ko = true; ftMsg('⚠ ' + x.message, true); });
+}
+function ftRenderFilters(items, list) {
+  const el = document.getElementById('ft-filters'), F = FT.f;
+  const tags = [...new Set(items.reduce((a, it) => a.concat(ftTagsOf(it)), []))].sort((a, b) => a.localeCompare(b, 'it'));
+  [...F.tags].forEach(t => { if (!tags.includes(t)) F.tags.delete(t); });
+  const active = F.dal || F.al || F.src || F.nopin || F.tags.size;
+  el.innerHTML = `<div class="ft-filters">
+      <label>Dal<input type="date" value="${vbEsc(F.dal)}" onchange="FT.f.dal=this.value;renderFoto()"></label>
+      <label>Al<input type="date" value="${vbEsc(F.al)}" onchange="FT.f.al=this.value;renderFoto()"></label>
+      <label>Origine<select class="vb-select" onchange="FT.f.src=this.value;renderFoto()"><option value="">Tutte</option><option value="foto"${F.src === 'foto' ? ' selected' : ''}>Sezione foto</option><option value="verbale"${F.src === 'verbale' ? ' selected' : ''}>Verbali</option></select></label>
+      <button type="button" class="vb-chip" style="min-height:34px;font-size:12px;" aria-pressed="${F.nopin}" onclick="FT.f.nopin=!FT.f.nopin;renderFoto()">Da posizionare</button>
+      ${active ? `<button type="button" class="vb-link" onclick="ftResetFilters()">Azzera filtri</button>` : ''}
+      <span class="vb-muted" style="margin-left:auto">${list.length} di ${items.length} foto</span>
+    </div>
+    ${tags.length ? `<div class="ft-tags">${tags.map(t => `<button type="button" class="vb-chip" aria-pressed="${F.tags.has(t)}" data-t="${vbEsc(t)}" onclick="ftToggleTag(this.dataset.t)">${vbEsc(t)}</button>`).join('')}</div>` : ''}`;
+}
+function ftRenderGrid(list) {
+  const el = document.getElementById('ft-grid');
+  if (!list.length) { el.innerHTML = `<div class="vb-empty" style="grid-column:1/-1">${ftItems().length ? 'Nessuna foto corrisponde ai filtri.' : 'Nessuna foto. Usa <b>Scatta foto</b>, oppure tocca un punto della pianta per scattare direttamente lì.'}</div>`; return; }
+  el.innerHTML = list.map((it, i) => {
+    const f = it.f, pin = ftPinned(f), pn = pin ? piante.find(p => p.id === f.piantaId).nome : '';
+    return `<div class="ft-card" onclick="ftApri('${f.id}')" onmouseenter="ftHl('${f.id}',1)" onmouseleave="ftHl('${f.id}',0)">
+      <div class="ft-card-img"><img loading="lazy" src="${dbxThumbSrc(f)}" alt=""><span class="ft-num${pin ? '' : ' off'}">${i + 1}</span></div>
+      <div class="ft-card-b"><b>${vbEsc(vbFmtShort(it.date))}${it.src === 'verbale' ? ' · Verbale ' + vbPad(it.v.n || 0) : ''}</b>
+        ${f.did ? `<div class="d">${vbEsc(f.did)}</div>` : ''}<div class="d">${pin ? vbEsc(pn) : 'Non posizionata'}</div>
+        ${ftTagsOf(it).map(t => `<span class="tag">${vbEsc(t)}</span>`).join('')}</div></div>`;
+  }).join('');
+}
+function ftHl(id, on) { const p = document.querySelector('.ft-pin[data-id="' + id + '"]'); if (p) p.classList.toggle('hl', !!on); }
+function ftToggleTag(t) { const s = FT.f.tags; if (s.has(t)) s.delete(t); else s.add(t); renderFoto(); }
+function ftResetFilters() { FT.f = { dal: '', al: '', src: '', nopin: false, tags: new Set() }; renderFoto(); }
+function ftSelPlan(id) { FT.pianta = id; FT.spot = null; renderFoto(); }
+function ftZoom(d) { FT.zoom = Math.max(0, Math.min(FT_ZOOM.length - 1, FT.zoom + d)); ftRenderPlan(); }
+function ftCancelPlace() { FT.placing = null; ftRenderPlan(); }
+function ftPlanClick(e) {
+  const r = document.getElementById('ft-img').getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  const x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+  if (FT.placing) {
+    const it = ftFind(FT.placing); FT.placing = null;
+    if (it) { it.f.piantaId = FT.pianta; it.f.x = x; it.f.y = y; ftSaveSoon(); }
+    renderFoto();
+  } else { FT.spot = { x, y }; ftRenderPlan(); }
+}
+
+// ---------- piante ----------
+function ftLoadPdfJs() {
+  return new Promise((res, rej) => {
+    if (window.pdfjsLib) return res();
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = () => { if (!window.pdfjsLib) return rej(new Error('pdfjs')); window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(); };
+    s.onerror = () => rej(new Error('pdfjs'));
+    document.head.appendChild(s);
+  });
+}
+async function ftAddPlan(input) {
+  const file = input.files && input.files[0]; input.value = '';
+  if (!file) return;
+  const base = (file.name || 'Pianta').replace(/\.[^.]+$/, '');
+  ftMsg('Carico la pianta…');
+  try {
+    const nuove = [];
+    if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '')) {
+      await ftLoadPdfJs();
+      const doc = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+      const n = Math.min(doc.numPages, 12);
+      for (let i = 1; i <= n; i++) {
+        const page = await doc.getPage(i), v1 = page.getViewport({ scale: 1 });
+        const vp = page.getViewport({ scale: FT_PLAN_MAX / Math.max(v1.width, v1.height) });
+        const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+        const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+        await page.render({ canvasContext: cx, viewport: vp }).promise;
+        nuove.push({ id: vbUid(), nome: doc.numPages > 1 ? base + ' · p. ' + i : base, data: cv.toDataURL('image/jpeg', 0.82), w: cv.width, h: cv.height });
+      }
+      if (doc.numPages > n) ftMsg('Importate le prime ' + n + ' pagine del PDF', true);
+    } else {
+      const url = URL.createObjectURL(file);
+      try {
+        const img = await vbLoadImg(url), k = Math.min(1, FT_PLAN_MAX / Math.max(img.naturalWidth, img.naturalHeight));
+        const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(img.naturalWidth * k)); cv.height = Math.max(1, Math.round(img.naturalHeight * k));
+        const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, 0, 0, cv.width, cv.height);
+        nuove.push({ id: vbUid(), nome: base, data: cv.toDataURL('image/jpeg', 0.82), w: cv.width, h: cv.height });
+      } finally { URL.revokeObjectURL(url); }
+    }
+    nuove.forEach(p => piante.push(p));
+    if (nuove.length) { FT.pianta = nuove[0].id; FT.zoom = 0; FT.spot = null; }
+    renderFoto(); if (dbxOn()) dbxKick(); else saveToStorage();
+  } catch (e) {
+    alert(e && e.message === 'pdfjs' ? 'Per leggere i PDF serve la connessione a internet. In alternativa carica la pianta come immagine (JPG o PNG).' : 'Non riesco a leggere questo file. Carica la pianta come immagine (JPG, PNG) o PDF.');
+  }
+}
+function ftRenamePlan() {
+  const p = piante.find(x => x.id === FT.pianta); if (!p) return;
+  const n = prompt('Nome della pianta', p.nome);
+  if (n && n.trim()) { p.nome = n.trim(); renderFoto(); saveToStorage(); }
+}
+function ftDelPlan() {
+  const p = piante.find(x => x.id === FT.pianta); if (!p) return;
+  const n = ftItems().filter(it => it.f.piantaId === p.id).length;
+  if (!confirm('Eliminare la pianta "' + p.nome + '"?' + (n ? ' Le ' + n + ' foto restano in archivio ma perdono la posizione.' : ''))) return;
+  ftItems().forEach(it => { if (it.f.piantaId === p.id) { it.f.piantaId = ''; it.f.x = null; it.f.y = null; } });
+  piante.splice(piante.indexOf(p), 1);
+  FT.pianta = null; FT.spot = null; FT.placing = null;
+  renderFoto(); saveToStorage();
+}
+
+// ---------- nuove foto ----------
+function ftPush(data, name, date, spot) {
+  const f = { id: vbUid(), data, name: name || 'foto.jpg', type: 'image/jpeg', did: '', tags: [], date: date || vbToday(), at: new Date().toISOString(), piantaId: '', x: null, y: null };
+  if (spot && FT.pianta) { f.piantaId = FT.pianta; f.x = spot.x; f.y = spot.y; }
+  fotoCantiere.push(f);
+  return f;
+}
+function ftScatta(here) {
+  FT.pendingSpot = here ? FT.spot : null;
+  const live = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && window.isSecureContext !== false;
+  const touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (touch || !live) document.getElementById('ft-cam-input').click();
+  else ftOpenCam();
+}
+function ftGalleria(here) { FT.pendingSpot = here ? FT.spot : null; document.getElementById('ft-gal-input').click(); }
+async function ftOnFiles(input) {
+  const files = Array.from(input.files || []); input.value = '';
+  if (!files.length) return;
+  const spot = FT.pendingSpot; FT.pendingSpot = null;
+  const isCam = input.id === 'ft-cam-input';
+  let ko = 0, last = null;
+  ftMsg('Elaboro le foto…');
+  for (const file of files) {
+    try {
+      const data = await vbFileToJpeg(file);
+      const d = !isCam && file.lastModified ? new Date(file.lastModified) : new Date();
+      last = ftPush(data, (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg', d.getFullYear() + '-' + vbPad(d.getMonth() + 1) + '-' + vbPad(d.getDate()), spot);
+    } catch (e) { ko++; }
+  }
+  if (spot) FT.spot = null;
+  renderFoto();
+  if (ko) alert(ko === 1 ? 'Una foto non è stata letta: formato non supportato.' : ko + ' foto non lette: formato non supportato.');
+  if (last) { if (dbxOn()) dbxKick(); else saveToStorage(); if (files.length - ko === 1) ftApri(last.id); }
+}
+function ftOpenCam() {
+  if (vbCam) return;
+  const spot = FT.pendingSpot; FT.pendingSpot = null;
+  const host = document.createElement('div');
+  host.style.cssText = 'position:fixed;inset:0;z-index:10001;';
+  let n = 0;
+  host.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const a = b.dataset.act;
+    if (a === 'cam-close') vbCloseCam();
+    else if (a === 'cam-shot') vbCamShot();
+    else if (a === 'cam-flip' && vbCam) { vbCam.facing = vbCam.facing === 'environment' ? 'user' : 'environment'; vbCamStart(); }
+  });
+  document.body.appendChild(host);
+  vbOpenCam(host, data => { ftPush(data, 'foto-' + vbPad(fotoCantiere.length + 1) + '.jpg', vbToday(), spot); n++; },
+    () => { host.remove(); if (spot && n) FT.spot = null; renderFoto(); if (n) { if (dbxOn()) dbxKick(); else saveToStorage(); } });
+}
+
+// ---------- scheda foto ----------
+function ftApri(id) {
+  const it = ftFind(id); if (!it) return;
+  const f = it.f, own = it.src === 'foto';
+  const ov = document.createElement('div');
+  ov.className = 'vb-dlg-ov';
+  const allTags = () => [...new Set(ftItems().reduce((a, x) => a.concat(ftTagsOf(x)), []).concat(VB_AREE))].sort((a, b) => a.localeCompare(b, 'it'));
+  const close = () => { ov.remove(); renderFoto(); };
+  const draw = () => {
+    const pin = ftPinned(f), tags = ftTagsOf(it);
+    ov.innerHTML = `<div class="vb-dlg" role="dialog" aria-label="Foto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:16px;font-weight:600;">Foto del ${vbEsc(vbFmtLong(it.date))}</div><button type="button" data-a="close" aria-label="Chiudi" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text);">✕</button></div>
+      <img class="ft-dimg" src="${dbxSrc(f)}" alt="">
+      ${own ? '' : `<div class="vb-msg" style="margin-top:0">Foto del verbale n. ${vbPad(it.v.n || 0)}: data e rimozione si gestiscono dal verbale. <button type="button" class="vb-link" data-a="verbale">Apri il verbale</button></div>`}
+      <div class="input-group"><label>DIDASCALIA</label><input type="text" data-k="did" value="${vbEsc(f.did)}" placeholder="Cosa si vede nella foto"></div>
+      ${own ? `<div class="input-group"><label>DATA</label><input type="date" data-k="date" value="${vbEsc(it.date)}"></div>` : ''}
+      <div class="input-group" style="margin-bottom:8px"><label>TAG</label>
+        <div class="ft-dtags">${tags.map(t => `<button type="button" class="vb-chip" aria-pressed="true" data-a="rm-tag" data-t="${vbEsc(t)}" title="Togli il tag">${vbEsc(t)} ✕</button>`).join('') || '<span class="vb-muted">Nessun tag.</span>'}</div>
+        <div class="vb-inline"><input id="ft-newtag" list="ft-taglist" placeholder="Aggiungi tag: zona, lavorazione, impresa…" autocomplete="off"><button type="button" class="btn-outline" data-a="add-tag">Aggiungi</button></div>
+        <datalist id="ft-taglist">${allTags().filter(t => !tags.includes(t)).map(t => `<option value="${vbEsc(t)}">`).join('')}</datalist></div>
+      <div class="input-group"><label>POSIZIONE</label><div style="font-size:13px;margin-bottom:8px;">${pin ? 'Sulla pianta <b>' + vbEsc(piante.find(p => p.id === f.piantaId).nome) + '</b>' : 'Non posizionata'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">${piante.length ? `<button type="button" class="btn-outline" data-a="place">${pin ? 'Sposta sulla pianta' : 'Posiziona sulla pianta'}</button>` : '<span class="vb-muted">Carica una pianta per posizionare le foto.</span>'}${pin ? `<button type="button" class="btn-outline" data-a="unpin">Togli dalla pianta</button>` : ''}</div></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap;">${own ? `<button type="button" class="vb-link danger" data-a="del">Elimina foto</button>` : '<span></span>'}<button type="button" class="btn" data-a="close">Fatto</button></div></div>`;
+  };
+  const addTag = () => {
+    const inp = ov.querySelector('#ft-newtag'), t = inp.value.trim();
+    if (t && !ftTagsOf(it).some(x => x.toLowerCase() === t.toLowerCase())) { f.tags.push(t); ftSaveSoon(); }
+    draw(); ov.querySelector('#ft-newtag').focus();
+  };
+  const upd = e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return; f[k] = e.target.value; if (k === 'date') it.date = f.date; ftSaveSoon(); };
+  ov.addEventListener('input', upd); ov.addEventListener('change', upd);
+  ov.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'ft-newtag') { e.preventDefault(); addTag(); } });
+  ov.addEventListener('click', e => {
+    if (e.target === ov) return close();
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const a = b.dataset.a;
+    if (a === 'close') close();
+    else if (a === 'add-tag') addTag();
+    else if (a === 'rm-tag') { const t = b.dataset.t; f.tags = f.tags.filter(x => x !== t); if (f.area === t) f.area = ''; ftSaveSoon(); draw(); }
+    else if (a === 'unpin') { f.piantaId = ''; f.x = null; f.y = null; ftSaveSoon(); draw(); }
+    else if (a === 'place') {
+      if (ftPinned(f)) FT.pianta = f.piantaId;
+      FT.placing = f.id; FT.spot = null; ov.remove(); renderFoto();
+      const pl = document.getElementById('ft-plan'); if (pl) pl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    else if (a === 'del') { if (!confirm('Eliminare questa foto?')) return; const i = fotoCantiere.indexOf(f); if (i >= 0) fotoCantiere.splice(i, 1); ov.remove(); renderFoto(); saveToStorage(); }
+    else if (a === 'verbale') { ov.remove(); showTab('verbali'); vbApri(verbali.indexOf(it.v)); }
+  });
+  document.body.appendChild(ov);
+  draw();
+  if (!f.data && f.dbx) dbxEnsure(f).then(() => { const im = ov.querySelector('.ft-dimg'); if (im && f.data) im.src = f.data; }).catch(x => ftMsg('⚠ ' + x.message, true));
 }
 
 // ========================
@@ -5328,6 +6785,7 @@ function renderHome() {
     avanzamento:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
     verbali:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
     problematiche:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+    foto:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
     documenti:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
     preventivi:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg>`,
     checklist:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
@@ -5340,9 +6798,10 @@ function renderHome() {
     { id:'preventivi', label:'Preventivi', desc:'Confronto offerte e aggiudicazione gare' },
     { id:'risorse', label:'Risorse', desc:'Subappaltatori, fornitori e costi' },
     { id:'avanzamento', label:'Avanzamento', desc:'SAL, monitoraggio e analisi critica' },
-    { id:'verbali', label:'Verbali', desc:'Riunioni, sopralluoghi e verbali SAL' },
+    { id:'verbali', label:'Verbali', desc:'Sopralluoghi con foto, PDF e invio' },
     { id:'problematiche', label:'Problematiche', desc:'Non conformità, riserve e segnalazioni' },
     { id:'documenti', label:'Documenti', desc:'Archivio contratti, permessi e allegati' },
+    { id:'foto', label:'Foto', desc:'Foto posizionate sulle piante, per data e tag' },
     { id:'checklist', label:'Checklist', desc:'Liste di verifica e controllo qualità DL' },
   ];
 
@@ -6175,17 +7634,6 @@ window.onload = async () => {
     return;
   }
 
-  // Prova a caricare l'ultimo progetto
-  const projects = await listSavedProjects();
-  if (projects.length > 0) {
-    const latest = projects[0]; // gia' ordinati per savedAt desc
-    await loadFromStorage(latest.key);
-    calcolaSALLiquidati();
-    sincronizzaDaGare();
-    aggiorna();
-    renderTasks();
-    renderHome();
-  }
 };
 
 // ========================
@@ -7352,23 +8800,352 @@ function toggleDarkMode() {
   } catch(e){}
 })();
 
-// Patch showTab to also update sidebar active state and topbar title
+// ========================
+// INTERFACCIA v1.8 — icone in alto, schede dei progetti aperti, Home generale, Impostazioni
+// ========================
+const UI_PROJECT_TABS = ['home', 'progetto', 'fasi', 'gantt', 'preventivi', 'risorse', 'avanzamento', 'verbali', 'problematiche', 'documenti', 'foto', 'checklist'];
+const UI_GECKO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6c-1.5 0-2.5 1.1-2.5 2.5 0 .9.4 1.6 1 2.1-.8 1.3-1.1 2.9-.9 4.5.3 2 1.2 3.3 1.3 4.9.1 1.9-1.200 3.1-2.800 3.100-1.5 0-2.400-1.200-1.900-2.400"/><path d="M12 2.600c1.500 0 2.500 1.100 2.500 2.500 0 .900-.400 1.600-1 2.100.800 1.300 1.100 2.900.900 4.500-.200 1.600-.900 2.800-1.200 4.100"/><path d="M9.800 9.300L6.600 8.100M6.600 8.100L5.900 6.500M6.600 8.100L5 8.500M14.200 9.300l3.200-1.200m0 0l.7-1.600m-.7 1.600l1.600.400M10.300 14.200l-3 1.700m0 0l-1.600-.300m1.600.300l-.300 1.600M13.800 14.200l3 1.700m0 0l1.600-.300m-1.600.300l.300 1.600"/></svg>';
+const UI = { view: 'dash', tabs: [], labels: {}, active: null, loaded: null, lastTab: 'home', busy: false, projects: null, loadedAt: 0, stale: true, loading: null, pendingSave: null, map: null, layer: null, mePos: null, geoBusy: false };
+
+const uiEsc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uiToday = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const uiDate = (iso, o) => { if (!iso) return '—'; const d = new Date(String(iso).slice(0, 10) + 'T12:00:00'); return isNaN(d) ? String(iso) : d.toLocaleDateString('it-IT', o || { day: '2-digit', month: '2-digit', year: 'numeric' }); };
+const uiGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } };
+const uiSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+
+// Si salva solo quando c'è un progetto aperto: dalla Home non si deve mai scrivere il progetto di esempio
+const _uiSave = saveToStorage;
+saveToStorage = async function () {
+  if (!UI.loaded) return;
+  UI.stale = true;
+  const p = _uiSave.apply(this, arguments);
+  UI.pendingSave = p;
+  return p;
+};
+
+// ---------- navigazione ----------
 const _origShowTab = showTab;
 const TAB_LABELS = {
-  home: 'Home', progetto: 'Progetto', fasi: 'Fasi & Attività',
-  preventivi: 'Preventivi', risorse: 'Risorse', gantt: 'Gantt',
-  avanzamento: 'Avanzamento', verbali: 'Verbali',
-  problematiche: 'Problematiche', documenti: 'Documenti', checklist: 'Checklist',
-  help: 'Guida'
+  home: 'Panoramica', progetto: 'Progetto', fasi: 'Fasi & Attività', preventivi: 'Preventivi', risorse: 'Risorse', gantt: 'Gantt',
+  avanzamento: 'Avanzamento', verbali: 'Verbali', problematiche: 'Problematiche', documenti: 'Documenti', foto: 'Foto', checklist: 'Checklist',
+  help: 'Guida', dash: 'Home', settings: 'Impostazioni'
 };
-window.showTab = function(tab) {
+window.showTab = function (tab) {
+  const isProj = UI_PROJECT_TABS.includes(tab);
+  if (isProj && !UI.loaded) tab = 'dash'; // nessun progetto aperto: si resta sulla Home generale
   _origShowTab(tab);
-  document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
-    btn.classList.toggle('active', btn.id === 'nav-' + tab);
-  });
-  const title = document.getElementById('topbar-title');
-  if (title) title.textContent = TAB_LABELS[tab] || tab;
+  UI.view = UI_PROJECT_TABS.includes(tab) ? 'project' : tab === 'dash' ? 'dash' : 'settings';
+  if (UI.view === 'project') UI.lastTab = tab;
+  document.body.classList.toggle('ui-project', UI.view === 'project');
+  document.body.classList.remove('ui-mobile-open');
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.querySelectorAll('.sidebar-nav-item').forEach(btn => { if (btn.id) btn.classList.toggle('active', btn.id === 'nav-' + tab); });
+  const title = document.getElementById('topbar-title'); if (title) title.textContent = TAB_LABELS[tab] || tab;
+  document.getElementById('ui-btn-home').classList.toggle('active', UI.view === 'dash');
+  document.getElementById('ui-btn-settings').classList.toggle('active', UI.view === 'settings');
+  uiRenderTabs();
+  if (tab === 'dash') uiRenderDash();
+  if (tab === 'settings') uiRenderSettings();
+  if (UI.view !== 'project') uiRenderSideList();
+  window.scrollTo(0, 0);
 };
+function uiGoHome() { showTab('dash'); }
+function uiGoSettings() { showTab('settings'); }
+function uiToggleSidebar() {
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    const open = document.getElementById('sidebar').classList.toggle('mobile-open');
+    document.body.classList.toggle('ui-mobile-open', open);
+    return;
+  }
+  toggleSidebar();
+  document.body.classList.toggle('ui-collapsed', document.getElementById('sidebar').classList.contains('collapsed'));
+}
+
+// ---------- progetti: apertura, schede, nuovo, importa ----------
+function uiResetProject() {
+  const clear = n => { try { const a = eval(n); if (Array.isArray(a)) a.length = 0; } catch (e) {} };
+  ['tasks', 'fornitori', 'sals', 'verbali', 'contattiVerbali', 'piante', 'fotoCantiere', 'problematiche', 'documenti', 'garePreventivi', 'checklist', 'combos'].forEach(clear);
+  ['nome_cantiere', 'committente', 'indirizzo', 'note_generali', 'impresa', 'dl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  try { FT.pianta = null; FT.spot = null; FT.placing = null; ftResetFiltersQuiet(); } catch (e) {}
+  try { _homeMapCoords = null; } catch (e) {}
+}
+function ftResetFiltersQuiet() { FT.f = { dal: '', al: '', src: '', nopin: false, tags: new Set() }; }
+function uiRefreshProject() {
+  try { calcolaSALLiquidati(); } catch (e) {}
+  try { sincronizzaDaGare(); } catch (e) {}
+  try { aggiorna(); } catch (e) {}
+  try { renderTasks(); } catch (e) {}
+}
+function uiStoreTabs() { uiSet('gk_tabs', JSON.stringify({ tabs: UI.tabs, labels: UI.labels })); }
+function uiAddTab(key) { if (!UI.tabs.includes(key)) UI.tabs.push(key); uiStoreTabs(); }
+function uiLabel(key) {
+  if (key === UI.loaded) {
+    const c = (document.getElementById('codice_progetto')?.value || '').trim(), n = (document.getElementById('nome_cantiere')?.value || '').trim();
+    UI.labels[key] = { c: c || key.replace(/^gantt_/, ''), n };
+  } else {
+    const p = (UI.projects || []).find(x => x.key === key);
+    if (p) UI.labels[key] = { c: p.codice, n: p.nome === '—' ? '' : p.nome };
+  }
+  return UI.labels[key] || { c: key.replace(/^gantt_/, ''), n: '' };
+}
+function uiRenderTabs() {
+  const el = document.getElementById('ui-tabs'); if (!el) return;
+  el.innerHTML = UI.tabs.map(k => {
+    const l = uiLabel(k), on = UI.view === 'project' && k === UI.active;
+    return `<div class="ui-tab${on ? ' active' : ''}" role="tab" tabindex="0" aria-selected="${on}" title="${uiEsc(l.c + (l.n ? ' · ' + l.n : ''))}" data-k="${uiEsc(k)}" onclick="uiOpen(this.dataset.k)" onkeydown="if(event.key==='Enter')uiOpen(this.dataset.k)"><span class="l"><b>${uiEsc(l.c)}</b>${l.n ? '<span class="n"> ' + uiEsc(l.n) + '</span>' : ''}</span><button type="button" class="x" aria-label="Chiudi scheda" onclick="event.stopPropagation();uiCloseTab(this.parentElement.dataset.k)">✕</button></div>`;
+  }).join('') + `<button type="button" class="ui-tab add" title="Apri un progetto" aria-label="Apri un progetto" onclick="showProjectPicker()">+</button>`;
+}
+async function uiOpen(key, tab) {
+  document.getElementById('project-picker-overlay')?.remove();
+  if (UI.busy) return;
+  UI.busy = true;
+  try {
+    if (UI.loaded !== key) {
+      if (UI.loaded) { try { await saveToStorage(); } catch (e) {} }
+      try { if (VB) vbChiudi(true); } catch (e) {}
+      showSaveIndicator('⏳ caricamento...');
+      UI.loaded = null;
+      uiResetProject();
+      const ok = await loadFromStorage(key);
+      if (ok === false) {
+        showSaveIndicator('✗ progetto non trovato', true);
+        UI.tabs = UI.tabs.filter(k => k !== key); if (UI.active === key) UI.active = null; uiStoreTabs();
+        UI.stale = true; showTab('dash'); return;
+      }
+      UI.loaded = getStorageKey();
+      try { if (!checklist.length) applicaTemplateSuNuovoProgetto(); } catch (e) {}
+      uiRefreshProject();
+      showSaveIndicator('✓ progetto caricato');
+      tab = tab || 'home';
+    }
+    if (UI.loaded !== key) { UI.tabs = UI.tabs.map(k => k === key ? UI.loaded : k); }
+    uiAddTab(UI.loaded); UI.active = UI.loaded;
+    showTab(tab || UI.lastTab || 'home');
+  } finally { UI.busy = false; }
+}
+window.openProject = key => uiOpen(key, 'home');
+async function uiCloseTab(key) {
+  const i = UI.tabs.indexOf(key); if (i < 0) return;
+  if (key === UI.loaded) { try { await saveToStorage(); } catch (e) {} try { if (VB) vbChiudi(true); } catch (e) {} UI.loaded = null; UI.active = null; }
+  UI.tabs.splice(i, 1); uiStoreTabs();
+  if (UI.view === 'project' && !UI.loaded) { const next = UI.tabs[Math.min(i, UI.tabs.length - 1)]; if (next) return uiOpen(next, UI.lastTab); return showTab('dash'); }
+  uiRenderTabs();
+}
+const _uiConfirmNew = confirmNewProject;
+window.confirmNewProject = async function () {
+  const inp = document.getElementById('new-project-code'), code = (inp?.value || '').trim().toUpperCase();
+  if (!code) return _uiConfirmNew();
+  const key = 'gantt_' + code;
+  // Un codice già usato aprirebbe un progetto vuoto sopra quello esistente: lo si apre, invece di sovrascriverlo
+  let list = UI.projects; if (!list && getGithubToken()) { try { list = await uiLoadProjects(true); } catch (e) {} }
+  if ((list || []).some(p => p.key === key)) {
+    document.getElementById('new-project-overlay')?.remove();
+    alert('Esiste già un progetto con codice ' + code + ': lo apro.');
+    return uiOpen(key, 'progetto');
+  }
+  if (UI.loaded) { try { await saveToStorage(); } catch (e) {} }
+  try { if (VB) vbChiudi(true); } catch (e) {}
+  UI.loaded = null;
+  uiResetProject();
+  UI.loaded = key; // serve già qui: la creazione apre la Panoramica
+  _uiConfirmNew();
+  try { applicaTemplateSuNuovoProgetto(); } catch (e) {}
+  UI.loaded = getStorageKey(); UI.active = UI.loaded; uiAddTab(UI.loaded);
+  showTab('progetto');
+  saveToStorage();
+};
+const _uiImporta = eseguiImporta;
+eseguiImporta = function (data) {
+  const go = () => {
+    try { if (VB) vbChiudi(true); } catch (e) {}
+    UI.loaded = null; uiResetProject();
+    UI.loaded = '__import__';
+    _uiImporta(data);
+    UI.loaded = getStorageKey(); UI.active = UI.loaded; uiAddTab(UI.loaded);
+    showTab('home');
+  };
+  if (UI.loaded) Promise.resolve(saveToStorage()).then(go, go); else go();
+};
+
+// ---------- elenco di tutti i progetti (per Home e barra laterale) ----------
+async function uiLoadProjects(force) {
+  if (UI.loading) return UI.loading;
+  if (UI.projects && !force) return UI.projects;
+  UI.loading = (async () => {
+    const token = getGithubToken(); if (!token) return (UI.projects = []);
+    const gistId = await resolveGistId(token);
+    const resp = await fetch(`https://api.github.com/gists/${gistId}`, { headers: { 'Authorization': `token ${token}` } });
+    if (!resp.ok) throw new Error('GitHub ' + resp.status);
+    const gist = await resp.json(), today = uiToday(), out = [];
+    for (const [filename, info] of Object.entries(gist.files || {})) {
+      if (!filename.startsWith('gantt_') || !filename.endsWith('.json')) continue;
+      try {
+        let content = info.content;
+        if (info.truncated) content = await (await fetch(info.raw_url)).text();
+        const d = JSON.parse(content), vs = Array.isArray(d.verbali) ? d.verbali : [], ps = Array.isArray(d.problematiche) ? d.problematiche : [];
+        const pross = vs.map(v => String(v.prossimo || '').slice(0, 10)).filter(x => x && x >= today).sort()[0] || '';
+        out.push({
+          key: filename.replace(/\.json$/, ''), codice: d.codice_progetto || filename.replace('gantt_', '').replace('.json', ''), nome: d.nome_cantiere || '—',
+          indirizzo: d.indirizzo || '', committente: d.committente || '', savedAt: d.savedAt || '', prossimo: pross, nVerbali: vs.length,
+          problemi: ps.filter(p => p && p.stato !== 'Risolta' && p.stato !== 'Chiusa').map(p => ({ desc: p.desc || p.cat || 'Problematica', priorita: p.priorita || '', scadenza: p.scadenza || '' })),
+          osservazioni: vs.reduce((s, v) => s + (Array.isArray(v.osservazioni) ? v.osservazioni.filter(o => o && !o.chiusa && String(o.testo || '').trim()).length : 0), 0)
+        });
+      } catch (e) {}
+    }
+    out.sort((a, b) => new Date(b.savedAt || 0) - new Date(a.savedAt || 0));
+    UI.projects = out; UI.loadedAt = Date.now(); UI.stale = false;
+    return out;
+  })();
+  try { return await UI.loading; } finally { UI.loading = null; }
+}
+function uiRenderSideList() {
+  const el = document.getElementById('ui-proj-list'); if (!el) return;
+  if (!getGithubToken()) { el.innerHTML = '<div class="ui-sb-empty">Collega GitHub dalle Impostazioni per vedere i progetti.</div>'; return; }
+  if (!UI.projects) { el.innerHTML = '<div class="ui-sb-empty">Carico i progetti…</div>'; return; }
+  const list = UI.projects.slice().sort((a, b) => String(a.codice).localeCompare(String(b.codice), 'it', { numeric: true }));
+  el.innerHTML = list.map(p => `<button class="sidebar-nav-item" data-k="${uiEsc(p.key)}" title="${uiEsc(p.codice + ' · ' + p.nome)}" onclick="uiOpen(this.dataset.k)"><span class="ui-code">${uiEsc(p.codice)}</span><span class="nav-label">${uiEsc(p.nome)}</span></button>`).join('')
+    || '<div class="ui-sb-empty">Nessun progetto. Creane uno con il pulsante + qui sotto.</div>';
+}
+
+// ---------- Home generale ----------
+function uiRenderDash() {
+  const name = uiGet('gk_user', '').trim();
+  document.getElementById('ui-welcome').textContent = name ? 'Benvenuto ' + name : 'Benvenuto';
+  uiDrawDash();
+  if (!getGithubToken()) return;
+  if (!UI.projects || UI.stale || Date.now() - UI.loadedAt > 45000) {
+    Promise.resolve(UI.pendingSave).catch(() => {}).then(() => uiLoadProjects(true)).then(() => { uiRenderSideList(); uiRenderTabs(); if (UI.view === 'dash') uiDrawDash(); })
+      .catch(() => { const r = document.getElementById('ui-recent'); if (r && !UI.projects) r.innerHTML = '<div class="vb-empty" style="grid-column:1/-1">Non riesco a leggere i progetti da GitHub: controlla la connessione o il token nelle Impostazioni.</div>'; });
+  }
+}
+function uiDrawDash() {
+  const sop = document.getElementById('ui-card-sop'), prob = document.getElementById('ui-card-prob'), rec = document.getElementById('ui-recent');
+  if (!getGithubToken()) {
+    const m = '<p class="vb-muted" style="margin:0">Collega GitHub dalle Impostazioni per vedere i tuoi progetti.</p>';
+    sop.innerHTML = m; prob.innerHTML = m; rec.innerHTML = `<div class="vb-empty" style="grid-column:1/-1">Nessun progetto da mostrare.<div style="margin-top:14px"><button class="btn" onclick="uiGoSettings()">Apri le Impostazioni</button></div></div>`;
+    uiDrawMap([]); return;
+  }
+  const P = UI.projects;
+  if (!P) { const m = '<p class="vb-muted" style="margin:0">Carico…</p>'; sop.innerHTML = m; prob.innerHTML = m; rec.innerHTML = '<div class="vb-empty" style="grid-column:1/-1">Carico i progetti…</div>'; uiDrawMap([]); return; }
+  // prossimo sopralluogo
+  const next = P.filter(p => p.prossimo).sort((a, b) => a.prossimo.localeCompare(b.prossimo));
+  if (!next.length) sop.innerHTML = '<p class="vb-muted" style="margin:0">Nessun sopralluogo in programma. La data si imposta nei "Prossimi passi" di un verbale.</p>';
+  else {
+    const giorni = Math.round((new Date(next[0].prossimo + 'T12:00:00') - new Date(uiToday() + 'T12:00:00')) / 86400000);
+    sop.innerHTML = `<div class="ui-big">${uiEsc(uiDate(next[0].prossimo, { weekday: 'long', day: 'numeric', month: 'long' }))}</div><div class="vb-muted" style="margin-bottom:10px">${giorni === 0 ? 'oggi' : giorni === 1 ? 'domani' : 'tra ' + giorni + ' giorni'}</div>`
+      + next.slice(0, 4).map(p => `<div class="ui-li" data-k="${uiEsc(p.key)}" onclick="uiOpen(this.dataset.k,'verbali')"><span class="c">${uiEsc(p.codice)}</span><span class="t">${uiEsc(p.nome)}</span><span class="r">${uiEsc(uiDate(p.prossimo))}</span></div>`).join('');
+  }
+  // problematiche aperte
+  const all = P.reduce((a, p) => a.concat(p.problemi.map(x => ({ p, x }))), []), oss = P.reduce((s, p) => s + p.osservazioni, 0);
+  const rank = x => /alta|urgent|critic/i.test(x.priorita) ? 0 : /media/i.test(x.priorita) ? 1 : 2;
+  all.sort((a, b) => rank(a.x) - rank(b.x) || String(a.x.scadenza || '9999').localeCompare(String(b.x.scadenza || '9999')));
+  prob.innerHTML = `<div class="ui-big">${all.length}</div><div class="vb-muted" style="margin-bottom:10px">${all.length ? 'in ' + new Set(all.map(a => a.p.key)).size + (new Set(all.map(a => a.p.key)).size === 1 ? ' cantiere' : ' cantieri') : 'nessuna da risolvere'}${oss ? ' · ' + oss + (oss === 1 ? ' osservazione aperta' : ' osservazioni aperte') + ' nei verbali' : ''}</div>`
+    + (all.slice(0, 4).map(a => `<div class="ui-li" data-k="${uiEsc(a.p.key)}" onclick="uiOpen(this.dataset.k,'problematiche')"><span class="c">${uiEsc(a.p.codice)}</span><span class="t">${uiEsc(a.x.desc)}</span><span class="r">${uiEsc(a.x.priorita || '')}${a.x.scadenza ? ' · ' + uiEsc(uiDate(a.x.scadenza)) : ''}</span></div>`).join('') || '');
+  // progetti recenti
+  rec.innerHTML = P.slice(0, 4).map(p => `<button type="button" class="ui-rcard" data-k="${uiEsc(p.key)}" onclick="uiOpen(this.dataset.k)"><div class="c">${uiEsc(p.codice)}</div><div class="n">${uiEsc(p.nome)}</div><div class="a">${uiEsc(p.indirizzo || 'Indirizzo non indicato')}</div><div class="d">${p.savedAt ? 'Aggiornato il ' + uiEsc(uiDate(p.savedAt)) : ''}</div></button>`).join('')
+    || `<div class="vb-empty" style="grid-column:1/-1">Nessun progetto. Creane uno con il pulsante <b>+</b> in basso a sinistra.</div>`;
+  uiDrawMap(P, next[0] ? next[0].key : null);
+}
+
+// ---------- mappa: cantieri e posizione attuale ----------
+function uiGeoCache() { try { return JSON.parse(uiGet('gk_geo', '{}')) || {}; } catch (e) { return {}; } }
+async function uiGeocode(addr) {
+  const k = addr.trim().toLowerCase(), c = uiGeoCache();
+  if (k in c) return c[k];
+  let v = null;
+  try {
+    const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(addr));
+    if (!r.ok) return null; // errore temporaneo: non si memorizza
+    const j = await r.json();
+    if (j && j[0]) v = { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon) };
+  } catch (e) { return null; }
+  const c2 = uiGeoCache(); c2[k] = v; uiSet('gk_geo', JSON.stringify(c2));
+  await new Promise(s => setTimeout(s, 1100)); // il servizio chiede al massimo una richiesta al secondo
+  return v;
+}
+function uiDrawMap(P, nextKey) {
+  const box = document.getElementById('ui-map'), note = document.getElementById('ui-map-note');
+  if (!window.L) { box.innerHTML = '<div class="vb-empty">Mappa non disponibile senza connessione.</div>'; return; }
+  if (!UI.map) {
+    UI.map = L.map(box, { scrollWheelZoom: false }).setView([42.6, 12.6], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors', maxZoom: 19 }).addTo(UI.map);
+    UI.layer = L.layerGroup().addTo(UI.map);
+  }
+  const run = UI.mapRun = {};
+  UI.layer.clearLayers();
+  const pts = [], miss = [];
+  const fit = () => { const all = pts.map(p => [p.lat, p.lon]).concat(UI.mePos ? [[UI.mePos.lat, UI.mePos.lon]] : []); if (all.length === 1) UI.map.setView(all[0], 13); else if (all.length) UI.map.fitBounds(all, { padding: [40, 40], maxZoom: 15 }); };
+  const drawMe = () => {
+    if (!UI.mePos || UI.mapRun !== run) return;
+    if (UI.meLayer) UI.layer.removeLayer(UI.meLayer);
+    UI.meLayer = L.layerGroup().addTo(UI.layer);
+    L.marker([UI.mePos.lat, UI.mePos.lon], { icon: L.divIcon({ className: '', html: '<div class="ui-me">' + UI_GECKO + '</div>', iconSize: [38, 38], iconAnchor: [19, 19] }), zIndexOffset: 500 }).addTo(UI.meLayer).bindPopup('La tua posizione');
+    const t = pts.find(p => p.key === nextKey);
+    if (t) L.polyline([[UI.mePos.lat, UI.mePos.lon], [t.lat, t.lon]], { color: '#111', weight: 2, dashArray: '6 8', opacity: 0.8 }).addTo(UI.meLayer);
+  };
+  const setNote = () => {
+    if (UI.mapRun !== run) return;
+    const parts = [];
+    if (P.length) parts.push(`<span>${pts.length} di ${P.filter(p => p.indirizzo).length} cantieri sulla mappa${miss.length ? ' · indirizzo non trovato: ' + miss.map(uiEsc).join(', ') : ''}</span>`);
+    if (!UI.mePos) parts.push(`<button type="button" class="btn-sm" onclick="uiLocate(true)">Mostra la mia posizione</button>`);
+    if (nextKey && UI.mePos && pts.some(p => p.key === nextKey)) parts.push('<span class="vb-muted">La linea tratteggiata porta al prossimo sopralluogo.</span>');
+    note.innerHTML = parts.join('');
+  };
+  UI.mapRedraw = () => { drawMe(); fit(); setNote(); };
+  // la mappa va rimisurata quando la Home torna visibile o cambia la larghezza dello schermo
+  setTimeout(() => { if (UI.mapRun !== run) return; try { UI.map.invalidateSize(); fit(); } catch (e) {} }, 80);
+  setNote();
+  (async () => {
+    for (const p of P) {
+      if (!p.indirizzo) continue;
+      const g = await uiGeocode(p.indirizzo);
+      if (UI.mapRun !== run) return;
+      if (!g) { miss.push(p.codice); setNote(); continue; }
+      pts.push({ key: p.key, lat: g.lat, lon: g.lon });
+      const m = L.marker([g.lat, g.lon], { icon: L.divIcon({ className: '', html: `<div class="ui-pin${p.key === nextKey ? ' next' : ''}"><span>${uiEsc(String(p.codice).slice(0, 3))}</span></div>`, iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24] }) }).addTo(UI.layer);
+      const div = document.createElement('div');
+      div.innerHTML = `<b>${uiEsc(p.codice)}</b> ${uiEsc(p.nome)}<br><span style="opacity:.7">${uiEsc(p.indirizzo)}</span>${p.prossimo ? '<br>Prossimo sopralluogo: ' + uiEsc(uiDate(p.prossimo)) : ''}<br><a href="#" style="font-weight:600">Apri il progetto</a>`;
+      div.querySelector('a').addEventListener('click', e => { e.preventDefault(); uiOpen(p.key); });
+      m.bindPopup(div);
+      drawMe(); fit(); setNote();
+    }
+  })();
+  drawMe(); fit();
+  uiLocate(false);
+}
+// Posizione attuale: automatica solo se il permesso è già stato dato, altrimenti su richiesta
+async function uiLocate(ask) {
+  if (!navigator.geolocation || UI.geoBusy) return;
+  if (!ask) {
+    try { const st = await navigator.permissions.query({ name: 'geolocation' }); if (st.state !== 'granted') return; } catch (e) { return; }
+  }
+  UI.geoBusy = true;
+  navigator.geolocation.getCurrentPosition(pos => {
+    UI.geoBusy = false; UI.mePos = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+    if (UI.mapRedraw && UI.view === 'dash') UI.mapRedraw();
+  }, err => {
+    UI.geoBusy = false;
+    if (ask) alert(err && err.code === 1 ? 'Posizione non consentita: abilitala dalle impostazioni del browser per questa pagina.' : 'Non riesco a rilevare la posizione in questo momento.');
+  }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+}
+
+// ---------- impostazioni ----------
+function uiRenderSettings() {
+  const u = document.getElementById('ui-user'); if (u && document.activeElement !== u) u.value = uiGet('gk_user', '');
+  const g = document.getElementById('ui-gh-status');
+  if (g) g.innerHTML = getGithubToken() ? 'Stato: <b>collegato ✓</b><br><span class="vb-muted">I progetti si salvano sul tuo GitHub Gist.</span>' : 'Stato: <b>non collegato</b><br><span class="vb-muted">Senza GitHub i progetti non vengono salvati.</span>';
+  try { dbxUpdBtn(); } catch (e) {}
+}
+function uiSetUser(v) { uiSet('gk_user', String(v || '').trim()); }
+
+// ---------- avvio ----------
+(function () {
+  try { const s = JSON.parse(uiGet('gk_tabs', '{}')) || {}; UI.tabs = Array.isArray(s.tabs) ? s.tabs.filter(k => typeof k === 'string') : []; UI.labels = s.labels || {}; } catch (e) {}
+  document.getElementById('ui-btn-home').innerHTML = UI_GECKO;
+  document.body.classList.toggle('ui-collapsed', document.getElementById('sidebar').classList.contains('collapsed'));
+  document.addEventListener('input', e => { if (e.target && (e.target.id === 'nome_cantiere')) uiRenderTabs(); });
+  uiRenderTabs();
+})();
 </script>
 </body>
 </html>
